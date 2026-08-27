@@ -1,2 +1,2 @@
-# dsc152-2026-fa
-DSC152 Fall 20026
+# dsc152-2026-sp
+Public repository for DSC 152, Spring 2026

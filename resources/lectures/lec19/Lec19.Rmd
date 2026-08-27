@@ -1,0 +1,324 @@
+---
+title: |
+  | DSC 152: 
+  | Applied Statistical Data Analysis and Inference
+author: | 
+  | Lecture \#19
+  | Time Series Regression
+  | Power Estimation
+date: |
+  | Tuesday, June 2
+  | Spring Quarter 2026
+  | Peter Chi  
+output: 
+  beamer_presentation:
+    theme: "Warsaw"
+    fonttheme: "serif"
+
+header-includes:
+- \setbeamertemplate{footline}[frame number]{}
+- \setbeamertemplate{navigation symbols}{}
+- \setbeamersize{text margin left=0.5cm,text margin right=0.5cm}
+- \definecolor{codegray}{HTML}{f4f4f4}
+- \let\textttOrig\texttt
+- \renewcommand{\texttt}[1]{\textttOrig{\colorbox{codegray}{#1}}}
+---
+    
+```{r setup, include=FALSE}
+  knitr::opts_chunk$set(echo = TRUE)
+  knitr::opts_chunk$set(dev = 'pdf')
+  def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+  knitr::knit_hooks$set(chunk = function(x, options) {
+    x <- def.chunk.hook(x, options)
+    ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+  })
+```
+
+
+## Recall yet again...
+\framesubtitle{Conditions for validity of inference in linear regression}
+
+
+ - The relationship between $X$ and $Y$, if there is one, is actually \underline{\textbf{L}inear}
+   - e.g. not quadratic, exponential, etc.
+
+\vspace{2mm}
+
+ - \textbf{I}ndependence of observations
+
+\vspace{2mm}
+
+ - \textbf{N}ormality of $\epsilon_i$
+   - Note that this can also be achieved, due to the central limit theorem, with a large sample size even if $\epsilon_i$ does not follow a normal distribution
+
+\vspace{2mm}
+
+ - \textbf{E}qual variance across all values of $X$
+   - Also known as homoskedasticity
+   
+## How much does it actually matter? {.t}
+What happens if the data actually are time-dependent, but we ignore that in our analysis? 
+
+### Recall the poker example...
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, out.width="75%"}
+library(dplyr)
+library(readr)
+library(ggplot2)
+export_all <- read_csv("ReportExport.csv")
+won_all <- gsub("\\$", "", export_all$`My C Won`)
+won_all <- gsub("\\(", "-", won_all)
+won_all <- gsub("\\)", "", won_all)
+won_all <- as.numeric(won_all)
+
+df_all <- data.frame(won_all = won_all,
+                     hand = 1:length(won_all))
+
+df_all <- df_all %>% mutate(won_cum = cumsum(won_all))
+
+ggplot(data=df_all, aes(x=hand, y=won_cum)) + 
+  geom_line() + 
+  labs(title="Running total of money won starting from May 7, 2020", y = "Cumulative amount won") + 
+  scale_y_continuous(labels = scales::label_dollar()) +
+  theme(text = element_text(size=20))
+```
+
+
+
+## Simulation under an AR(p) model {.t}
+
+::: {.t}
+### Recall: an AR(2) model
+\vspace{-6mm}
+$$
+y_t = c + \phi_1 y_{t-1} + \phi_2 y_{t-2} + \epsilon_t
+$$
+:::
+
+Now suppose the data generating process is this AR(2) model with:
+
+ - $c=2$
+ - $\phi_1 = 0.65$
+ - $\phi_2 = 0.25$
+ - $\epsilon_t \sim N(0, 1)$
+
+::: {.t}
+### which would give:
+\vspace{-6mm}
+$$
+y_t = 2 + 0.65 y_{t-1} + 0.25 y_{t-2} + \epsilon_t
+$$
+:::
+
+
+Recall that $c$ is the drift parameter...
+
+
+
+## Simulation under an AR(p) model {.t}
+```{r, echo=FALSE, cache=TRUE}
+library(ggplot2)
+set.seed(3)
+eps <- rnorm(102, 0, 1)
+
+# We need two burn-in values
+y <- 2 + eps[1]
+y[2] <- 2 + 0.65*y + eps[2]
+for(i in 3:102){
+  y[i] <- 2 + 0.65*y[i-1] + 0.25*y[i-2] + eps[i]
+}
+
+time <- 1:100
+y <- y[3:102] # discard the burn-in
+df <- data.frame(time=time, y = y)
+
+ggplot(df, aes(x=time, y=y)) + geom_line()
+```
+
+## Simulation under an AR(p) model {.t}
+```{r, eval=FALSE}
+library(ggplot2)
+set.seed(3)
+eps <- rnorm(102, 0, 1)
+
+# We need two burn-in values
+y <- 2 + eps[1]
+y[2] <- 2 + 0.65*y + eps[2]
+for(i in 3:102){
+  y[i] <- 2 + 0.65*y[i-1] + 0.25*y[i-2] + eps[i]
+}
+
+time <- 1:100
+y <- y[3:102] # discard the burn-in
+df <- data.frame(time=time, y = y)
+
+ggplot(df, aes(x=time, y=y)) + geom_line()
+```
+
+## Simulation under an AR(p) model {.t}
+\label{diffs}
+What would a t-test give on the differences for this particular simulation?
+```{r, results='hide'}
+diffs <- NULL
+for(i in 1:99){
+  diffs[i] <- y[i+1] - y[i]
+}
+
+t.test(diffs)
+```
+
+Wait why on the differences?
+
+
+## Simulation under an AR(p) model {.t}
+For this particular simulation:
+
+```{r}
+t.test(diffs)
+```
+
+
+## Simulation under an AR(p) model {.t}
+```{r, message=FALSE}
+library(forecast)
+library(lmtest)
+
+model2 <- Arima(y, order=c(2,0,0), xreg=time)
+coeftest(model2)
+```
+
+
+## Simulation under an AR(p) model {.t}
+
+::: {.t}
+### What did we observe?
+\vspace{-2mm}
+
+In this particular case, we fail to reject $H_0$ with the t-Test, but correctly reject $H_0$ when we run the AR(2) model.
+
+\vspace{5mm}
+
+What would happen on average?
+:::
+
+
+## Simulation under an AR(p) model {.t}
+\framesubtitle{Your Turn \#1}
+
+::: {.t}
+### First let's write two functions:
+\vspace{-2mm}
+
+ - One to take in inputs of:
+   - $n$
+   - $\phi_1$
+   - $\phi_2$
+   - and then output a dataframe of `y` and `time`. You can hardcode `c=2` and `sd=1`.
+
+\vspace{1mm}   
+
+ - One to calculate `diffs` as in Slide \ref{diffs}
+ 
+:::
+
+::: {.t}
+### Then, use the function...
+\vspace{-2mm}
+to run a simulation study of 1000 reps with $n=100, \phi_1=0.65, \phi_2=0.25$ and compare power with:
+
+ - the `t.test` (ignoring the AR(2) structure of the data)
+ - `Arima` (properly accounting for the AR(2) structure of the data)
+
+:::
+
+Finally, repeat with $\phi_1=-0.65, \phi_2=-0.25$.
+
+
+## Now, how about in Time Series *Regression*? {.t}
+
+::: {.t}
+### Recall the Jalen Brunson example from last time... 
+\vspace{-2mm}
+
+ - The covariate of interest was the opponent's defensive rating
+ - In the simulated example, we generated data under an MA(1) model
+ - We observed that in the analysis with `lm`, we failed to reject $H_0$, whereas in the analysis with `Arima`, we correctly rejected $H_0$. 
+
+:::
+
+But that was just one iteration. What happens on average?
+
+Let's stick with an AR(2) model as in the previous example from today, and simulate without context...
+
+## Now, how about in Time Series *Regression*? {.t}
+
+::: {.t}
+### Suppose the true model is:
+\vspace{-6mm}
+$$
+y_t = \beta_0 + \beta_1 x_t + \phi_1 y_{t-1} + \phi_2 y_{t-2} + \epsilon_t
+$$
+:::
+
+where:
+
+ - $\beta_0 = 0$
+ - $\beta_1 = 2$
+ - $\phi_1 = 0.65$
+ - $\phi_2 = 0.25$
+ - $\epsilon_t \sim N(0, 3)$
+ 
+Let's do a simulated power comparison!
+
+
+## Now, how about in Time Series *Regression*? {.t}
+\framesubtitle{Your Turn \#2}
+First, together we will write a new function that will be a modification of the `gen_AR2` function from Your Turn \#1. 
+
+ - $\beta_0, \beta_1$ and the distribution of $\epsilon_t$ can be hardcoded. 
+ - Let the $x$ values come from a Unif(0, 10) distribution (which can also be hardcoded)
+ - You'll need two burn-in values in a similar manner to that of Your Turn \#1
+ 
+
+## Now, how about in Time Series *Regression*? {.t}
+\framesubtitle{Your Turn \#2}
+Next, use that function to write a simulation comparing:
+
+ - the statistical power with the `lm` function (ignoring the time dependency structure)
+ 
+\vspace{5mm}
+
+ - the statistical power with `Arima` (accounting for the time dependency structure)
+
+## Recap and Looking Ahead {.t}
+
+::: {.t}
+### Recap
+\vspace{-2mm}
+Failing to account for time dependency in your data can lead to incorrect inference. In every example here, we showed a loss of power, but other things could happen.
+
+:::
+
+\vspace{4mm}
+
+::: {.t}
+### Looking Ahead
+\vspace{-2mm}
+
+ - Thursday's class: Final Exam Review
+ - Saturday: Final Exam from 3-6pm. EVERYONE will be in SOLIS 107
+ 
+:::
+
+
+\vspace{4mm}
+
+
+::: {.t}
+### Today's Daily Check
+\vspace{-2mm}
+The two Your Turns
+:::
+
+
+## Quiz 3 Review

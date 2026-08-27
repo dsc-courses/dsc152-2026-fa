@@ -1,0 +1,461 @@
+---
+title: |
+  | DSC 152: 
+  | Applied Statistical Data Analysis and Inference
+author: | 
+  | Lecture \#11
+  | Introduction to Interactions
+date: |
+  | Tuesday, May 5
+  | Spring Quarter 2026
+  | Peter Chi
+output: 
+  beamer_presentation:
+    theme: "Warsaw"
+    fonttheme: "serif"
+
+header-includes:
+- \setbeamertemplate{footline}[frame number]{}
+- \setbeamertemplate{navigation symbols}{}
+- \setbeamersize{text margin left=0.5cm,text margin right=0.5cm}
+- \definecolor{codegray}{HTML}{f4f4f4}
+- \let\textttOrig\texttt
+- \renewcommand{\texttt}[1]{\textttOrig{\colorbox{codegray}{#1}}}
+---
+    
+```{r setup, include=FALSE}
+  knitr::opts_chunk$set(echo = TRUE)
+  knitr::opts_chunk$set(dev = 'pdf')
+  def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+  knitr::knit_hooks$set(chunk = function(x, options) {
+    x <- def.chunk.hook(x, options)
+    ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+  })
+```
+
+## Where have we been?
+
+Thus far, all of our regression examples have been with exactly ONE primary covariate of interest
+
+::: {.block}
+### Some of the Examples
+\vspace{-2mm}
+
+ - March Madness
+   - bracket score vs. knowledge
+
+\vspace{4mm}
+
+ - Lung Function
+   - FEV vs. smoking status, adjusted for age
+   
+\vspace{4mm}
+
+ - Mental Health Dogs
+   - Loneliness vs. treatment group, adjusted for age
+
+:::
+
+What if we had TWO covariates of primary interest (and we care about both of them equally)?
+
+## Example: Mental Health Self-Experiment {.t}
+A person is interested in the impact of different activities on her mental health. Specifically, she believes that going to the gym and meditation are both things that improve her mental health. She wants to formally investigate the impact of each of these things. 
+
+::: {.block}
+### The setup
+\vspace{-2mm}
+
+She will perform an experiment that will last for 28 days
+
+ - Each day will be randomly assigned for her to:
+   - Either go to the gym or not
+   - Either meditate or not
+ - At the end of each day, she will rate her happiness on a scale of 0 to 10
+:::
+
+This is another example of A/B testing! As there are two factors, each of which has two levels, this is known as a $2^2$ Factorial Experiment. 
+
+## Example: Mental Health Self-Experiment {.t}
+
+The data:
+
+\begin{center}
+\begin{tabular}{ c |c| c }
+& no meditate & meditate \\ 
+\hline
+ no gym & 7, 4, 2, 8, 4, 5, 8 & 7, 5, 4, 8, 5, 6, 3 \\  
+ \hline
+ gym & 5, 1, 8, 8, 9, 7, 6 & 9, 6, 8, 9, 9, 8, 10     
+\end{tabular}
+\end{center}
+
+::: {.block}
+### Into R they go:
+
+```{r, size="scriptsize"}
+neither <- c(7, 4, 2, 8, 4, 5, 8)
+gym <- c(5, 1, 8, 8, 9, 7, 6)
+meditate <- c(7, 5, 5, 8, 5, 6, 5)
+both <- c(9, 6, 8, 9, 9, 8, 10)
+
+mh_df <- data.frame(
+  score = c(neither, gym, meditate, both),
+  gym = c(rep("no", 7), rep("yes", 7),
+          rep("no", 7), rep("yes", 7)),
+  meditate = c(rep("no", 14), rep("yes",14))
+)
+```
+:::
+
+
+## Example: Mental Health Self-Experiment {.t}
+```{r, echo=FALSE, size="scriptsize"}
+knitr::kable(mh_df[1:18,])
+```
+This continues on but I cut it off due to space.
+
+
+
+## Example: Mental Health Self-Experiment {.t}
+\framesubtitle{Let's visualize it}
+
+```{r, echo=FALSE, warning=FALSE, out.width="90%"}
+library(ggplot2)
+theme_update(text = element_text(size = 25))
+ggplot() + 
+  geom_boxplot(aes(x="neither", y=neither)) +
+  geom_boxplot(aes(x="gym", y=gym)) +
+  geom_boxplot(aes(x="meditate", y=meditate)) +
+  geom_boxplot(aes(x="both", y=both)) + 
+  scale_x_discrete(limits=c("neither", "gym", "meditate", "both")) +
+  ggtitle("Mental Health Comparisons") +
+  ylab("Score") +
+  xlab("Method")
+```
+
+
+
+## Example: Mental Health Self-Experiment {.t}
+\label{box}
+\framesubtitle{Let's visualize it: this is better}
+
+```{r, out.width="80%", size="small"}
+ggplot(data=mh_df, mapping=aes(x=gym, y=score, fill=meditate)) +
+  geom_boxplot() + ggtitle("Mental Health Comparisons")
+```
+
+## Example: Mental Health Self-Experiment {.t}
+\framesubtitle{Let's visualize it: another option}
+```{r, warning=FALSE, message=FALSE, echo=FALSE, out.width="90%"}
+library(dplyr)
+tmp <- mh_df %>% 
+  group_by(gym, meditate) %>% 
+  summarize(mean=mean(score))
+
+# make line interaction plot
+ggplot(data=tmp, aes(y=mean, x=gym, group=meditate, color=meditate)) + 
+  geom_point() + geom_line() + 
+  ggtitle("Mental Health Comparisons") + 
+  ylab("mean score")
+```
+
+
+## Example: Mental Health Self-Experiment {.t}
+\label{lines}
+\framesubtitle{Let's visualize it: another option}
+```{r, warning=FALSE, message=FALSE, eval=FALSE}
+library(dplyr)
+tmp <- mh_df %>% 
+  group_by(____________) %>% 
+  summarize(mean=mean(score))
+
+# make line interaction plot
+ggplot(data=tmp, aes(y=mean, x=gym, 
+                     group=meditate, color=meditate)) + 
+  geom_point() + geom_line() + 
+  ggtitle("Mental Health Comparisons") + 
+  ylab("mean score")
+```
+
+What should go in the `group_by` function here? pollev.com
+
+
+## Your Turn \#1 {.t} 
+\framesubtitle{Now for some real data...}
+Consider the data from Winter's data collection of my probability theory research project... 
+
+```{r, echo=FALSE, message=FALSE}
+library(readr)
+learn_prob <- read_csv("learn_prob.csv")
+show <- learn_prob %>% 
+  select("score", "handwritten", "coding")
+
+knitr::kable(show[1:9,])
+```
+
+
+Recall, as mentioned in a previous class, that the study design then was different than it is now. 
+
+## Your Turn \#1 {.t} 
+Just like in the Mental Health example, in the Winter study design there are two factors:
+
+ - Coding Exercises (Yes/No)
+ - Handwritten Exercises (Yes/No)
+
+So this is also a $2^2$ Factorial Experiment. We can therefore visualize the data in exactly the same manner as the Mental Health example.
+
+::: {.block}
+### In an R Markdown file: 
+\vspace{-2mm}
+Load the `learn_prob.csv` dataset into R Markdown, and then:
+
+ - Make the better version of the boxplots following the code on Slide \ref{box}
+ - Make a line graph following the code on Slide \ref{lines} (note that it will get unhappy about the NA values...)
+:::
+ 
+Note: in this dataframe, the outcome variable is `score`; the relevant covariates are `handwritten` and `coding`.
+
+
+## Back to the Mental Health Self-Experiment {.t}
+\framesubtitle{Let's analyze it!}
+What are our null and alternative hypotheses??
+
+::: {.block}
+### We have two factors
+\vspace{-2mm}
+ - Going to the gym
+ - Meditating
+
+So a reasonable null hypothesis is that they BOTH have no impact. However...
+:::
+
+There is also their *interaction*. What does that mean?
+
+In simple terms, it means that if there is a positive interaction, then their impact together is different from the sum of their impacts individually. 
+
+## Back to the Mental Health Self-Experiment {.t}
+\framesubtitle{Let's analyze it!}
+```{r, message=FALSE}
+means <- mh_df %>% 
+  group_by(gym, meditate) %>% 
+  summarize(mean=round(mean(score), 3)) 
+```
+
+```{r, results='asis', echo=FALSE}
+library(xtable)
+print(xtable(means, align=c("c","c","c","c"), digits=c(0,0,0,3)), comment=FALSE, include.rownames=FALSE)
+```
+
+
+## Back to the Mental Health Self-Experiment {.t}
+\label{diffs}
+\framesubtitle{Let's analyze it!}
+```{r, results='asis', echo=FALSE}
+print(xtable(means, align=c("c","c","c","c"), digits=c(0,0,0,3)), comment=FALSE, include.rownames=FALSE)
+```
+
+ - Among days without meditation, going to the gym results in an increase of approximately `r means$mean[3]` - `r means$mean[1]` = `r means$mean[3] - means$mean[1]`
+ - Among days with meditation, going to the gym results in an increase of approximately `r means$mean[4]` - `r means$mean[2]` = `r means$mean[4] - means$mean[2]`
+
+Roughly speaking, an *interaction* is present when these values are different! 
+
+## Back to the Mental Health Self-Experiment {.t}
+\framesubtitle{Let's analyze it!}
+
+```{r, size="scriptsize"}
+model1 <- lm(score ~ gym + meditate + gym*meditate, data=mh_df)
+summary(model1)
+```
+
+## Back to the Mental Health Self-Experiment {.t}
+\framesubtitle{Let's analyze it!}
+On the previous slide, the p-value for the F-statistic is `r pf(summary(model1)$fstatistic[1], summary(model1)$fstatistic[2], summary(model1)$fstatistic[3], lower.tail=FALSE)`. 
+
+This is the overall p-value for the entire model. 
+
+::: {.block}
+### That is, the null hypothesis for this p-value, in words, is:
+\vspace{-5mm}
+$$
+\begin{aligned}
+H_0\text{:} &\text{ Each factor has no impact on the mental health score} \\
+&\text{ and there is no interaction between the two.}
+\end{aligned}
+$$
+:::
+
+What is the null hypothesis in mathematical notation if we let $\mu_i$ be the true mean of the $i^{th}$ treatment group? 
+
+
+## Interpretation of Regression Model Coefficients {.t}
+Now, our linear model looks like this:
+
+$$
+\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x_1 + \hat{\beta}_2 x_2 + \hat{\beta}_3 x_1x_2
+$$
+where 
+
+ - $x_1$ is `gym` (treated as a 0/1 variable)
+ - $x_2$ is `meditate` (treated as a 0/1 variable)
+ - $x_1x_2$ is the interaction between `gym` and `meditate`
+
+What are the $\hat{\beta}$s??
+
+
+## Interpretation of Regression Model Coefficients
+
+
+::: {.block}
+### Each $\hat{\beta}$ shows up under Estimate in the output table:
+
+```{r, size="footnotesize", echo=FALSE}
+coefficients <- round(summary(model1)$coefficients, 3)
+coefficients
+```
+:::
+
+For example:
+
+ - $\hat{\beta}_1 = `r coefficients[2,1]`$ represents the expected increase in mental health score associated with going to the gym, among days that she does NOT meditate. 
+   - Note that this matches the `r means$mean[3] - means$mean[1]` that we calculated on Slide \ref{diffs}
+ - $\hat{\beta}_2 = `r coefficients[3,1]`$ follows analogously.
+
+## Interpretation of Regression Model Coefficients
+
+
+::: {.block}
+### Each $\hat{\beta}$ shows up under Estimate in the output table:
+
+```{r, size="footnotesize", echo=FALSE}
+coefficients <- round(summary(model1)$coefficients, 3)
+coefficients
+```
+:::
+
+For example:
+
+ - $\hat{\beta}_3 = `r coefficients[4,1]`$ is the *interaction* term. This represents the expected *difference in the effect* of going to the gym, between when she meditates and doesn't meditate. 
+   - That is, recall that on Slide \ref{diffs}, we calculated `r means$mean[4]` - `r means$mean[2]` = `r means$mean[4] - means$mean[2]` as being the effect of going to the gym when she DOES meditate. This is also equal to `r coefficients[2,1]` + `r coefficients[4,1]`
+
+
+## Interpretation of Regression Model Coefficients {.t}
+
+::: {.block}
+### Each $\hat{\beta}$ shows up under Estimate in the output table:
+
+```{r, size="footnotesize", echo=FALSE}
+coefficients <- round(summary(model1)$coefficients, 3)
+coefficients
+```
+:::
+
+What about the p-values?
+
+Briefly, each of them is for the corresponding coefficient. But we need to exercise some caution when utilizing them...
+
+## Global $\mathcal{F}$-test
+
+```{r, size="scriptsize", echo=FALSE}
+model1 <- lm(score ~ gym + meditate + gym*meditate, data=mh_df)
+summary(model1)
+```
+The p-value of `r pf(summary(model1)$fstatistic[1], summary(model1)$fstatistic[2], summary(model1)$fstatistic[3], lower.tail=FALSE)`...
+
+
+## Global $\mathcal{F}$-test
+
+The p-value of `r pf(summary(model1)$fstatistic[1], summary(model1)$fstatistic[2], summary(model1)$fstatistic[3], lower.tail=FALSE)` is for the overall null hypothesis:
+
+::: {.block}
+### Global $\mathcal{F}$-test hypotheses
+\vspace{-2mm}
+$$
+\begin{aligned}
+H_0&: \beta_0 = \beta_1 = \beta_2 = \beta_3 = 0 \\
+H_A&: \text{ at least one is not equal to 0}
+\end{aligned}
+$$
+:::
+
+That is, it is an overall test for whether the model describes the data in any way whatsoever.
+
+Here, with a p-value of `r pf(summary(model1)$fstatistic[1], summary(model1)$fstatistic[2], summary(model1)$fstatistic[3], lower.tail=FALSE)`, we find statistically significant evidence that some combination of going to the gym and meditating has an impact on her mental health score. 
+
+\vspace{4mm}
+
+*Note: there is a mistake in $H_0$ here! What is it??*
+
+
+## Back to the Individual p-values
+
+```{r, size="scriptsize", echo=FALSE}
+model1 <- lm(score ~ gym + meditate + gym*meditate, data=mh_df)
+summary(model1)
+```
+
+
+## Back to the Individual p-values {.t}
+Recalling that our linear model looks like this,
+
+$$
+\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x_1 + \hat{\beta}_2 x_2 + \hat{\beta}_3 x_1x_2,
+$$
+
+the interaction term has a p-value of `r round(summary(model1)$coefficients[4,4], 3)`. What $H_0$ is this for?
+
+\vspace{10mm}
+
+How about the p-value of `r round(summary(model1)$coefficients[2,4], 3)`?
+
+
+## So how do we test for main effects? {.t}
+Since the provided p-value for the "main effect" coefficients are not typically of interest to us, what should we do instead?
+
+::: {.t}
+### More partial F-tests
+\vspace{-2mm}
+We generally want to test main effects *in combination* with any interaction terms that involve it. This calls for a partial $\mathcal{F}$-test!
+:::
+
+For example, if we were primarily interested in the impact of meditation, then we would compare the full model against what null model?
+
+pollev.com
+
+## Your Turn \#2{.t}
+Consider again the `learn_prob.csv` data that should already be loaded into your R Markdown file.
+
+ - First, run a linear model on these data as we saw on the Mental Health data, with an interaction term
+ - Report the overall p-value and your conclusion from that
+ - Report the p-value for the interaction term and your conclusion from that
+ - Suppose we are primarily interested in the impact of coding exercises. Report the p-value from the appropriate partial $\mathcal{F}$-test for that
+ - Based on the regression output, what is the estimated impact of coding exercises among those who did not do handwritten exercises? How about among those who DID do handwritten exercises?
+
+
+## Recap and Looking Ahead {.t}
+
+::: {.t}
+### Recap
+\vspace{-2mm}
+
+ - Interaction terms are used when the impact of one covariate may DIFFER across values of another covariate
+ - Main effect p-values are typically not of interest; main effects should generally be assessed \underline{in combination} with any interaction term involving it, using a partial $\mathcal{F}$-test
+ 
+:::
+
+\vspace{3mm}
+
+::: {.t}
+### Looking ahead
+\vspace{-2mm}
+
+ - How do we test other comparisons we might be interested in?
+ - What if one or both of the covariates is/are not binary?
+:::
+
+\vspace{3mm}
+
+### Today's Daily Check
+\vspace{-2mm}
+
+ - Both Your Turns
+ - A screenshot of the confirmation of completion of the Midway Survey

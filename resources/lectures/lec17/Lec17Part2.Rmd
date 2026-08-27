@@ -1,0 +1,97 @@
+---
+title: |
+  | DSC 152: 
+  | Applied Statistical Data Analysis and Inference
+author: | 
+  | Lecture \#17 Part 2
+  | Introduction to 
+  | Time Series Analyses
+output: 
+  beamer_presentation:
+    theme: "Warsaw"
+    fonttheme: "serif"
+
+header-includes:
+- \setbeamertemplate{footline}[frame number]{}
+- \setbeamertemplate{navigation symbols}{}
+- \setbeamersize{text margin left=0.5cm,text margin right=0.5cm}
+- \definecolor{codegray}{HTML}{f4f4f4}
+- \let\textttOrig\texttt
+- \renewcommand{\texttt}[1]{\textttOrig{\colorbox{codegray}{#1}}}
+---
+    
+```{r setup, include=FALSE}
+  knitr::opts_chunk$set(echo = TRUE)
+  knitr::opts_chunk$set(dev = 'pdf')
+  def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+  knitr::knit_hooks$set(chunk = function(x, options) {
+    x <- def.chunk.hook(x, options)
+    ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+  })
+```
+
+
+## Moving Average Models {.t}
+In a Moving Average model, each value is a function of a *weighted average of past values.*
+
+::: {.t}
+### Examples
+\vspace{-2mm}
+
+ - A period of high demand at a store results in the store increasing their inventory; if demand drops for long enough, they will decrease their inventory
+ 
+\vspace{3mm}
+
+ - Prolonged weather patterns may influence foot traffic at retail locations, impacting their sales. 
+:::
+
+Moving Average models are referenced as ~~MA(p)~~ MA(q) where ~~p~~ q is the number of past values that influence the current value.
+
+\textit{(apologies for the typo, I originally had this as MA(p) in the slides)}
+
+## Moving Average Models {.t}
+\framesubtitle{What might an MA(q) process look like?}
+
+Let's simulate some values according to an MA(5) process and plot it:
+```{r, eval=FALSE}
+y <- arima.sim(model = 
+                 list(ma = c(0.5, 0.4, 0.3, 0.2, 0.1)), 
+               n = 200)
+t <- 1:200
+df <- data.frame(y=y, t=t)
+ggplot(df, aes(x=t, y=y)) + 
+  geom_line()
+```
+
+## Moving Average Models {.t}
+\framesubtitle{What might an MA(q) process look like?}
+```{r, echo=FALSE, message=FALSE}
+library(ggplot2)
+y <- arima.sim(model = list(ma = c(0.5, 0.4, 0.3, 0.2, 0.1)), n = 200)
+t <- 1:200
+df <- data.frame(y=y, t=t)
+ggplot(df, aes(x=t, y=y)) + 
+  geom_line()
+```
+
+## Moving Average Models {.t}
+\framesubtitle{What might an MA(q) process look like?}
+It's hard to discern from that plot! But what about an ACF plot?
+```{r, out.width="85%"}
+acf(y)
+```
+
+## Lucas 2013 paper
+
+
+## Your Turn \#2 {.t}
+
+ - Load in the data from the `casino_poker_data.csv` file on the course website
+ 
+\vspace{4mm}
+
+ - Make a timeplot of the `R2_COIN` variable
+ 
+\vspace{4mm}
+
+ - Make an ACF plot of the `R2_COIN` variable and briefly comment on what you observe.

@@ -1,0 +1,193 @@
+---
+title: |
+  | DSC 152: 
+  | Applied Statistical Data Analysis and Inference
+author: | 
+  | Lecture \#17 Part 1
+  | Introduction to 
+  | Time Series Analyses
+output: 
+  beamer_presentation:
+    theme: "Warsaw"
+    fonttheme: "serif"
+
+header-includes:
+- \setbeamertemplate{footline}[frame number]{}
+- \setbeamertemplate{navigation symbols}{}
+- \setbeamersize{text margin left=0.5cm,text margin right=0.5cm}
+- \definecolor{codegray}{HTML}{f4f4f4}
+- \let\textttOrig\texttt
+- \renewcommand{\texttt}[1]{\textttOrig{\colorbox{codegray}{#1}}}
+---
+    
+```{r setup, include=FALSE}
+  knitr::opts_chunk$set(echo = TRUE)
+  knitr::opts_chunk$set(dev = 'pdf')
+  def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+  knitr::knit_hooks$set(chunk = function(x, options) {
+    x <- def.chunk.hook(x, options)
+    ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+  })
+```
+
+
+## Recall...
+\framesubtitle{Conditions for validity of inference in linear regression}
+
+
+ - The relationship between $X$ and $Y$, if there is one, is actually \underline{\textbf{L}inear}
+   - e.g. not quadratic, exponential, etc.
+
+\vspace{2mm}
+
+ - \textbf{I}ndependence of observations
+
+\vspace{2mm}
+
+ - \textbf{N}ormality of $\epsilon_i$
+   - Note that this can also be achieved, due to the central limit theorem, with a large sample size even if $\epsilon_i$ does not follow a normal distribution
+
+\vspace{2mm}
+
+ - \textbf{E}qual variance across all values of $X$
+   - Also known as homoskedasticity
+   
+   
+## Time Series Data {.t}
+
+Time Series data violate the independence condition in a very particular way. 
+
+Simply put, time series data are data that are collected over time.
+
+### Examples:
+\vspace{-2mm}
+ - Stock market prices
+ - Temperature of a particular location over time
+ - Quiz scores within individual students over time
+
+
+## Time Series Data {.t}
+\framesubtitle{Example \#1: TSM Stock Price} 
+TSM is the stock symbol for Taiwan Semiconductor Manufacturing Company. The R package `quantmod` lets you grab pricing information for stocks:
+
+```{r, eval=FALSE}
+install.packages("quantmod")
+library(quantmod)
+getSymbols("TSM")
+```
+
+```{r, echo=FALSE, message=FALSE, size="footnotesize"}
+library(quantmod)
+getSymbols("TSM", from="2025-05-22", to="2026-05-22")
+knitr::kable(TSM[1:5])
+```
+
+
+## Time Series Data {.t}
+\framesubtitle{Example \#1: TSM Stock Price} 
+```{r, echo=FALSE, message=FALSE}
+tsm_df <- TSM
+tsm_df$day_num <- 1:dim(tsm_df)[1]
+library(ggplot2)
+theme_update(text=element_text(size=20))
+ggplot(tsm_df, aes(x=day_num, y=TSM.Open)) + 
+  geom_line() + labs(title="TSM Opening Stock Price for the past year", y="Opening Price ($)",
+                     x="Day Number")
+
+y <- as.numeric(tsm_df$TSM.Open)
+```
+
+## Time Series Data {.t}
+\framesubtitle{Example \#1: TSM Stock Price} 
+To assess autocorrelation, the standard approach is to look at correlograms of two things:
+
+ - autocorrelation function (ACF)
+   - This shows the correlation between $x_t$ and $x_{t+k}$ for any $k$, where $k$ is the number of steps in the future. For example, for $k=1$, this would just be looking at the correlation between subsequent days
+   
+\vspace{5mm}
+
+ - partial autocorrelation function (PACF)
+   - Even if the data generating process only has e.g. one-step correlations, it will show up as correlations between steps that are further apart as well due to carry-over. The PACF controls for these intermediate steps in an attempt to isolate only the correlations that are actually driving any relationship.
+   
+## Time Series Data {.t}
+\framesubtitle{Example \#1: TSM Stock Price} 
+```{r, out.width="85%"}
+acf(y)
+```
+
+
+   
+## Time Series Data {.t}
+\framesubtitle{Example \#1: TSM Stock Price} 
+```{r, out.width="85%"}
+pacf(y)
+```
+
+
+
+## Time Series Data {.t}
+\framesubtitle{Example \#1: TSM Stock Price} 
+So, let's try an AR(1) model
+```{r}
+library(forecast)
+t <- 1:length(y)
+stock_model <- Arima(y, order=c(1,0,0), xreg=t)
+stock_model
+```
+
+
+
+## Time Series Data {.t}
+\framesubtitle{Example \#1: TSM Stock Price} 
+```{r}
+library(lmtest)
+coeftest(stock_model)
+```
+
+
+## Your Turn \#1 {.t}
+\framesubtitle{Example \#2: Poker data from Lecture \#5}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(dplyr)
+library(readr)
+library(ggplot2)
+export_all <- read_csv("ReportExport.csv")
+won_all <- gsub("\\$", "", export_all$`My C Won`)
+won_all <- gsub("\\(", "-", won_all)
+won_all <- gsub("\\)", "", won_all)
+won_all <- as.numeric(won_all)
+
+df_all <- data.frame(won_all = won_all,
+                     hand = 1:length(won_all))
+
+df_all <- df_all %>% mutate(won_cum = cumsum(won_all))
+
+ggplot(data=df_all, aes(x=hand, y=won_cum)) + 
+  geom_line() + 
+  labs(title="Running total of money won starting from May 7, 2020", y = "Cumulative amount won") + 
+  scale_y_continuous(labels = scales::label_dollar()) +
+  theme(text = element_text(size=20))
+```
+
+
+
+## Your Turn \#1 {.t}
+\framesubtitle{Example \#2: Poker data from Lecture \#5}
+
+ - Load the data into R (`PokerHands1NL.csv` file on course website)
+
+\vspace{5mm}
+
+ - Using the `won_cumul` column in that dataframe, recreate the graph on the previous slide
+ 
+\vspace{5mm}
+
+ - Create ACF and PACF plots with the `won_cumul` column
+ 
+\vspace{5mm}
+
+ - Run the appropriate Arima model and find the p-value for whether there is a significant directional trend, adjusting for any autocorrelation. 
+ 
+ 
+ 
+ 

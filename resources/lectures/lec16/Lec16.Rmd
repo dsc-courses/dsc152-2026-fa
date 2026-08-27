@@ -1,0 +1,552 @@
+---
+title: |
+  | DSC 152: 
+  | Applied Statistical Data Analysis and Inference
+author: | 
+  | Lecture \#16
+  | Introduction to Logistic Regression
+date: |
+  | Thursday, May 21
+  | Spring Quarter 2026
+  | Peter Chi
+output: 
+  beamer_presentation:
+    theme: "Warsaw"
+    fonttheme: "serif"
+
+header-includes:
+- \setbeamertemplate{footline}[frame number]{}
+- \setbeamertemplate{navigation symbols}{}
+- \setbeamersize{text margin left=0.5cm,text margin right=0.5cm}
+- \definecolor{codegray}{HTML}{f4f4f4}
+- \let\textttOrig\texttt
+- \renewcommand{\texttt}[1]{\textttOrig{\colorbox{codegray}{#1}}}
+---
+    
+```{r setup, include=FALSE}
+  knitr::opts_chunk$set(echo = TRUE)
+  knitr::opts_chunk$set(dev = 'pdf')
+  def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+  knitr::knit_hooks$set(chunk = function(x, options) {
+    x <- def.chunk.hook(x, options)
+    ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+  })
+```
+
+
+## Binary Outcome with Quantitative Covariate(s)
+
+::: {.t}
+### Example: Diabetes and BMI {.t}
+\vspace{-2mm}
+In this dataset, we have:
+
+ - An outcome variable of whether the individual gets diabetes
+ - A primary covariate of BMI
+
+Our question of interest is to investigate the relationship between BMI and getting diabetes. 
+:::
+
+
+If you want to load the data into R yourself now, you can (but do not have to yet; we'll use it for two Your Turns later):
+```{r, size="footnotesize", eval=FALSE}
+library(readr)
+diabetes <- read_csv(
+  "https://raw.githubusercontent.com/plotly/datasets/master/diabetes.csv")
+```
+
+
+(that can obv all go in one line; I was just trying not to make it too tiny on the slide)
+
+## Example: Diabetes and BMI {.t}
+\framesubtitle{Smith et al., 1988 (paper linked on course website)}
+These data originally come from a study on Native Americans once known as the Pima Indian Tribe, but are now more commonly referred to as The Akimel O'odham, who are at high risk of diabetes.
+
+\begin{center}
+\includegraphics[width=0.4\textwidth]{"Pima_territory_in_1700_CE.pdf"}
+\end{center}
+
+## Example: Diabetes and BMI {.t}
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+library(readr)
+library(dplyr)
+library(ggplot2)
+diabetes<-read_csv("https://raw.githubusercontent.com/plotly/datasets/master/diabetes.csv")
+
+theme_update(text=element_text(size=20))
+ggplot(data=diabetes, aes(x=factor(Outcome), y=BMI)) + 
+  geom_boxplot() + labs(x="Diabetes Status (0=no, 1=yes)", title="Diabetes and BMI")
+```
+
+
+## Example: Diabetes and BMI {.t}
+
+### Now what?
+\vspace{-2mm}
+
+The plot on the previous slide suggests that we have two groups of a quantitative variable, so perhaps we should do a two-sample t-Test. But this would be incorrect!!
+
+\vspace{3mm}
+
+Why?
+
+
+
+
+
+## Example: Diabetes and BMI {.t}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+ggplot(data=diabetes, aes(x=BMI, y=Outcome)) + 
+  geom_point() + labs(y="Diabetes", title="Ok if Diabetes is the outcome variable, then...") + geom_smooth(method="lm", se=FALSE)
+```
+
+
+## Example: Diabetes and BMI {.t}
+So that graph and regression line is obviously stupid. On the other hand, it DOES seem to indicate that there might be a relationship...
+
+```{r, size="scriptsize", echo=FALSE}
+model1 <- lm(Outcome ~ BMI, data=diabetes)
+summary(model1)
+```
+
+## Example: Diabetes and BMI {.t}
+But we can (and should) do better than this. 
+
+::: {.t}
+### What exactly should we do instead?
+\vspace{-2mm}
+Last time, we learned about transformations. Can we do a transformation that would help us here?
+
+:::
+
+First note: from the simple linear regression output on the previous slide, we have:
+
+$$
+\hat{y} = `r round(model1$coefficients[1], 4)` + `r round(model1$coefficients[2], 4)` \cdot BMI
+$$
+
+What even does $\hat{y}$ mean in this context?
+
+
+
+## Example: Diabetes and BMI {.t}
+\label{logit}
+So whatever transformation we are going to do, we need it to be such that $\hat{y}$ will always be between 0 and 1, no matter what the values of the covariates are.
+
+::: {.t}
+### logit transformation
+\vspace{-2mm}
+
+It turns out that this works quite well:
+
+$$
+log\bigg(\frac{\hat{y}}{1 - \hat{y}}\bigg) = \hat{\beta}_0 + \hat{\beta}_1 \cdot x
+$$
+:::
+
+Wait why?
+
+## logit transformation {.t}
+More space for notes if needed
+
+
+## Example: Diabetes and BMI {.t}
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+ggplot(data=diabetes, aes(x=BMI, y=Outcome)) + 
+  geom_point() + labs(y="Diabetes", title="Using the logit transformation") + 
+  geom_smooth(method="glm", method.args=list(family="binomial"), se=FALSE)
+```
+
+## Example: Diabetes and BMI {.t}
+Now, how do we fit the model? In other words, how did R get the curve on the previous slide?
+
+### Slight technical detail
+\vspace{-2mm}
+Unlike in Lecture \#14, we are not transforming the actual data values. *What would happen if we applied the logit transformation on the actual values of y here?*
+
+\vspace{3mm}
+
+Instead what we are doing is transforming the *predicted* value of y (which is why it is $\hat{y}$ instead of $y$ that is shown on Slide \ref{logit}).
+
+\vspace{3mm}
+What this means for us is that instead of using the `lm` function on the transformed data values (as we did in the last lecture), we will use the `glm` function on the original data values...
+
+
+## Example: Diabetes and BMI {.t}
+\label{model1}
+```{r, size="scriptsize"}
+model_logit <- glm(Outcome ~ BMI, data=diabetes, family="binomial")
+summary(model_logit)
+```
+
+
+## Example: Diabetes and BMI {.t}
+So this gives us the following linear model:
+
+$$
+log\bigg(\frac{\hat{y}}{1 - \hat{y}}\bigg) = `r round(model_logit$coefficients[1], 4)` + `r round(model_logit$coefficients[2], 4)` \cdot BMI
+$$
+
+where $\hat{y}$ is the estimated probability of getting diabetes. 
+
+### What are the interpretations of these coefficients??
+\vspace{-2mm}
+ - It is technically correct to say, e.g., that 
+   - `r round(model_logit$coefficients[2], 4)` is the estimated difference in $log\bigg(\frac{\hat{y}}{1 - \hat{y}}\bigg)$ corresponding to a 1-unit increase in BMI. 
+
+\vspace{2mm}
+   
+ - But can we get a more meaningful interpretation than that?
+
+\vspace{2mm}
+
+ - Note the familiarity of the quantity $\frac{\hat{y}}{1-\hat{y}}$ as we just learned about odds ratios...
+
+
+## Example: Diabetes and BMI {.t}
+\framesubtitle{Logistic Regression and Odds Ratios}
+
+::: {.t}
+### Here's the model again:
+\vspace{-4mm}
+$$
+log\bigg(\frac{\hat{y}}{1 - \hat{y}}\bigg) = `r round(model_logit$coefficients[1], 4)` + `r round(model_logit$coefficients[2], 4)` \cdot BMI
+$$
+:::
+
+\vspace{3mm}
+
+::: {.t}
+### which is also equivalent to:
+\vspace{-8mm}
+$$
+\begin{align*}
+\frac{\hat{y}}{1 - \hat{y}} &= e^{`r round(model_logit$coefficients[1], 4)` + `r round(model_logit$coefficients[2], 4)` \cdot BMI} \\
+&= \bigg(e^{-3.6864}\bigg) \bigg(e^{0.0935}\bigg)^{BMI}
+\end{align*}
+$$
+:::
+
+What does a 1-unit increase in BMI do to $\hat{y}$ now?
+
+## Example: Diabetes and BMI {.t}
+More space for notes if needed
+
+## Conclusions {.t}
+
+::: {t}
+### What p-value(s) from the output do we care about?
+\vspace{-2mm}
+Recall that our question of interest is in whether BMI is associated with getting diabetes, and our logistic regression model is:
+
+$$
+log\bigg(\frac{\widehat{diabetes}}{1- \widehat{diabetes}}\bigg) = \hat{\beta}_0 + \hat{\beta}_1 \cdot BMI
+$$
+:::
+
+which gives us the following hypotheses:
+
+$$
+\begin{aligned}
+H_0\colon \beta_1 &= 0 \\
+H_A\colon \beta_1 &\neq 0 \\
+\end{aligned}
+$$
+
+So the p-value for this is... pollev.com
+
+
+## Conclusions {.t}
+\framesubtitle{How about a confidence interval?}
+```{r}
+confint(model_logit)
+```
+
+But now on the odds ratio scale...
+```{r}
+exp(confint(model_logit)[2,])
+```
+
+
+## Conclusions {.t}
+
+::: {.t}
+### A full written conclusion
+\vspace{-2mm}
+We find that there is statistically significant evidence at the $\alpha=0.05$ level that BMI is associated with getting diabetes (p=`r signif(summary(model_logit)$coefficients[2,4], 4)`). Specifically, we estimate that a 1-unit increase in BMI corresponds to an odds ratio of `r round(exp(summary(model_logit)$coefficients[2,1]), 4)` for diabetes, with 95\% CI: (`r round(exp(confint(model_logit, 'BMI')[1]), 4)`, `r round(exp(confint(model_logit, 'BMI')[2]), 4)`).
+:::
+
+
+\vspace{5mm}
+\pause
+
+::: {.t}
+### Note: the text above was written with inline R code
+![](inline.png)
+:::
+
+
+## Your Turn \#1 {.t}
+::: {.block}
+### Quote of the Day \#1
+\vspace{-2mm}
+"The data are what they are."
+:::
+
+\vspace{2mm}
+
+\begin{minipage}{0.8\textwidth}
+\begin{flushright}
+Dr. Rich Hume \\
+Department of Biology \\
+University of Michigan
+\end{flushright}
+\end{minipage}
+\begin{minipage}{0.19\textwidth}
+\includegraphics[width=\textwidth]{Hume.jpg}
+\end{minipage}
+
+\vspace{5mm}
+::: {.block}
+### Quote of the Day \#2
+\includegraphics[width=0.95\textwidth]{outliers.png}
+:::
+
+
+## Your Turn \#1 {.t}
+There are some values of BMI in the dataset that are impossible. First, load the dataset in now if you haven't already. Then,
+
+ - Remove the rows with impossible values of BMI, and then re-run the primary analysis.
+ 
+\vspace{5mm}
+
+ - Report your conclusions at $\alpha=0.05$ for the primary question of interest, along with an estimated odds ratio and 95\% confidence interval. 
+
+
+## Conditions for Logistic Regression
+
+ - The outcome variable is binary
+
+\vspace{12mm}
+
+ - The observations are independent of each other
+
+\vspace{12mm}
+
+ - The relationship between your covariates and the log-odds of the outcome variable is linear
+ 
+ 
+## Conditions for Logistic Regression
+
+ - The outcome variable is binary
+   - This one is obvious
+
+\vspace{10mm}
+
+ - The observations are independent of each other
+   - We could check residuals against time or something like that, but also can just make arguments based on anything we know about how the data were collected
+
+\vspace{10mm}
+
+ - The relationship between your covariates and the log-odds of the outcome variable is linear
+   - We can check this one (somewhat) similar to how we checked for linearity in linear regression...
+   
+## Conditions for Logistic Regression {.t}
+\framesubtitle{Linearity Condition}
+
+Can we just check residuals vs. fitted values?
+
+```{r, eval=FALSE}
+diabetes$fitted <- model_logit$fitted.values
+diabetes$residuals <- residuals(model_logit, type="deviance")
+ggplot(data=diabetes, aes(x=fitted, y=residuals)) + 
+  geom_point()
+```
+
+### What's up with the residuals(model_logit, type="deviance")?
+\vspace{-2mm}
+When using `glm` for logistic regression, it is customary to calculate "deviance residuals" instead of grabbing `residuals` from the model output. For our purposes, all you need to know is that they have better properties in a glm, and that you can get them with the above code.
+
+## Conditions for Logistic Regression {.t}
+\framesubtitle{Linearity Condition}
+What exactly is happening here?
+
+```{r, echo=FALSE, out.width="80%"}
+diabetes$fitted <- model_logit$fitted.values
+diabetes$residuals <- residuals(model_logit, type="deviance")
+ggplot(data=diabetes, aes(x=fitted, y=residuals)) + 
+  geom_point()
+```
+
+## Conditions for Logistic Regression {.t}
+\framesubtitle{Let's illuminate this with simpler examples}
+
+```{r, echo=FALSE, message=FALSE, out.width="90%"}
+set.seed(2)
+x <- c(rnorm(30), rnorm(30, mean=2.5))
+y <- c(rep(0, 30), rep(1, 30))
+
+df <- data.frame(x=x, y=y)
+
+ggplot(data=df, aes(x=x, y=y)) + 
+  geom_point() + 
+  geom_smooth(method="glm", method.args=list(family="binomial"), se=FALSE)
+```
+
+
+## Conditions for Logistic Regression {.t}
+\framesubtitle{Let's illuminate this with simpler examples}
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+model_simp <- glm(y ~ x, family="binomial")
+
+df$fitted <- model_simp$fitted.values
+df$residuals <- residuals(model_simp, type="deviance")
+ggplot(data=df, aes(x=fitted, y=residuals)) + 
+  geom_point() 
+```
+
+## Conditions for Logistic Regression {.t}
+\framesubtitle{Let's illuminate this with simpler examples}
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+model_simp <- glm(y ~ x, family="binomial")
+
+df$fitted <- model_simp$fitted.values
+df$residuals <- residuals(model_simp, type="deviance")
+ggplot(data=df, aes(x=fitted, y=residuals)) + 
+  geom_point() + 
+  geom_smooth(method = "loess", se = FALSE) +
+  geom_hline(yintercept = 0, linetype = "dashed")
+```
+
+
+## Conditions for Logistic Regression {.t}
+\framesubtitle{Let's illuminate this with simpler examples}
+So this is good, because the we are looking for the loess smoother to roughly follow the flat horizontal line at 0.
+
+Here is the code that made the plot on the previous slide:
+```{r, eval=FALSE}
+model_simp <- glm(y ~ x, family="binomial")
+
+df$fitted <- model_simp$fitted.values
+df$residuals <- residuals(model_simp, type="deviance")
+ggplot(data=df, aes(x=fitted, y=residuals)) + 
+  geom_point() + 
+  geom_smooth(method = "loess", se = FALSE) +
+  geom_hline(yintercept = 0, linetype = "dashed")
+```
+
+
+
+
+## Conditions for Logistic Regression {.t}
+\framesubtitle{Let's illuminate this with simpler examples}
+
+Now here's an example in which we have a questionable fit:
+
+
+```{r, echo=FALSE, message=FALSE, out.width="90%"}
+set.seed(2)
+x <- sort(c(rnorm(20), rnorm(20, mean=3)))
+y <- c(rep(0, 5), rep(1, 3), rep(0, 12), rep(1, 5), rep(0, 6), rep(1, 9))
+
+df <- data.frame(x=x, y=y)
+
+ggplot(data=df, aes(x=x, y=y)) + 
+  geom_point() + 
+  geom_smooth(method="glm", method.args=list(family="binomial"), se=FALSE)
+```
+
+
+## Conditions for Logistic Regression {.t}
+\framesubtitle{Let's illuminate this with simpler examples}
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, out.width="85%"}
+model_simp <- glm(y ~ x, family="binomial")
+
+df$fitted <- model_simp$fitted.values
+df$residuals <- residuals(model_simp, type="deviance")
+ggplot(data=df, aes(x=fitted, y=residuals)) + 
+  geom_point() + 
+  geom_smooth(method = "loess", se = FALSE) +
+  geom_hline(yintercept = 0, linetype = "dashed")
+```
+
+This loess curve wobbles a lot, so this one is not so good.
+
+
+## Conditions for Logistic Regression {.t}
+\framesubtitle{Linearity Condition}
+Back to the BMI data:
+
+```{r, echo=FALSE, out.width="80%", warning=FALSE, message=FALSE}
+diabetes$fitted <- model_logit$fitted.values
+diabetes$residuals <- residuals(model_logit, type="deviance")
+ggplot(data=diabetes, aes(x=fitted, y=residuals)) + 
+  geom_point() + 
+  geom_smooth(method = "loess", se = FALSE) +
+  geom_hline(yintercept = 0, linetype = "dashed")
+```
+
+
+## Your Turn {.t}
+Now we will consider the full `diabetes` dataset:
+```{r, echo=FALSE}
+columns <- names(diabetes)[1:9]
+
+description <- c("# of times pregnant",
+          "Plasma glucose level",
+          "Diastolic bp",
+          "Triceps skin fold thickness",
+          "2-hour serum insulin",
+          "body mass index",
+          "genetic disposition to diabetes",
+          "age in years",
+          "Has diabetes or not")
+
+knitr::kable(cbind(columns, description))
+```
+
+## Your Turn {.t}
+Suppose that the primary analysis was the simple logistic regression model with just BMI as a covariate, but now we would like to perform a sensitivity analysis:
+
+ - Perform backward selection via p-values, starting from the model with all 8 covariates in it
+   - Display the model summary at each step
+
+\vspace{3mm}
+
+ - For the final model, write a brief description of the following:
+   - The p-value for the primary question and what the conclusion would have been if this model had actually been the one used for inference
+   - The interpretation, on the odds ratio scale, of the estimate of the primary coefficient of interest, along with a 95\% confidence interval
+
+\vspace{3mm}
+
+ - Check the linearity condition via a residual plot with the final model, and briefly comment
+ 
+## Recap and Looking Ahead {.t}
+
+::: {.t}
+### Recap
+\vspace{-2mm}
+ - Logistic regression is used when we have a binary outcome variable, and any number of quantitative/categorical/binary covariates
+ - $e^{\hat{\beta}_i}$ can be interpreted as an odds ratio
+:::
+
+\vspace{6mm}
+
+::: {.t}
+### Looking Ahead
+\vspace{-2mm}
+Time Series! Also next Tuesday's class is asynchronous.
+:::
+
+\vspace{6mm}
+
+::: {.t}
+### Today's Daily Check
+\vspace{-2mm}
+The two Your Turns
+:::

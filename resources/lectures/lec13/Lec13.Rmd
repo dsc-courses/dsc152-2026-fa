@@ -1,0 +1,461 @@
+---
+title: |
+  | DSC 152: 
+  | Applied Statistical Data Analysis and Inference
+author: | 
+  | Lecture \#13
+  | Pitfalls of Mixing Model Selection
+  | with Statistical Inference
+date: |
+  | Tuesday, May 12
+  | Spring Quarter 2026
+  | Peter Chi
+output: 
+  beamer_presentation:
+    theme: "Warsaw"
+    fonttheme: "serif"
+
+header-includes:
+- \setbeamertemplate{footline}[frame number]{}
+- \setbeamertemplate{navigation symbols}{}
+- \setbeamersize{text margin left=0.5cm,text margin right=0.5cm}
+- \definecolor{codegray}{HTML}{f4f4f4}
+- \let\textttOrig\texttt
+- \renewcommand{\texttt}[1]{\textttOrig{\colorbox{codegray}{#1}}}
+---
+    
+```{r setup, include=FALSE}
+  knitr::opts_chunk$set(echo = TRUE)
+  knitr::opts_chunk$set(dev = 'pdf')
+  def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+  knitr::knit_hooks$set(chunk = function(x, options) {
+    x <- def.chunk.hook(x, options)
+    ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+  })
+```
+
+
+
+## A common (flawed) workflow
+\framesubtitle{from today's reading}
+
+![](berk1.png)
+
+## A common (flawed) workflow
+\framesubtitle{from today's reading}
+
+![](berk2.png)
+
+## A common (flawed) workflow {.t}
+To summarize, the (flawed) workflow is:
+
+ - Start with a dataset with one outcome variable and many covariates, one of which is your primary covariate of interest
+   - Example:
+     - **Outcome variable:** life expectancy
+     - **Primary covariate of interest:** education level
+     - **Other covariates (potential confounders):** region, SES at birth, current SES, ethnicity, family history of illnesses, dietary habits, exercise habits, etc.
+   - Your question of interest is whether there is a relationship between education level and life expectancy
+
+\vspace{2mm}     
+     
+ - Perform model selection to determine which set of covariates should be included in the "best model" (keeping education level in no matter what)
+
+\vspace{2mm}     
+
+ - From this "best model," use the p-value corresponding to education level to answer the original question of interest
+
+
+## So what's wrong with that? {.t}
+Unfortunately, if we do the procedure described on the previous slide, our hypothesis testing will be invalid!
+
+\vspace{5mm}
+
+Recall: what do we mean by invalid?
+
+
+## Example {.t}
+To illustrate the point, we will investigate the following simple example: 
+
+::: {.block}
+### Just one potential confounder
+\vspace{-2mm}
+Suppose that we are considering the model:
+$$
+y = \beta_0 + \beta_1x_1 + \beta_2x_2 + \epsilon
+$$
+
+where $x_1$ is the primary covariate of interest, and $x_2$ is a potential confounding variable. 
+
+\vspace{4mm}
+For example: 
+
+ - let $x_1$ be the education level (in years of education)
+ - let $x_2$ be the amount that they typically exercised (in hours per week)
+ - let $y$ be their age at death (in years)
+
+:::
+
+
+
+
+
+## Example {.t}
+\framesubtitle{These are simulated data...}
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, out.width="95%"}
+set.seed(17)
+
+x1 <- round(rnorm(100, mean=14, sd=2.5), 0)
+x2 <- round(rnorm(100, mean=(x1/3), sd=0.5), 2)
+x2 <- ifelse(x2 > 0, x2, 0)
+y <- round(70 + x2 + rnorm(100, sd=10), 0)
+
+life_df <- data.frame(age = y,
+                      edu = x1,
+                      exercise = x2)
+
+library(ggplot2)
+library(dplyr)
+
+theme_update(text=element_text(size=20))
+ggplot(data=life_df, aes(x=age)) + 
+  geom_bar() + labs(title="Age at death")
+
+```
+
+
+## Example {.t}
+\framesubtitle{These are simulated data...}
+```{r, echo=FALSE}
+ggplot(data=life_df, aes(x=edu)) + 
+  geom_bar() + labs(title="Years of Education")
+```
+
+## Example {.t}
+\framesubtitle{These are simulated data...}
+```{r, echo=FALSE, message=FALSE, out.width="95%"}
+ggplot(data=life_df, aes(x=exercise)) + 
+  geom_histogram() + labs(title="Weekly Hours of Exercise (self-reported)")
+```
+
+
+
+## Example {.t}
+```{r, echo=FALSE}
+ggplot(data=life_df, aes(x=edu, y=age)) + 
+  geom_point() + labs(x="Years of Education", y="Age at Death", title="Death Age vs. Education")
+```
+
+
+
+## Example {.t}
+
+```{r, size="footnotesize"}
+summary(lm(age ~ edu + exercise, data=life_df))
+```
+
+
+
+## Example {.t}
+The flawed workflow would take the output on the previous slide and decide whether to keep `exercise` in the final model based on whether `exercise` is statistically significant in the model.
+
+In this case, the p-value for `exercise` is `r round(summary(lm(age ~ edu + exercise, data=life_df))$coefficients[3, 4], 3)`, so we would remove `exercise` from the model.
+
+Then, we run the model with just `edu` and get its p-value...
+
+
+
+## Example {.t}
+
+```{r, size="footnotesize"}
+summary(lm(age ~ edu, data=life_df))
+```
+
+## Example {.t}
+\framesubtitle{But was this the right decision??}
+
+In reality, the data were simulated under:
+
+ - An association between exercise and age of death
+ - An association between exercise and education level
+ - No direct association between education level and age of death
+ 
+So this workflow resulted in a Type I Error! 
+
+And it wouldn't have happened if we kept `exercise` in the model!!
+
+## Example {.t}
+\framesubtitle{What happens on average?}
+
+### Two Questions:
+\vspace{-2mm}
+ - If we repeat the simulation many times (10,000), what is the overall Type I Error rate on the test for education level?
+
+ - And if we just used the full model each time, would our Type I Error rate be ok?
+ 
+## Example {.t}
+```{r, size="tiny", cache=TRUE}
+count1 <- 0
+count2 <- 0
+reps <- 10000
+
+for(i in 1:reps){
+  # Simulate data
+  x1 <- round(rnorm(100, mean=14, sd=2.5), 0) # integer values for years of education
+  x2 <- round(rnorm(100, mean=(x1/3), sd=0.5), 2) # two decimals for exercise
+  x2 <- ifelse(x2 > 0, x2, 0) # no negative values of exercise
+  y <- round(70 + x2 + rnorm(100, sd=10), 0) # integer values for age
+  
+  # Run model
+  model <- lm(y ~ x1+x2)
+  
+  # Check whether the p-value for exercise is significant
+  if(summary(model)$coefficient[3,4] < 0.05){
+    pval1 <- summary(model)$coefficient[2,4] # if it is, keep it in the model
+  } else {
+    model2 <- lm(y ~ x1)
+    pval1 <- summary(model2)$coefficient[2,4] # if it's not, take it out
+  }
+  
+  # Count how frequently the education p-value is significant
+  if(pval1 < 0.05){
+    count1 <- count1 + 1
+  }
+  
+  # Also count how many times significant from the full model every time
+  if(summary(model)$coefficient[2,4] < 0.05){
+    count2 <- count2 + 1
+  }
+}
+```
+
+## Example {.t}
+
+::: {.t}
+### Type I Error rate from using full model always
+\vspace{-2mm}
+```{r}
+count2 / reps
+```
+:::
+
+\pause
+\vspace{8mm}
+
+::: {.t}
+### Type I Error rate when doing model selection followed by inference
+\vspace{-2mm}
+```{r}
+count1 / reps
+```
+:::
+
+\vspace{4mm}
+
+P.S. This is a big problem!!
+
+
+## Your Turn \#1 {.t}
+In the previous example, there was a true causal pathway through the confounder of "exercise." It makes sense that we would have a problem in this case. (Why?)
+
+\vspace{3mm}
+
+But, is there still a problem when the secondary covariate does NOT actually have any association with the outcome variable? Here we will explore that. 
+
+### Simulation study:
+\vspace{-2mm}
+ - Simulate a vector `x1` of size 100 where each observation follows a $N(0, 1)$ distribution
+
+\vspace{2mm}
+
+ - Simulate a vector `x2` of size 100 where each $x_{i2}$ observation follows a $N(x_{i1}, \sigma=0.5)$ distribution; that is, each value of the `x2` vector is centered at the corresponding `x1` value, with some noise
+
+## Your Turn \#1 {.t}
+
+
+### Simulation study (continued):
+\vspace{-2mm}
+ - Simulate a vector `y` that has no relationship with `x1` or `x2`, and each observation just follows a $N(0, 1)$ distribution.
+ 
+\vspace{2mm}
+
+ - Run the full model with `x1` and `x2` as covariates, then check whether the p-value for `x2` is less than 0.05
+   - If it is, keep it in the model and grab the p-value for `x1`
+   - If it is not, remove it from the model, run the linear model again without it, and grab the p-value for `x1` from that model
+   - Increment a counter each time the p-value for `x1` is less than 0.05 under this procedure
+
+\vspace{2mm}
+
+ - Increment a separate counter each time the full model itself gives a p-value of less than 0.05 for `x1`
+
+\vspace{2mm}
+
+ - Put this in a loop, and compare the Type I Error rates for the model selection approach vs. just using the full model every time
+
+## What should we actually do? {.t}
+As we have shown, the model selection $\rightarrow$ statistical inference workflow is NOT A GOOD IDEA!
+
+So, what should we do instead?
+
+\vspace{3mm}
+
+### A proper statistical inference workflow consists of the following:
+\vspace{-2mm}
+
+ - A presentation of summary statistics from the data, in the form of a table and usually one or more appropriate graphical representations
+
+\vspace{2mm}
+
+ - The statistical inference must be done using a model that is pre-specified, either based on scientific rationale, prior studies, or a combination of both. This constitutes the "primary analysis."
+ 
+
+
+## What should we actually do? {.t}
+
+\vspace{2mm}
+### A proper statistical inference workflow consists of the following:
+\vspace{-2mm}
+Once the primary analysis is done, THEN secondary analyses should be performed. Secondary analyses consist of:
+
+ - Model diagnostics (as discussed in Lecture \#10)
+ 
+\vspace{2mm}
+
+ - Sensitivity analyses: what WOULD have happened if we had fit a different model? Here you can do any model building procedure to find potential "better" models.
+ 
+\vspace{2mm}
+
+ - Possibly a permutation test (particularly if model diagnostics give you any cause for concern that can't be fixed by model building)
+
+   
+
+## Example: March Madness (again) {.t}
+
+```{r, message=FALSE, echo=FALSE}
+library(readr)
+march_madness <- read_csv("march_madness.csv")
+
+ggplot(data=march_madness, aes(x=knowledge, y=bracket_score)) +
+  geom_point() + labs(y="bracket score", title="Students from Villanova University in Spring 2019") + 
+  geom_smooth(method="lm", se=FALSE)
+```
+
+
+## Example: March Madness (again) {.t}
+Now let us consider the full dataset, which can be found under Lecture \#7 on the course website. It has the following columns:
+
+```{r, echo=FALSE, size="footnotesize"}
+columns <- names(march_madness)
+
+description <- c("# of Villanova games watched",
+          "# of non-Villanova games watched",
+          "# of teams for which you can name 1 player",
+          "# of teams for which you can name 2 players",
+          "# of teams for which you can name the head coach",
+          "how frequently can you identify strategies on the court",
+          "to what degree did you use your knowledge in your picks",
+          "final score on the bracket",
+          "overall knowledge score from 0 to 10")
+
+knitr::kable(cbind(columns, description))
+```
+
+Suppose that our primary interest is actually in whether there is a relationship between `other_games` and `bracket_score`. 
+
+## Example: March Madness (again) {.t}
+```{r, echo=FALSE}
+ggplot(data=march_madness, aes(x=other_games, y=bracket_score)) +
+  geom_point() + labs(y="bracket score", 
+                      x="Number of non-Villanova games watched",
+                      title="Students from Villanova University in Spring 2019")
+```
+
+## Example: March Madness (again) {.t}
+\framesubtitle{Your Turn \#2}
+Let's walk through these components of the statistical inference workflow:
+
+ - Performing a primary statistical analysis using a pre-specified model
+ 
+\vspace{3mm}
+
+ - Sensitivity analysis: backward selection using p-values
+   - Note: this is one of the simplest model building procedures possible; there are many other possibilities that you may have learned about in other classes. You are welcome to use them in this class but I will not cover them. 
+   
+   
+## Example: March Madness (again) {.t}
+\framesubtitle{Your Turn \#2}
+
+For the primary analysis, let's suppose that we think that all of the other covariates (except `knowledge`) should be included in the model.
+
+We would do this because we have scientific rationale for thinking that this is the right thing to do.
+
+
+## Example: March Madness (again) {.t}
+\framesubtitle{Your Turn \#2}
+
+```{r, size="tiny"}
+model_all <- lm(bracket_score ~ nova_games+other_games+name1_player+name2_players+name_coach+
+                  identify_strat+used_knowledge, data=march_madness)
+summary(model_all)
+```
+
+
+## Example: March Madness (again) {.t}
+\framesubtitle{Your Turn \#2}
+
+::: {.t}
+### Primary Analysis
+\vspace{-2mm}
+The p-value for `other_games` from this primary analysis is `r summary(model_all)$coefficients[3,4]` so we would fail to reject $H_0$ at $\alpha=0.05$.
+:::
+
+\vspace{2mm}
+
+### Sensitivity Analysis
+\vspace{-2mm}
+Now, to do backward selection using the p-values, we remove covariates one-by-one, in order of the highest p-value. We stop when all p-values are less than 0.05.
+
+\vspace{2mm}
+
+Note that `identify_strat` is a categorical variable with 4 dummy variables, so these need to be either all in the model or all removed. This means that it requires a partial F-test!
+
+\vspace{2mm}
+
+For the sake of simplicity, let us assume that it's just not going to be in the final model and remove it first (otherwise, we would need to do the partial F-test on every step, which will get somewhat painful).
+
+
+## Example: March Madness (again) {.t}
+\framesubtitle{Your Turn \#2}
+
+The entirety of Your Turn \#2 is:
+
+1. Do the primary analysis and report its conclusions (shown on the previous slides)
+
+\vspace{3mm}
+2. Do backward selection with p-values, showing the model summary at each step, and then report what the final model is under this procedure and the p-value for the primary covariate of interest in that model, along with brief comments on what you observed. 
+
+## Recap and Looking Ahead {.t}
+
+::: {.t}
+### Recap
+\vspace{-2mm}
+
+ - Model Selection $\rightarrow$ Inference is not a good workflow!
+ - Model Selection is a fine thing to do if you are doing a purely Machine Learning endeavour, or as part of Secondary Analyses of a Statistical Inference Workflow
+:::
+
+\vspace{6mm}
+
+::: {.t}
+### Looking Ahead
+\vspace{-2mm}
+Transformations
+:::
+
+\vspace{6mm}
+
+::: {.t}
+### Today's Daily Check
+\vspace{-2mm}
+Both Your Turns
+:::

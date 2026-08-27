@@ -1,0 +1,475 @@
+---
+title: |
+  | DSC 152: 
+  | Applied Statistical Data Analysis and Inference
+author: | 
+  | Lecture \#12
+  | Interactions Terms Continued
+date: |
+  | Thursday, May 7
+  | Spring Quarter 2026
+  | Peter Chi
+output: 
+  beamer_presentation:
+    theme: "Warsaw"
+    fonttheme: "serif"
+
+header-includes:
+- \setbeamertemplate{footline}[frame number]{}
+- \setbeamertemplate{navigation symbols}{}
+- \setbeamersize{text margin left=0.5cm,text margin right=0.5cm}
+- \definecolor{codegray}{HTML}{f4f4f4}
+- \let\textttOrig\texttt
+- \renewcommand{\texttt}[1]{\textttOrig{\colorbox{codegray}{#1}}}
+---
+    
+```{r setup, include=FALSE}
+  knitr::opts_chunk$set(echo = TRUE)
+  knitr::opts_chunk$set(dev = 'pdf')
+  def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+  knitr::knit_hooks$set(chunk = function(x, options) {
+    x <- def.chunk.hook(x, options)
+    ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+  })
+```
+
+
+## Mid-Quarter Survey Summary
+![](survey_inperson)
+
+## Mid-Quarter Survey Summary
+![](survey_podcast)
+
+## Mid-Quarter Survey Summary {.t}
+
+### Lecture Feedback
+\vspace{-2mm}
+
+ - Mostly positive things
+ 
+\vspace{3mm}
+
+ - Many comments about the class being too early
+ 
+\vspace{3mm}
+
+ - A few people said I go too fast sometimes
+ 
+## Mid-Quarter Survey Summary
+![](survey_lab)
+
+## Mid-Quarter Survey Summary
+![](survey_lab1)
+
+
+## Mid-Quarter Survey Summary
+![](survey_lab2)
+
+
+## Mid-Quarter Survey Summary
+![](survey_lab3)
+
+
+## Mid-Quarter Survey Summary
+![](survey_lab4)
+
+
+## Mid-Quarter Survey Summary
+![](survey_lab5)
+
+
+
+
+## Mid-Quarter Survey Summary {.t}
+
+### Lab Feedback
+\vspace{-2mm}
+
+ - Lab 1: Mostly good/fine/easy
+
+\vspace{2mm}
+
+ - Lab 2: Maybe too easy?
+
+\vspace{2mm}
+
+ - Lab 3: "The sheer tedium of this lab single handedly drilled the impact of distributions and stuff on power, etc into my head...  I didn't love working on it, but it's my favorite/most effective lab so far."
+
+\vspace{2mm}
+
+ - Lab 4: Long
+
+\vspace{2mm}
+
+ - Lab 5: "I thought it was very clearly presented and easy to follow! Very easy to finish and relearn about the violations/conditions for linear regression & on full/reduced models." 
+   - Also there was some longer constructive feedback, thank you!
+
+
+## Mid-Quarter Survey Summary
+![](survey_hw-hours)
+
+## Mid-Quarter Survey Summary
+![](survey_hw)
+
+
+## Mid-Quarter Survey Summary
+
+### HW1 Feedback
+\vspace{-2mm}
+
+ - Good preparation for quiz
+
+\vspace{4mm}
+
+ - Clarity or too vague sometimes
+
+
+## Mid-Quarter Survey Summary
+![](survey_help){width="70%"}
+
+## Mid-Quarter Survey Summary
+
+### Other comments
+\vspace{-2mm}
+
+ - TONS of good feedback for Quiz 1
+   - Most people said it was very fair, good coverage of content
+   - Some comments about clarity of questions
+
+\vspace{2mm}
+
+ - Lots of positive comments about the poker lecture, with feedback saying that memorable examples help in terms of retention of the topics
+
+\vspace{2mm}
+
+ - Positive comments on course organization
+ 
+\vspace{2mm}
+
+ - Some issues with chalk visibility
+
+\vspace{2mm}
+
+ - "Professor Chi is really great, one of my favorite DSC professors at UCSD so far, right after Eldridge. Great job man"
+
+
+## Mid-Quarter Survey Summary
+
+### THANK YOU
+\vspace{-2mm}
+We appreciate the time you took to fill out the survey! Everything stated, even if not mentioned here, will be carefully considered for the sake of improving the course both for the remainder of this quarter and in the future. 
+
+
+## Recall: Mental Health Self-Experiment {.t}
+\label{box}
+
+```{r, size="small", echo=FALSE, warning=FALSE}
+neither <- c(7, 4, 2, 8, 4, 5, 8)
+gym <- c(5, 1, 8, 8, 9, 7, 6)
+meditate <- c(7, 5, 5, 8, 5, 6, 5)
+both <- c(9, 6, 8, 9, 9, 8, 10)
+
+mh_df <- data.frame(
+  score = c(neither, gym, meditate, both),
+  gym = c(rep("no", 7), rep("yes", 7),
+          rep("no", 7), rep("yes", 7)),
+  meditate = c(rep("no", 14), rep("yes",14))
+)
+
+library(ggplot2)
+theme_update(text = element_text(size = 25))
+
+ggplot(data=mh_df, mapping=aes(x=gym, y=score, fill=meditate)) +
+  geom_boxplot() + ggtitle("Mental Health Comparisons")
+```
+
+## Recall: Mental Health Self-Experiment {.t}
+The linear model was:
+$$
+\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x_1 + \hat{\beta}_2 x_2 + \hat{\beta}_3 x_1x_2
+$$
+where 
+
+ - $x_1$ is `gym` (treated as a 0/1 variable)
+ - $x_2$ is `meditate` (treated as a 0/1 variable)
+ - $x_1x_2$ is the interaction between `gym` and `meditate`
+
+
+### Last time, we investigated the following null hypotheses:
+\vspace{-2mm}
+
+ - $H_0: \beta_1 = \beta_2 = \beta_3 = 0$
+   - (Does any combination of the two factors and their interaction have an impact
+   on the mental health score?)
+ - $H_0: \beta_3 = 0$
+   - (Is there an interaction between going to the gym and meditation?)
+
+
+## Recall: Mental Health Self-Experiment {.t}
+The linear model was:
+$$
+\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x_1 + \hat{\beta}_2 x_2 + \hat{\beta}_3 x_1x_2
+$$
+where 
+
+ - $x_1$ is `gym` (treated as a 0/1 variable)
+ - $x_2$ is `meditate` (treated as a 0/1 variable)
+ - $x_1x_2$ is the interaction between `gym` and `meditate`
+
+
+### Last time, we investigated the following null hypotheses:
+\vspace{-2mm}
+and finally,
+
+ - $H_0: \beta_2 = \beta_3 = 0$
+   - (Is meditation in combination with its interaction statistically significant?)
+
+
+
+## Recall: Mental Health Self-Experiment {.t}
+The linear model was:
+$$
+\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x_1 + \hat{\beta}_2 x_2 + \hat{\beta}_3 x_1x_2
+$$
+where 
+
+ - $x_1$ is `gym` (treated as a 0/1 variable)
+ - $x_2$ is `meditate` (treated as a 0/1 variable)
+ - $x_1x_2$ is the interaction between `gym` and `meditate`
+
+::: {.t}
+### What if we actually wanted to ask a different question?
+\vspace{-2mm}
+
+Suppose our interest is in whether going to the gym and meditation have a different impact *from each other*. What would be the $H_0$ to test for this??
+::: 
+
+pollev.com
+
+## Recall: Mental Health Self-Experiment {.t}
+\label{eachother}
+
+::: {.t}
+### What if we actually wanted to ask a different question?
+\vspace{-2mm}
+
+Suppose our interest is in whether going to the gym and meditation have a different impact *from each other*. How do we test for it?
+:::
+
+If $H_0$ is true, then 
+
+$$
+\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x_1 + \hat{\beta}_2 x_2 + \hat{\beta}_3 x_1x_2
+$$
+
+would be equivalent to
+
+$$
+\hat{y} = \hat{\beta}_{0}^* + \hat{\beta}_{1}^* (x_1 + x_2) + \hat{\beta}_{3}^* x_1x_2
+$$
+
+Daily Check Question: Why??
+
+pollev.com
+
+## Recall: Mental Health Self-Experiment {.t}
+We want to compare two models, so this calls for a partial $\mathcal{F}$-test!
+
+
+```{r, echo=FALSE}
+mh_df$gym <- ifelse(mh_df$gym=="no", 0, 1)
+mh_df$meditate <- ifelse(mh_df$meditate=="no", 0, 1)
+```
+
+```{r, size="footnotesize"}
+full_model <- lm(score ~ gym + meditate + gym:meditate, data=mh_df)
+null_model <- lm(score ~ I(gym + meditate) + gym:meditate, data=mh_df)
+anova(null_model, full_model)
+```
+
+
+## Your Turn \#1 {.t} 
+Recall again the data from Winter's data collection of my probability theory research project:
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(readr)
+library(dplyr)
+learn_prob <- read_csv("learn_prob.csv")
+show <- learn_prob %>% 
+  select("score", "handwritten", "coding")
+
+knitr::kable(show[1:9,])
+```
+
+
+## Your Turn \#1 {.t} 
+In actuality, we wanted to know if coding exercises had a *different* impact than handwritten exercises. 
+
+::: {.block}
+### In an R Markdown file: 
+\vspace{-2mm}
+Load the `learn_prob.csv` dataset into R Markdown again, and then:
+
+ - Run the full model
+ - Run the appropriate null model
+ - Get a p-value for this question from a partial $\mathcal{F}$-test
+:::
+ 
+Reminder: in this dataframe, the outcome variable is `score`; the relevant covariates are `handwritten` and `coding`.
+
+## Recall: FEV and Smoking
+```{r, echo=FALSE, message=FALSE}
+library(readr)
+FEV <- read_delim("FEV.txt", delim = "\t", escape_double = FALSE, trim_ws = TRUE)
+
+
+ggplot(data=FEV, mapping = aes(x = age, y=fev, color=factor(smoke))) + 
+  geom_jitter(aes(shape=factor(smoke)), size=3) + 
+  theme(text=element_text(size=20)) + 
+  labs(y="FEV", title="Lung Function vs. Smoking Status with Age", shape="smoke", color="smoke")
+```
+
+
+## Recall: FEV and Smoking
+```{r, echo=FALSE, message=FALSE}
+library(readr)
+FEV <- read_delim("FEV.txt", delim = "\t", escape_double = FALSE, trim_ws = TRUE)
+
+
+ggplot(data=FEV, mapping = aes(x = age, y=fev, color=factor(smoke))) + 
+  geom_jitter(aes(shape=factor(smoke)), size=3) + geom_smooth(method="lm", se=FALSE) +
+  theme(text=element_text(size=20)) + 
+  labs(y="FEV", title="Lung Function vs. Smoking Status with Age", shape="smoke", color="smoke")
+```
+
+
+## Recall: FEV and Smoking {.t}
+Question: what does the fact that the regression lines for each group are not parallel suggest??
+
+
+
+## Recall: FEV and Smoking {.t}
+Here was the original model we ran in Lecture \#8:
+
+```{r, size="scriptsize"}
+model1 <- lm(fev ~ smoke + age, data=FEV)
+summary(model1)
+```
+
+
+## Recall: FEV and Smoking {.t}
+*Adjusting* for age is NOT the same thing as including an *interaction* with age. 
+
+In other words, what again is the interpretation of `r summary(model1)$coefficients[2,1]` on the previous slide?
+
+
+## Recall: FEV and Smoking {.t}
+\framesubtitle{Interaction model}
+```{r, size="scriptsize"}
+model2 <- lm(fev ~ smoke*age, data=FEV)
+summary(model2)
+```
+
+## Recall: FEV and Smoking {.t}
+\framesubtitle{Interaction model}
+Now what are the interpretations of each of the coefficient estimates from this output?
+
+pollev.com
+
+
+## Recall: FEV and Smoking {.t}
+```{r, size="footnotesize"}
+null_model <- lm(fev ~ age, data=FEV)
+anova(null_model, model2)
+```
+
+### If the full model is:
+\vspace{-2mm}
+$$
+\widehat{FEV} = \hat{\beta}_0 + \hat{\beta}_1 \cdot smoke + \hat{\beta}_2 \cdot age + \hat{\beta}_3 \cdot smoke \times age,
+$$
+
+then what is the $H_0$ for the test shown here? pollev.com
+
+## Your Turn \#2 {.t}
+Recall the data from HW1 on UCSD women's basketball player Rosa Smith. 
+
+ - In HW1, we investigated a variety of Smith's statistics, each as a single variable of interest (3 point shooting, assists, minutes played).
+
+\vspace{3mm}
+
+ - Suppose now that Coach VanDerveer wants you to investigate the potential relationship between the \underline{number of minutes} that Smith plays in a game, and her \underline{field goal shooting percentage} in that game
+   - Specifically, VanDerveer wants to know if Smith tends to do better on average when she is in the game for longer. 
+   
+
+The data are in the tab-delimited file `smith.txt` under this lecture on the course website (slightly modified from before)...
+
+
+## Your Turn \#2 {.t}
+```{r, echo=FALSE, message=FALSE, size="scriptsize"}
+smith <- read_delim("smith.txt")
+knitr::kable(smith[1:8,1:8])
+```
+There are more rows and columns that this. Specifically,
+
+ - Each row represents a single game
+ - `fgp` is her 3-point shooting percentage in that game
+ - `MIN` is the number of minutes she played in that game
+ - `AST` is the number of assists she had in that game
+ - `TO` is the number of turnovers she had in that game
+
+## Your Turn \#2 {.t}
+After discussion with Coach, you decide that the following full model is appropriate:
+
+$$
+\widehat{\texttt{fgp}} = \hat{\beta}_0 + \hat{\beta}_1 \texttt{MIN} + \hat{\beta}_2 \texttt{AST} + \hat{\beta}_3 \texttt{TO} + \hat{\beta}_4 \texttt{MIN} \times \texttt{AST}
+$$
+
+where, again, our primary covariate of interest is `MIN`.
+
+### Answer/do the following:
+\vspace{-2mm}
+ - What would be the rationale for choosing this as the model for inference, in terms of what we think the role of each of these variables is?
+ 
+ - Run the full model
+ 
+ - Provide brief interpretations of $\hat{\beta}_1$ and $\hat{\beta}_4$ using the output
+ 
+ - Then run the null model for the question of interest, and do the appropriate partial $\mathcal{F}$-test, reporting your p-value.
+ 
+## Recap and Looking Ahead
+
+::: {.t}
+### Recap
+\vspace{-2mm}
+
+ - Different statistical comparisons (e.g. $H_0\colon \beta_1 = \beta_2$) can be made by properly specifying the null model and performing a partial $\mathcal{F}$-test
+ 
+\vspace{1mm}
+
+ - Interactions can be modeled between binary, categorical, and quantitative variables
+ 
+:::
+
+\vspace{2mm}
+
+::: {.t}
+### Looking Ahead
+\vspace{-2mm}
+
+ - Transformations
+
+\vspace{1mm}
+
+ - Caution with Model Selection
+:::
+
+\vspace{2mm}
+
+::: {.t} 
+### Today's Daily Check
+\vspace{-2mm}
+
+ - Answer to the question on Slide \ref{eachother}
+ - The two Your Turns
+:::

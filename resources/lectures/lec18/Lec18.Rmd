@@ -1,0 +1,553 @@
+---
+title: |
+  | DSC 152: 
+  | Applied Statistical Data Analysis and Inference
+author: | 
+  | Lecture \#18
+  | Time Series Regression
+date: |
+  | Thursday, May 28
+  | Spring Quarter 2026
+  | Peter Chi  
+output: 
+  beamer_presentation:
+    theme: "Warsaw"
+    fonttheme: "serif"
+
+header-includes:
+- \setbeamertemplate{footline}[frame number]{}
+- \setbeamertemplate{navigation symbols}{}
+- \setbeamersize{text margin left=0.5cm,text margin right=0.5cm}
+- \definecolor{codegray}{HTML}{f4f4f4}
+- \let\textttOrig\texttt
+- \renewcommand{\texttt}[1]{\textttOrig{\colorbox{codegray}{#1}}}
+---
+    
+```{r setup, include=FALSE}
+  knitr::opts_chunk$set(echo = TRUE)
+  knitr::opts_chunk$set(dev = 'pdf')
+  def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+  knitr::knit_hooks$set(chunk = function(x, options) {
+    x <- def.chunk.hook(x, options)
+    ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+  })
+```
+
+
+## Recall...
+\framesubtitle{Conditions for validity of inference in linear regression}
+
+
+ - The relationship between $X$ and $Y$, if there is one, is actually \underline{\textbf{L}inear}
+   - e.g. not quadratic, exponential, etc.
+
+\vspace{2mm}
+
+ - \textbf{I}ndependence of observations
+
+\vspace{2mm}
+
+ - \textbf{N}ormality of $\epsilon_i$
+   - Note that this can also be achieved, due to the central limit theorem, with a large sample size even if $\epsilon_i$ does not follow a normal distribution
+
+\vspace{2mm}
+
+ - \textbf{E}qual variance across all values of $X$
+   - Also known as homoskedasticity
+   
+   
+## Time Series Data {.t}
+
+Last time: 
+
+::: {.t}
+### Auto-regressive Models: AR(p)
+\vspace{-2mm}
+Current observations are a function of $p$ previous steps. Result: shocks to the system linger for many steps.
+
+ - ex: stock prices
+
+:::
+
+
+
+
+\vspace{5mm}
+
+::: {.t}
+### Moving Average Models: MA(q)
+\vspace{-2mm}
+Current observations are a function of the *deviation* from the average of $q$ previous steps. Result: shocks to the system are completely gone after $q$ steps.
+
+ - ex: equipment malfunction in a shop that can be quickly fixed
+::: 
+ 
+## Time Series Data {.t}
+\framesubtitle{Mathematically:}
+
+::: {.t}
+### An AR(p) model:
+\vspace{-6mm}
+$$
+y_t = c + \phi_1 y_{t-1} + \phi_2 y_{t-2} + \cdots + \phi_p y_{t-p} + \epsilon_t
+$$
+:::
+
+(see Lab 9 for more details)
+
+
+\vspace{7mm}
+
+::: {.t}
+### An MA(q) model: 
+\vspace{-6mm}
+$$
+y_t = c + \epsilon_t + \theta_1 \epsilon_{t-1} + \theta_2 \epsilon_{t-2} + \cdots + \theta_q \epsilon_{t-q}
+$$
+:::
+
+where each $\epsilon_i$ is independently $N(0, \sigma^2)$.
+
+\vspace{3mm}
+
+Let's break this one down a little here...
+
+
+## AR(p) vs. MA(q) models {.t}
+\framesubtitle{But first: what is the difference between these two?}
+For simplicity, let's consider AR(1) vs. MA(1) with $c=0$ (no drift).
+
+::: {.t}
+### AR(1)
+\vspace{-7mm}
+$$
+y_t = \phi_1 y_{t-1} + \epsilon_t
+$$
+:::
+
+::: {.t}
+### MA(1)
+\vspace{-7mm}
+$$
+y_t = \epsilon_t + \theta_1 \epsilon_{t-1}
+$$
+:::
+
+Key difference: 
+
+ - In the AR(1) model, even though $y_t$ only explicitly depends on $y_{t-1}$, it is also true that $y_{t-1}$ depended on $y_{t-2}$, and so on. So, impacts last longer than just the value of $p$.
+ - Conversely, in the MA(1) model, $y_t$ depends on $y_{t-1}$ only through its error term. So, impacts only last the length of $q$.
+
+
+
+## MA(q) models {.t}
+
+Again, suppose $q=1$. Then, an MA(1) model would be:
+
+$$
+y_t = c + \epsilon_t + \theta_1 \epsilon_{t-1}
+$$
+
+So as a simple example, suppose $c=0, \theta_1=1, \sigma=1$. Then $\epsilon_1$ and $\epsilon_0$ are both independently $N(0, 1)$ so,
+
+```{r}
+set.seed(1)
+eps0 <- rnorm(n=1, mean=0, sd=1)
+eps1 <- rnorm(n=1, mean=0, sd=1)
+eps0
+eps1
+```
+
+## MA(q) models {.t}
+Now,
+```{r, echo=FALSE}
+eps <- rnorm(5)
+```
+
+$$
+\begin{aligned}
+y_1 &= \epsilon_1 + \epsilon_0 = `r eps1` + `r eps0` = `r eps1 + eps0` \\
+y_2 &= \epsilon_2 + \epsilon_1 = `r eps[1]` + `r eps1` = `r eps[1] + eps1` \\
+y_3 &= \epsilon_3 + \epsilon_2 = `r eps[2]` + `r eps[1]` = `r eps[2] + eps[1]` \\
+y_4 &= \epsilon_4 + \epsilon_3 = `r eps[3]` + `r eps[2]` = `r eps[3] + eps[2]` \\
+y_5 &= \epsilon_5 + \epsilon_4 = `r eps[4]` + `r eps[3]` = `r eps[4] + eps[3]` \\
+y_6 &= \epsilon_6 + \epsilon_5 = `r eps[5]` + `r eps[4]` = `r eps[5] + eps[4]` \\
+\end{aligned}
+$$
+
+ok but what is actually happening here?
+
+## MA(q) models {.t}
+Comparing the MA(1) model to a simple independent N(0, 1) model:
+
+```{r, echo=FALSE, out.width="90%"}
+library(ggplot2)
+library(gridExtra)
+set.seed(1)
+theme_update(text=element_text(size=20))
+x <- 1:100
+y1 <- rnorm(101) # 1 extra for "burn-in"
+y2 <- NULL
+for(i in 1:100){
+  y2[i] <- y1[i+1] + y1[i]
+}
+
+dat1 <- data.frame(x=x, y1=y1[2:101])
+dat2 <- data.frame(x=x, y2=y2)
+
+p1 <- ggplot(data=dat1, aes(x=x, y=y1)) + geom_line() + labs(title="Independent N(0,1)")
+p2 <- ggplot(data=dat2, aes(x=x, y=y2)) + geom_line() + labs(title="MA(1)")
+
+grid.arrange(p1, p2, ncol=1)
+```
+
+## MA(q) models {.t}
+\label{macode}
+Here's the code that made the plot on the previous slide:
+
+```{r, eval=FALSE, size="footnotesize"}
+library(ggplot2)
+library(gridExtra)
+set.seed(1)
+theme_update(text=element_text(size=20))
+x <- 1:100
+y1 <- rnorm(101) # 1 extra for "burn-in"
+y2 <- NULL
+for(i in 1:100){
+  y2[i] <- y1[i+1] + y1[i]
+}
+
+dat1 <- data.frame(x=x, y1=y1[2:101])
+dat2 <- data.frame(x=x, y2=y2)
+
+p1 <- ggplot(data=dat1, aes(x=x, y=y1)) + geom_line() + 
+  labs(title="Independent N(0,1)")
+p2 <- ggplot(data=dat2, aes(x=x, y=y2)) + geom_line() + 
+  labs(title="MA(1)")
+
+grid.arrange(p1, p2, ncol=1)
+```
+
+
+## MA(1) model vs. AR(1) model {.t}
+Let's quickly go back and compare...
+
+::: {.t}
+### In the MA(1) model we had:
+\vspace{-6mm}
+$$
+\begin{aligned}
+y_1 &= \epsilon_1 + \epsilon_0  \\
+y_2 &= \epsilon_2 + \epsilon_1  \\
+y_3 &= \epsilon_3 + \epsilon_2 \\
+\end{aligned}
+$$
+:::
+
+::: {.t}
+### Conversely, in the AR(1) model,
+\vspace{-2mm}
+with $\phi_1=1$ and suppose $y_0=0$, it would be:
+$$
+\begin{aligned}
+y_1 &= y_0 + \epsilon_1 = \epsilon_1 \\
+y_2 &= y_1 + \epsilon_2 = y_0 + \epsilon_1 + \epsilon_2 \\
+y_3 &= y_2 + \epsilon_3 = y_0 + \epsilon_1 + \epsilon_2 + \epsilon_3 \\
+\end{aligned}
+$$
+:::
+
+
+## MA(q) models {.t}
+Now comparing the MA(2) model to a independent N(0, 1) model:
+
+```{r, echo=FALSE, out.width="90%"}
+y1 <- c(y1, rnorm(1))
+y3 <- NULL
+for(i in 1:100){
+  y3[i] <- y1[i+2] + y1[i+1] + y1[i]
+}
+
+dat1 <- data.frame(x=x, y1=y1[3:102])
+dat2 <- data.frame(x=x, y3=y3)
+
+p1 <- ggplot(data=dat1, aes(x=x, y=y1)) + geom_line() + labs(title="Independent N(0,1)")
+p2 <- ggplot(data=dat2, aes(x=x, y=y3)) + geom_line() + labs(title="MA(2)")
+
+grid.arrange(p1, p2, ncol=1)
+```
+
+
+## MA(q) models {.t}
+\framesubtitle{Your Turn \#1}
+
+ - Follow the code on Slide \ref{macode} to plot data from an MA(10) model below data from an independent N(0,1) model. Use the same specifications as in the code on Slide \ref{macode}.
+ 
+\vspace{5mm}
+
+ - Recall the behavior of vectors and their indices, to make at least one part of this slightly less cumbersome to code.
+
+\vspace{5mm}
+ 
+ - Comment briefly on what you observe.
+
+
+## Lucas 2013 paper and Lab 9
+ 
+ 
+## Time Series Regression {.t}
+Now, how does a time series behavior of data fit into the regression setting?
+
+::: {.t}
+### Recall: Simple Linear Regression
+\vspace{-6mm}
+$$
+y_i = \beta_0 + \beta_1 x_i + \epsilon_i
+$$
+:::
+
+where each $\epsilon \sim N(0, \sigma^2)$.
+
+In general, Time Series regression fixes the situation where each of the $y_i$s are not independent! It does so through the $\epsilon_i$ values.
+
+
+::: {.t}
+### Regression with a single $X$ covariate and an MA(1) term
+\vspace{-6mm}
+$$
+y_t = \beta_0 + \beta_1 x_t + \eta_t
+$$
+where $\eta_t = \epsilon_t + \theta_1 \epsilon_{t-1}$.
+:::
+
+## Time Series Regression {.t}
+\framesubtitle{Simulated Example: NBA player scoring vs. Opponent's Defensive Rating}
+To keep things simple(r), first we will simulate data according to the following situation: 
+
+ - We are interested in modeling a particular NBA basketball player's points per game.
+   - We suspect that the opponent's defensive rating influences the player's points per game. A team's defensive rating is basically the average number of points the team allows per 100 possessions; a lower defensive rating indicates that their defense is better!
+ 
+\vspace{3mm}
+
+ - Let's assume that the subsequent opponent will adjust to the player's success in any given game (i.e. fit an MA(1) term)
+   - If the player has a high scoring game, the next opponent will tend to double-team him
+
+
+
+## Time Series Regression {.t}
+\framesubtitle{Simulated Example: NBA player scoring vs. Opponent's Defensive Rating}
+
+### Simulation setup
+\vspace{-2mm}
+ - $X$ is the current opponent's end of season defensive rating (ranging from approximately 106 to 121)
+
+\vspace{4mm}
+
+ - $\beta_0 = -38, \beta_1= 0.55$ -- baseline of -38 points, with 0.55 more points per every 1-unit increase in opponent's defensive rating
+ 
+\vspace{4mm}
+
+ - $\theta_1=-0.55$ (55\% of the previous game's deviation from the average carries inversely into the current game)
+ 
+\vspace{4mm}
+
+ - $\sigma = 8$ (typical random daily variation in points scored by this player)
+ 
+ 
+ 
+## Time Series Regression {.t}
+\framesubtitle{Simulated Example: NBA player scoring vs. Opponent's Defensive Rating}
+```{r, message=FALSE}
+library(readr)
+x <- read_csv("JBrunson25-26.csv")$DefRtg
+set.seed(1)
+eps <- rnorm(length(x)+1, mean=0, sd=8)
+eta <- NULL
+for(i in 1:length(x)){
+  eta[i] <- eps[i+1] - 0.55*eps[i]
+}
+
+pts <- round(-38 + 0.55*x + eta, 0)
+
+nba_df <- data.frame(pts=pts, 
+                     opp_def=x, 
+                     game_num = 1:length(x))
+```
+
+
+## Time Series Regression {.t}
+\framesubtitle{Simulated Example: NBA player scoring vs. Opponent's Defensive Rating}
+
+```{r, echo=FALSE}
+ggplot(nba_df, aes(x=game_num, y=pts)) + geom_line() + labs(y="Points Scored", x="Game Number")
+```
+
+
+## Time Series Regression {.t}
+\framesubtitle{Simulated Example: NBA player scoring vs. Opponent's Defensive Rating}
+
+```{r, echo=FALSE}
+ggplot(nba_df, aes(x=opp_def, y=pts)) + 
+  geom_point() + 
+  labs(y="Points Scored", x="Oppoenent Defensive Rating")
+```
+
+## Time Series Regression {.t}
+\framesubtitle{Simulated Example: NBA player scoring vs. Opponent's Defensive Rating}
+```{r, size="footnotesize"}
+model1 <- lm(pts ~ opp_def, data=nba_df)
+summary(model1)
+```
+
+
+
+## Time Series Regression {.t}
+\framesubtitle{Simulated Example: NBA player scoring vs. Opponent's Defensive Rating}
+
+```{r, out.width="65%"}
+nba_df$residuals <- model1$residuals
+ggplot(nba_df, aes(x=game_num, y=residuals)) + 
+  geom_point() + 
+  labs(y="Residuals", x="Game Number")
+```
+
+
+
+## Time Series Regression {.t}
+\framesubtitle{Simulated Example: NBA player scoring vs. Opponent's Defensive Rating}
+Now, if we want to properly account for the MA(1) structure:
+
+::: {.t}
+### This is the model we need to fit:
+\vspace{-6mm}
+$$
+y_t = \beta_0 + \beta_1 x_t + \eta_t
+$$
+where $\eta_t = \epsilon_t + \theta_1 \epsilon_{t-1}$.
+:::
+
+The `Arima` function in the `forecast` package is the way to do it!
+
+
+## Time Series Regression {.t}
+\framesubtitle{Simulated Example: NBA player scoring vs. Opponent's Defensive Rating}
+The `Arima` function:
+
+```{r, size="footnotesize"}
+library(forecast)
+model2 <- Arima(
+  y = nba_df$pts, 
+  order = c(0, 0, 1), 
+  xreg = nba_df$opp_def)
+```
+where
+
+ - `y` is the outcome variable.
+ - `order` is to specify that this is an AR(p) or MA(q) model:
+   - The first value is the p for AR(p).
+   - The second value is a "differencing" term -- we will not use that.
+   - The third value is the q for MA(q).
+ - `xreg` is the "design matrix," or basically a matrix whose columns are each one of the predictor variables of interest.
+
+
+## Time Series Regression {.t}
+\framesubtitle{Simulated Example: NBA player scoring vs. Opponent's Defensive Rating}
+along with `coeftest` from the `lmtest` package:
+
+```{r, message=FALSE}
+library(lmtest)
+coeftest(model2)
+```
+
+
+## Time Series Regression {.t}
+\framesubtitle{Simulated Example: NBA player scoring vs. Opponent's Defensive Rating}
+
+::: {.t}
+### A few key points
+\vspace{-2mm}
+ - We observe that the model that properly accounts for the MA(1) structure results in us correctly rejecting $H_0$, whereas the simple linear model misses it.
+
+\vspace{5mm} 
+ - The time series trend is perhaps somewhat observable in the line plot over time, but does not show up at all in the plot of residuals over time
+
+\vspace{5mm}
+ - The structure of inputs to the `Arima` function is unfortunately a bit awkward...
+:::
+For the last point, we'll see how we have to handle that in the next exercise. 
+
+
+\vspace{5mm}
+
+## Time Series Regression {.t}
+\framesubtitle{Real Data: Jalen Brunson scoring vs. Opponent's Defensive Rating}
+
+
+::: {.t}
+### Now for real data
+\vspace{-2mm}
+ - The opponents' defensive ratings came from a dataframe of NBA player Jalen Brunson's game statistics from the regular season of this past year (2025-2026). 
+ 
+\vspace{3mm}
+
+ - But in the previous example, we simulated the points scored in each game so that we could look at what happens when we definitively know that the data followed an MA(1) structure. Let's now examine the real data. 
+:::
+
+The full dataset is in the `JBrunson25-26.csv` file on the course website. Each row of the dataframe represents a single game. 
+
+
+## Time Series Regression {.t}
+\framesubtitle{Real Data: Jalen Brunson scoring vs. Opponent's Defensive Rating}
+Our primary question of interest is still whether the opponent's defensive rating is associated with the number of points that Brunson scores in each game, and we still would like to model it with an MA(1) term. Suppose we would also like to adjust for the following covariates:
+
+ - `MIN`: the number of minutes he played in that game
+ - `TO`: the number of turnovers that he had in that game
+ - `Location`: whether the game was `Home` or `Away`.
+ 
+## Your Turn \#2
+\framesubtitle{Real Data: Jalen Brunson scoring vs. Opponent's Defensive Rating}
+
+ - Create a matrix `X` whose columns consist of the values of each covariate that you want to put in the model (including the primary covariate!)
+
+\vspace{2mm}
+
+ - Run the `Arima` function with the appropriate inputs to perform a time series regression on points scored, with your `X` matrix created above containing your covariates for the model, and with an MA(1) term.
+   - Note that, at first, it will be likely unhappy with your `X` matrix. Try to fix that based on the error message that it gives.
+   
+\vspace{2mm}
+
+ - As sensitivity analyses,
+   - Plot `PTS` over each game in order
+   - Run a multiple linear model with the same covariate as above, but without the MA(1) term
+   - Plot the residuals from this model over time
+
+\vspace{2mm}
+
+ - Briefly comment on what you observe across all parts. 
+
+ 
+## Summary and Recap
+
+::: {.t}
+### Summary
+\vspace{-2mm}
+ - AR(p) and MA(q) are two different models to account for time series data. They have similarities and differences.
+ - To fit a time series regression with AR(p) and MA(q) terms, we use the `Arima` function. Correctly providing the input variables to the `Arima` function can be a bit of a hassle.
+:::
+
+\vspace{4mm}
+
+::: {.t}
+### Looking Ahead
+\vspace{-2mm}
+Consequences of model misspecification in time series data
+:::
+
+\vspace{4mm}
+
+::: {.t}
+### Today's Daily Check
+\vspace{-2mm}
+The two Your Turns
+
+:::
