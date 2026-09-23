@@ -21,7 +21,7 @@ nav_order: 2
 
 ---
 
-[campuswire]: {{ site.urls.campuswire }}
+[piazza]: {{ site.urls.piazza }}
 [gradescope]: {{ site.urls.gradescope }}
 [podcasts]: {{ site.urls.podcasts }}
 [syllabus_check]: {{ site.urls.syllabus_check }}
@@ -42,7 +42,7 @@ Prerequisites:
 
 ### Acknowledgements
 
-I am grateful for multiple conversations with Drs. Justin Eldridge and Armin Schwartzman while preparing this course.
+I am grateful for multiple conversations with Drs. Peter Chi and Justin Eldridge while preparing this course.
 
 ---
 
@@ -52,24 +52,21 @@ I am grateful for multiple conversations with Drs. Justin Eldridge and Armin Sch
 
 We will hold the following weekly office hours this quarter:
 
-- Mondays 2-3pm (Valerie)
-- Mondays 3-4pm (Lucas)
-- Tuesdays 3-4pm (Aditya)
-- Thursdays 12:30-1:30pm (Peter)
-- Fridays 12:30-1:30pm (Arunima)
+- Mondays 10-11am (Aditya)
+- Mondays 2-3pm (Zida)
+- Tuesdays 11am-12pm (Reva)
+- Thursdays 3:30-4:30pm (Armin)
+- Fridays 11:30-12:30pm (Arunima)
 
 All office hours will be in <s>HDSI Rm 336</s> HDSI Rm 355. The room is large enough that you are welcome to come there and work on DSC 152 assignments
 even if you do not have specific questions ahead of time, but want to be in the 
 presence of staff for any help you may need as you work.
 
-During WEEK 1 ONLY, Lucas' office hours will be on Friday 4/3, in HDSI 237 (in the Industry Relations admin suite).
-
 ### Lecture
 
-There are two lecture sections:
+The lectures for this quarter are:
 
-- Section A: TTh 8:00-9:20am in [HSS 1330](https://map.concept3d.com/?id=1005#!m/237181?share).
-- Section B: TTh 9:30-10:50am in [HSS 1330](https://map.concept3d.com/?id=1005#!m/237181?share).
+- TTh 2:00-3:20 pm in [Patrick Ledden Auditorium](https://map.concept3d.com/?id=1005#!m/237181?share).
 
 We will not take attendance, but your regular attendance is STRONGLY encouraged, as this will give you the opportunity to ask questions, answer ungraded poll questions,
 and follow along with coding exercises interactively. Additionally, after each lecture, you will be required to turn in
@@ -83,50 +80,28 @@ You may always attend either lecture section regardless of which one you are reg
 
 ### Discussion
 
-There are two discussion section times:
+The discussions for this quarter are:
 
-- Wednesdays 3:00-3:50PM in [CENTR 216](https://map.concept3d.com/?id=1005#!m/163044).
-- Wednesdays 4:00-4:50PM in [CENTR 216](https://map.concept3d.com/?id=1005#!m/163044).
+- Mondays 1:00-2:00PM in [Mosaic Hall 0113](https://map.concept3d.com/?id=1005#!m/163044).
 
 Discussion sections will occur each week at these times.
-For three of the weeks, a quiz will be administered (see below). Otherwise, discussion
+For two of the weeks, a midterm exam will be administered (see below). Otherwise, discussion
 sections will consist of some structured material (particularly in the first few weeks),
 or review / extra office hours. See the schedule on the home page for more details. 
 
-With the exception of quiz days, you may attend either discussion section time of your
-choosing on any given week, without prior approval from us. 
-
 **Discussion sections will not be podcasted.**
-
-
-### Quizzes
-
-On three Wednesdays throughout the quarter, we will 
-have quizzes during the discussion section times:
-
-- April 22nd (Week 4)
-- May 13th (Week 7)
-- June 3rd (Week 10)
-
-These will take place during the discussion section times listed above. Based on your responses
-to the Welcome Survey, we will assign you to either the 3pm or 4pm section time for each quiz. On
-these weeks, you MUST attend the discussion section time that we assign you to take your quiz. 
-
-You will have the entire 50 minutes for each quiz. There will be no other material or activity
-during discussion sections on the day of a quiz. 
-
 
 
 ---
 
 ## Getting Started
 
-Make sure to complete the four items listed below by **Wednesday, April 1st at
+Make sure to complete the four items listed below by **Wednesday, October 1st at
 11:59PM**. If you join the course late, these items are due at 11:59PM the day
 after you join the class.
 
-1. Join [Campuswire][campuswire] (join code: 1733).
-2. Check if you can access [Gradescope][gradescope]. If not, make a post on Campuswire to "instructors & TAs" with your name, PID, and email address, then we can add you so you can submit assignments.
+1. Make sure you are signed up for [Piazza][piazza] to reecive communications.
+2. Check if you can access [Gradescope][gradescope]. If not, make a post on Piazza to "instructors & TAs" with your name, PID, and email address, then we can add you so you can submit assignments.
 3. Read the syllabus and course website and complete the Syllabus Check on Canvas/Gradescope.
 4. Fill out the Welcome Survey on Canvas/Gradescope.
 
@@ -139,9 +114,9 @@ you bring a laptop to every class session you attend.
 All course content will be linked from this website, but there are a few
 additional platforms that you'll need to access:
 
-- **Campuswire:** We'll be using Campuswire as our course message and
+- **Piazza:** We'll be using Piazza as our course message and
   discussion board. More details are in the [Communication](#-communication)
-  section below. If you didn't already get an invitation, [join here][campuswire] (join code: 1733).
+  section below. If you didn't already get an invitation, [join here][piazza].
 
 - **Gradescope:** You will submit all assignments to
   [Gradescope][gradescope]. This is where all of your scores will live as well, but they will also be synced to the gradebook in Canvas.
@@ -155,7 +130,7 @@ but for R instead of Python.
 Make sure you can access all three sites.
 
 {: .warning }
-**Other than for gradebook syncing to Gradescope, we will not be using Canvas this quarter. Please do not contact the staff through Canvas – we won't be able to read it! Use Campuswire for all course communications.**
+**Canvas will be used this quarter for gradebook syncing to Gradescope. Please use Piazza, embedded in Canvas, for all course communications.**
 
 ### Syllabus Check
 
@@ -172,27 +147,30 @@ Please fill out the short Welcome Survey on Canvas/Gradescope at the start of th
 
 ---
 
-## Communication
+## Course communication
 
-This quarter, we’ll be using [Campuswire][campuswire] (join code: 1733) as our course message board.
+This term we will be using Piazza for class discussion. The system is highly catered to getting you help fast and efficiently from classmates, the instructional assistants, and myself.
 
 If you have a question about anything to do with the course — if you’re stuck
 on a problem, want clarification on the logistics, or just have a general
-question about statistics — you can make a post on Campuswire. If your post
-includes any part of your solution to a problem (e.g. code), please make your
+question about statistics — you can make a post on Piazza. If your post
+is personal or includes any part of your solution to a problem, make your
 post private to "instructors & TAs"; otherwise, please make your post public so 
-that other students
-can benefit from the interaction. You can also post anonymously if you prefer.
-Course staff will regularly check Campuswire and try to answer any questions
+that other students can benefit from the interaction. Any private post that is of general interest will be made public.
+You can also post anonymously if you prefer, but the message will only be anonymous to the class, not the instructors.
+
+Course staff will regularly check Piazza and try to answer any questions
 that you have. You’re also encouraged to answer a question asked by another
 student if you feel that you know the answer – this is a great way to
 strengthen your understanding of the material (we will monitor this and modify
 any answers that are not quite correct!)
 
+Find our class signup link at: https://piazza.com/ucsd/fall2026/dsc152_fa26_001
+
 {: .note }
-Please use Campuswire **instead of email**, as this helps us keep all course-related
-communication in one place. In particular, make your post public if you can, but if it contains
-code or personal information, make your post to "instructors & TAs" (do NOT send DMs to
+Please use Piazza **instead of email**, as this helps us keep all course-related
+communication in one place. In particular, make your post public by default, but if it contains
+solutions or personal information, make your post private to "instructors & TAs" (do NOT send DMs to
 individual staff members as this will likely cause delays in getting a response).
 
 ---
@@ -237,10 +215,10 @@ but they will be
 due at midnight on the day of class. They will be scored based on a "good-faith
 effort" out of 1 point each. Your lowest two scores will be dropped. Late submissions
 will not be accepted unless there are extenuating circumstances such as a
-serious prolonged illness; reach out to "instructors & TAs" on Campuswire if necessary
+serious prolonged illness; reach out to "instructors & TAs" on Piazza if necessary
 and these will be handled on a case-by-case basis
-(do not email or even send direct messages on Campuswire to individual staff members; 
-a response will likely be delayed, or even worse, your message may get completely buried, 
+(do not email or even send direct messages on Piazza to individual staff members; 
+a response will likely be delayed, or even worse, your message may get completely buried
 if you do this).
 
 
@@ -256,7 +234,7 @@ assignment such that all the tests pass, you'll get a perfect score!
 To submit a lab, follow the instructions in the assignment to upload your
 notebook to Gradescope, which will run automated tests and assign your score.
 You should verify that all of your test cases pass on Gradescope **before the
-deadline**. Lab assignments will usually be due on Mondays at 11:59PM,
+deadline**. Lab assignments will usually be due on Fridays at 11:59PM,
 though you should refer to the [homepage of this website](..) for the most up-to-date schedule. We will
 release lab assignments roughly a week before they're due. **Your lowest lab score
 is dropped from your grade calculation at the end of the quarter.**
@@ -283,9 +261,9 @@ details.
 
 ### Exams
 
-This class has one Final Exam (and no midterm exam):
+This class has one Final Exam:
 
-- Saturday, June 6th from 3:00pm to 6:00pm, location TBD.
+- Thursday, Dec 10, 3:00pm to 6:00pm, location TBD.
 
 The Final Exam will cover the entire quarter, with emphasis on material after Week 5
 of the quarter. It will be held **in-person and on-paper**. You'll be allowed to use one 8.5 by 11 inch page of 
@@ -294,28 +272,24 @@ double-sided handwritten notes, but no calculators, computers, or other resource
 If you have a conflict with the exam, please let us know right away via the 
 Welcome Survey (in Canvas/Gradescope) to see if accommodations can be made. 
 
-### Quizzes
 
-There are three quizzes throughout the quarter, administered during 
-your assigned quiz time on the following dates:
+### Midterms
 
-- April 22nd (Week 4)
-- May 13th (Week 7)
-- June 3rd (Week 10)
+There will be two midterm exams, adminstered during the discussion section times:
+
+- Oct 19 (Week 4)
+- Nov 9 (Week 7)
+
+You will have the entire 50 minutes for each quiz. There will be no other material or activity
+during discussion sections on the day of a quiz. 
 
 You'll be allowed to use one 8.5 by 11 inch page of 
 double-sided handwritten notes, but no calculators, computers, or other resources.
 
-Your lowest score will be dropped. 
-
 {: .warning }
-We will not offer makeup quizzes. If you are sick, traveling, or otherwise need to miss a quiz, 
-the dropped quiz is intended to take care of this. If you have extenuating circumstances that
-require you to miss more than one quiz, please reach out to "instructors & TAs" on Campuswire and
+We will not offer makeup midterms. If you have extenuating circumstances that
+require you to miss a midterm, please reach out to "instructors & TAs" on Piazza and
 we will handle this on a case-by-case basis. 
-
-You must attend quizzes at **your assigned time** that we will establish and notify you of after the
-Welcome Survey responses are in.
 
 ---
 
@@ -355,7 +329,7 @@ how grades will be computed:
 | Daily Checks | 5% | drop lowest two |
 | Lab Assignments | 12% | drop lowest score |
 | Homework Assignments | 10% |  |
-| Quizzes | 40% | drop lowest score |
+| Midterms | 40% |  |
 | Final Exam | 30% | |
 
 Note that in each category, all assignments in that category will be worth the same amount,
