@@ -27,11 +27,12 @@ exclude: ['Gemfile', 'Gemfile.lock', 'LICENSE', 'README.md']
 # questions and announcements.
 urls:
   campuswire: &campuswire 'https://campuswire.com/p/GCF7F25DF'
-  gradescope: &gradescope 'https://www.gradescope.com/courses/1287129'
+  gradescope: &gradescope 'https://www.gradescope.com/courses/1409496'
   podcasts: &podcasts 'https://podcast.ucsd.edu/'
   syllabus_check: 'https://docs.google.com/forms/d/e/1FAIpQLSfcH_YKl2gY9lasAUSSkKDMiNrB82m4NZIEYdomYEoZoZl5Hw/viewform?usp=sharing&ouid=104866872711045167069'
   welcome_survey: 'https://docs.google.com/forms/d/e/1FAIpQLSc-Shhz9yTDWDri4MBfBlOsOyeZt_4VGxRBgkbKfVK75SclSQ/viewform?usp=sharing&ouid=104866872711045167069'
   github: 'https://github.com/dsc-courses/dsc10-2026-wi'
+  piazza: &piazza 'https://piazza.com/class/mud6omyfy884h'
 
 # Theme settings
 remote_theme: just-the-docs/just-the-docs@v0.12.0
@@ -40,8 +41,8 @@ search_enabled: true
 heading_anchors: true
 permalink: pretty
 aux_links:
-  🙋 Campuswire:
-    - *campuswire
+  🙋 Piazza:
+    - *piazza
   💯 Gradescope:
     - *gradescope
   🎥 Podcasts:

@@ -21,12 +21,6 @@ nav_order: 2
 
 ---
 
-[piazza]: {{ site.urls.piazza }}
-[gradescope]: {{ site.urls.gradescope }}
-[podcasts]: {{ site.urls.podcasts }}
-[syllabus_check]: {{ site.urls.syllabus_check }}
-[welcome_survey]: {{ site.urls.welcome_survey }}
-
 ## About
 
 Welcome to DSC 152: Applied Statistical Data Analysis and Inference, at UC San Diego! 
@@ -42,7 +36,7 @@ Prerequisites:
 
 ### Acknowledgements
 
-I am grateful for multiple conversations with Drs. Peter Chi and Justin Eldridge while preparing this course.
+I am grateful for multiple conversations with Dr. Peter Chi and Justin Eldridge while preparing this course.
 
 ---
 
@@ -58,7 +52,7 @@ We will hold the following weekly office hours this quarter:
 - Thursdays 3:30-4:30pm (Armin)
 - Fridays 11:30-12:30pm (Arunima)
 
-All office hours will be in <s>HDSI Rm 336</s> HDSI Rm 355. The room is large enough that you are welcome to come there and work on DSC 152 assignments
+All office hours will be in HDSI Rm 355. The room is large enough that you are welcome to come there and work on DSC 152 assignments
 even if you do not have specific questions ahead of time, but want to be in the 
 presence of staff for any help you may need as you work.
 
@@ -66,7 +60,7 @@ presence of staff for any help you may need as you work.
 
 The lectures for this quarter are:
 
-- TTh 2:00-3:20 pm in [Patrick Ledden Auditorium](https://map.concept3d.com/?id=1005#!m/237181?share).
+- TTh 2:00-3:20 pm in Warren Lecture Hall 2111.
 
 We will not take attendance, but your regular attendance is STRONGLY encouraged, as this will give you the opportunity to ask questions, answer ungraded poll questions,
 and follow along with coding exercises interactively. Additionally, after each lecture, you will be required to turn in
@@ -82,7 +76,7 @@ You may always attend either lecture section regardless of which one you are reg
 
 The discussions for this quarter are:
 
-- Mondays 1:00-2:00PM in [Mosaic Hall 0113](https://map.concept3d.com/?id=1005#!m/163044).
+- Mondays 1:00-1:50PM in Mosaic Hall 0113.
 
 Discussion sections will occur each week at these times.
 For two of the weeks, a midterm exam will be administered (see below). Otherwise, discussion
@@ -100,8 +94,8 @@ Make sure to complete the four items listed below by **Wednesday, October 1st at
 11:59PM**. If you join the course late, these items are due at 11:59PM the day
 after you join the class.
 
-1. Make sure you are signed up for [Piazza][piazza] to reecive communications.
-2. Check if you can access [Gradescope][gradescope]. If not, make a post on Piazza to "instructors & TAs" with your name, PID, and email address, then we can add you so you can submit assignments.
+1. Make sure you are signed up for [Piazza](site.urls.piazza) to reecive communications.
+2. Check if you can access [Gradescope](site.urls.gradescope). If not, make a post on Piazza to "instructors & TAs" with your name, PID, and email address, then we can add you so you can submit assignments.
 3. Read the syllabus and course website and complete the Syllabus Check on Canvas/Gradescope.
 4. Fill out the Welcome Survey on Canvas/Gradescope.
 
@@ -116,10 +110,10 @@ additional platforms that you'll need to access:
 
 - **Piazza:** We'll be using Piazza as our course message and
   discussion board. More details are in the [Communication](#-communication)
-  section below. If you didn't already get an invitation, [join here][piazza].
+  section below. If you didn't already get an invitation, [join here](https://piazza.com/ucsd/fall2026/dsc152_fa26_001).
 
 - **Gradescope:** You will submit all assignments to
-  [Gradescope][gradescope]. This is where all of your scores will live as well, but they will also be synced to the gradebook in Canvas.
+  [Gradescope](site.urls.gradescope). This is where all of your scores will live as well, but they will also be synced to the gradebook in Canvas.
   You will be automatically added to Gradescope about 24 hours after enrolling
   in the course. If you need to submit assignments before then, please make a post on Campuswire to "instructors & TAs" with your name, PID,
   and email address.
@@ -147,7 +141,7 @@ Please fill out the short Welcome Survey on Canvas/Gradescope at the start of th
 
 ---
 
-## Course communication
+## Course Communication
 
 This term we will be using Piazza for class discussion. The system is highly catered to getting you help fast and efficiently from classmates, the instructional assistants, and myself.
 
