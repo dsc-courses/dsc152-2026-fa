@@ -14,7 +14,7 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 title: DSC 152
-description: DSC 152, Spring 2026 at UC San Diego
+description: DSC 152, Fall 2026 at UC San Diego
 tagline: Applied Statistical Data Analysis and Inference
 baseurl: '' # the subpath of your site, e.g. /blog
 url: 'https://dsc152.com' # the base hostname & protocol for your site, e.g. http://example.com
