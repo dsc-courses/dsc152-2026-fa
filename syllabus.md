@@ -159,7 +159,7 @@ student if you feel that you know the answer – this is a great way to
 strengthen your understanding of the material (we will monitor this and modify
 any answers that are not quite correct!)
 
-Find our class signup link at: https://piazza.com/ucsd/fall2026/dsc152_fa26_001
+Find our class signup link at: [https://piazza.com/ucsd/fall2026/dsc152_fa26_001](https://piazza.com/ucsd/fall2026/dsc152_fa26_001)
 
 {: .note }
 Please use Piazza **instead of email**, as this helps us keep all course-related
