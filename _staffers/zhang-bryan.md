@@ -6,7 +6,7 @@ email:
 photo: assets/staff-images/zhang-bryan.jpg
 description: 3rd year, Mathematics & Data Science, Revelle
 hometown: Cincinnati, OH
-askabout: Traveling, cooking, Chinese dramas, music
+askabout: Traveling, cooking, Chinese dramas, reading
 foodemoji: 🍚
-food: Spicy City, YinTang, Chon Ju Jip, Venchi
+food: Spicy City, YinTang, Xinjiang BBQ, Venchi
 ---
