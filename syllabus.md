@@ -305,9 +305,8 @@ However, please refer to the [homepage of this website](..) for the most up-to-d
 
 There will be 3 participation points available:
 
-- 1 point for doing the Welcome Survey.
 - 1 point for getting all answers correct on the Syllabus Check.
-- 1 point for completing SETs (Student Evaluations of Teaching).
+- 2 point for completing SETs (Student Evaluations of Teaching).
 
 Your participation grade will be the number of points earned out of 3.
 
