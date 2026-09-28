@@ -14,9 +14,6 @@ nav_order: 1
 {{ site.staffersnobio }}
 
 {: .success }
-This course website is still under construction; anything you read here is not up to date until this message is removed.
-
-{: .success }
 All course communications should be posted on [Piazza](https://piazza.com/class/mud6omyfy884h) (Also available through Canvas); please direct all questions you have
 during the quarter either as a public post or to "instructors & TAs" there. 
 
