@@ -7,8 +7,8 @@ days:
       - name: LEC 1
         type: lecture
         title: Introduction and Background
-        url:
-        html:
+        url: resources/lectures/lec01/Lec01.Rmd
+        html: resources/lectures/lec01/Lec01.pdf
         podcast:
         readings:
           - name: SPA 2-3
