@@ -24,11 +24,6 @@ days:
         readings:
           - name: MD 9.5
             url: https://moderndive.com/v2/hypothesis-testing.html#ht-interpretation
-
-      - name: SUR
-        type: survey
-        title: Welcome Survey
-        url:
   - date: 2026-10-2
     events:
       - name: LAB 1
