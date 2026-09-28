@@ -13,13 +13,8 @@ days:
       - name: LEC 1
         type: lecture
         title: Introduction and Background
-<<<<<<< HEAD
-        url:
-        html:
-=======
         url: 
         html: resources/lectures/lec01/Lec01.pdf
->>>>>>> 3bc916b139bd682b0db2ae13e4e66caa312a3957
         podcast:
         readings:
           - name: SPA 2-3
