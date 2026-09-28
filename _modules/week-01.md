@@ -2,6 +2,12 @@
 title: Week 1 – Background, Basic Type I Error Rate Estimation
 weekNumber: 1
 days:
+  - date: 2026-9-28
+    events:
+      - name: DISC 1
+        type: disc
+        title: Getting Started with R and R Markdown
+        url:
   - date: 2026-9-29
     events:
       - name: LEC 1

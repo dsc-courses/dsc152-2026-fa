@@ -1,6 +1,6 @@
 Week,Title,Date,#,Lecture,Readings,Links,Homework,Discussion,Lab,Quiz,Survey
-0,,Mon 9/28,,,,,,1. Getting Started with R and R Markdown,,,
-1,"Background, Basic Type I Error Rate Estimation",Tue 9/29,1,Introduction and Background,SPA 2-3,https://bookdown.org/jefftemplewebb/IS-6489/getting-started.html,,,,,
+1,"Background, Basic Type I Error Rate Estimation",Mon 9/28,,,,,,1. Getting Started with R and R Markdown,,,
+,,Tue 9/29,1,Introduction and Background,SPA 2-3,https://bookdown.org/jefftemplewebb/IS-6489/getting-started.html,,,,,
 ,,Thu 10/1,2,Type I Error Estimation with the t-Test,MD 9.5,https://moderndive.com/v2/hypothesis-testing.html#ht-interpretation,,,,,Welcome Survey
 ,,Fri 10/2,,,,,,,1. Introduction to R,,
 2,Type I Error Rate and Power,Mon 10/5,,,,,,2. Simulations in R,,,
