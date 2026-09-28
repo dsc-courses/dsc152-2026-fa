@@ -198,7 +198,7 @@ that is in these texts that is not covered in lecture; this is here for your ref
 ## Assignments
 
 ### Daily Checks
-After each lecture, a brief assignment will be due to Gradescope. These assignments will
+After each lecture, a brief assignment will be due on Gradescope. These assignments will
 typically consist of short conceptual questions, coding, or a mix of both. They will
 be based directly on content from that day’s class, and should be very quick and
 straightforward if you were in class. If you miss class, it should still be possible to
