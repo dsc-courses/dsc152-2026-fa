@@ -6,7 +6,7 @@ days:
     events:
       - name: DISC 6
         type: disc
-        title: HW2 and Quiz 2 review
+        title: HW2 and Midterm 2 review
         url:
   - date: 2026-11-17
     events:
