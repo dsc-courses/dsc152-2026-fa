@@ -9,10 +9,10 @@ import sys
 import numpy as np
 
 # Edit these variables before running script
-CSV_PATH = "Schedule - DSC 152, Spring 2026 - sp26.csv"  #CHANGE CSV PATH for your computer
+CSV_PATH = "DSC152-2026-FA - FA26.csv"  #CHANGE CSV PATH for your computer
 DATE_FORMAT = "DATE MONTH/DAY"
 YEAR = 2026
-START_FROM_WEEK = 1 #only future weeks!
+START_FROM_WEEK = 0 #only future weeks!
 
 
 def fill_missing_vals(df):
