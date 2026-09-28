@@ -4,9 +4,9 @@ role: Graduate Reader
 pronouns: she/her
 email:
 photo: assets/staff-images/anand-arunima.jpg
-description: 1st year, M.S. in Data Science, Halicioglu Data Science Institute (HDSI)
+description: 2nd year, M.S. in Data Science, Halicioglu Data Science Institute (HDSI)
 hometown: Delhi, India
-askabout: Dancing, sunbathing at the beach, shopping, Pilates
+askabout: Dancing, beach days, coffee spots, movies, pilates
 foodemoji: 🌮
-food: Casa de Reyes, Heytea, An's Dry Cleaning
+food: Casa de Reyes, An's Dry Cleaning, Labora, DTF
 ---
