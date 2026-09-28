@@ -7,7 +7,8 @@ days:
       - name: DISC 1
         type: disc
         title: Getting Started with R and R Markdown
-        url:
+        url: resources/discussions/disc1/intro.R
+        html: resources/lectures/lec01/Lec01.pdf
   - date: 2026-9-29
     events:
       - name: LEC 1
