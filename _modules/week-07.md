@@ -4,9 +4,9 @@ weekNumber: 7
 days:
   - date: 2026-11-9
     events:
-      - name: QUIZ 2
+      - name: MIDTERM 2
         type: quiz
-        title: Quiz 2 covers Lectures 6-11
+        title: Midterm 2 covers Lectures 6-11
   - date: 2026-11-10
     events:
       - name: LEC 13

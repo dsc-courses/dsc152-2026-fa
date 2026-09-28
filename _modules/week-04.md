@@ -4,9 +4,9 @@ weekNumber: 4
 days:
   - date: 2026-10-19
     events:
-      - name: QUIZ 1
+      - name: MIDTERM 1
         type: quiz
-        title: Quiz 1 covers Lectures 1-5
+        title: Midterm 1 covers Lectures 1-5
   - date: 2026-10-20
     events:
       - name: LEC 7
