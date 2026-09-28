@@ -46,13 +46,13 @@ I am grateful for multiple conversations with Dr. Peter Chi and Justin Eldridge 
 
 We will hold the following weekly office hours this quarter:
 
-- Mondays 10-11am (Aditya)
-- Mondays 2-3pm (Zida)
-- Tuesdays 11am-12pm (Reva)
-- Thursdays 3:30-4:30pm (Armin)
-- Fridays 11:30-12:30pm (Arunima)
+- Mondays 10-11am (Aditya): HDSI 455
+- Mondays 2-3pm (Zida): HDSI 355
+- Tuesdays 11am-12pm (Reva): HDSI 455
+- Thursdays 3:30-4:30pm (Armin): HDSI 455
+- Fridays 11:30-12:30pm (Arunima): HDSI 455
 
-All office hours will be in HDSI Rm 355. The room is large enough that you are welcome to come there and work on DSC 152 assignments
+You are welcome to come to office hours and work on DSC 152 assignments
 even if you do not have specific questions ahead of time, but want to be in the 
 presence of staff for any help you may need as you work.
 
@@ -198,7 +198,7 @@ that is in these texts that is not covered in lecture; this is here for your ref
 ## Assignments
 
 ### Daily Checks
-After each lecture, a brief assignment will be due to Gradescope. These assignments will
+After each lecture, a brief assignment will be due on Gradescope. These assignments will
 typically consist of short conceptual questions, coding, or a mix of both. They will
 be based directly on content from that day’s class, and should be very quick and
 straightforward if you were in class. If you miss class, it should still be possible to
@@ -305,9 +305,8 @@ However, please refer to the [homepage of this website](..) for the most up-to-d
 
 There will be 3 participation points available:
 
-- 1 point for doing the Welcome Survey.
 - 1 point for getting all answers correct on the Syllabus Check.
-- 1 point for completing SETs (Student Evaluations of Teaching).
+- 2 point for completing SETs (Student Evaluations of Teaching).
 
 Your participation grade will be the number of points earned out of 3.
 
