@@ -6,9 +6,9 @@ author: |
   | Lecture \#1
   | Introduction and Background
 date: |
-  | Tuesday, March 31
-  | Spring Quarter 2026
-  | Peter Chi
+  | Tuesday, September 29
+  | Fall Quarter 2026
+  | Armin Schwartzman
 output: 
   beamer_presentation:
     theme: "Warsaw"
@@ -35,42 +35,39 @@ header-includes:
 
 ## Who am I?
 
-
 ::: {.block}
 ### To summarize:
 \vspace{-2mm}
 
  - My training and experience is heavily on the \underline{statistical} side of data science 
 
+ - I like both the *science* part of data science and the mathematical formalism of probability theory
+
 \vspace{4mm}
 
- - I have many years of teaching experience at the college level, specifically statistics courses. But,
-   - Prior to UCSB (in 2024), my class sizes were always much smaller (30ish max, and often single digits)
-   - This specific class, DSC 152, is brand new, both to UCSD and to me!
+ - I have many years of teaching experience at the college level, specifically probability and statistics courses. But,
+ - The world has changed
+ - I cannot do it alone, I need you to be engaged
 :::
 
 \vspace{3mm}
 
-P.S. Call me Peter!
+P.S. Call me Armin! (probably easier than Schwartzman)
 
 
 ## Who are the rest of the course staff?
 
+- Zida Jin: Head TA
 
-## Who are you? {.t}
-With any internet-capable device (including laptop, phone, tablet), please go to:
+- Arunima Anand: Graduate reader
 
-::: {.block} 
-### Poll Everywhere
-\vspace{-2mm}
-https://pollev.com/chi
-:::
-		
-Hit "Skip for now" if it asks you to register for credit (I will not be tracking responses for credit).
+- Aditya Iyer: Graduate reader
 
-\vspace{3mm}
+- Reva Kaneri: Graduate reader
 
-However, please do enter your name as your screen name if you are comfortable doing so (I will be the only one who will see it).
+- Bryan Zhang: Undergraduate tutor
+
+- Ryan Rulkens: Undergraduate tutor
 
 
 ## What is this course about? {.t}
@@ -151,10 +148,26 @@ The focus will be on statistical data analysis and inference, leveraging what yo
 :::
 
 
+## What is this course about? {.t}
+Ultimately, this course is about:
+
+ - Learning how to quantify uncertainty
+
+ - Learning how to reason with data in the presence of uncertainty
+
+ - Learning how to be aware of uncertainty in your search for the truth
+
+```{r, echo=FALSE, fig.align='center', out.height='50%'}
+knitr::include_graphics("truth.jpg")
+```
+
+
 ## Let's go back to basics and build up from there {.t}
 Example: flipping a coin
 
-![](coinflip.jpg){height="75%"}
+```{r, echo=FALSE, fig.align='center', out.height='75%'}
+knitr::include_graphics("coinflip.jpg")
+```
 
 ## Let's go back to basics and build up from there {.t}
 To do a hypothesis test, we need to lay out our null and alternative hypotheses:
@@ -166,7 +179,6 @@ In DSC 10 and DSC 80, we learned about *simulated* null distributions:
 ```{r, echo=FALSE, warning=FALSE}
 library(reticulate)
 ```
-
 
 ```{python, echo=FALSE}
 import numpy as np
@@ -196,7 +208,6 @@ for i in np.arange(10000):
   
 heads_array
 ```
-
 
 ## Null distribution {.t}
 In DSC 10 and DSC 80, we learned about *simulated* null distributions:
@@ -275,36 +286,55 @@ ggplot(data = heads_df, aes(x=heads)) +
 ```
 
 
-## Now what? {.t}
+## Class clicker
 
-::: {.block}
-### What is a p-value?
+With any internet-capable device (including laptop, phone, tablet), please go to:
+
+::: {.block} 
+### Class clicker
 \vspace{-2mm}
-https://pollev.com/chi
-:::
-
-\pause
-\vspace{3mm}
-
-So then, what is the p-value here?
-
-::: {.block}
-### What is the p-value here?
-\vspace{-2mm}
-https://pollev.com/chi again
+clacl.com/spxozdgyn
 :::
 
 
-## Now what? {.t}
+## Class clicker
 
-::: {.block}
-### What is a p-value?
-\vspace{-2mm}
-https://pollev.com/chi
-:::
+**Which of the following is a correct definition of a p-value?**
+
+A. The probability of observing data at least as extreme as what was observed, if the null hypothesis is true
+
+B. The probability that the null hypothesis is true
+
+C. The proportion of the null hypothesis that is at least as extreme as the observed data
+
+D. The proportion of the null distribution that is at least as extreme as the observed data
+
+---
+
+## Class clicker
+
+**Based on the data we observed in this coin flipping example, what is the p-value for $H_0: p = 0.5$ vs. $H_A: p \neq 0.5$?**
+
+A. 0.5
+
+B. 0.25 (which is $0.5^2$)
+
+C. 0.125 (which is $0.5^3$)
+
+D. 0.0625 (which is $0.5^4$)
+
+E. 0.03125 (which is $0.5^5$)
+
+F. 0.015625 (which is $0.5^6$)
+
+G. None of these
+
+H. I have no idea
+
+---
 
 
-So then, what is the p-value here?
+## So then, what is the p-value here?
 
 We can also do it this way:
 
@@ -313,7 +343,7 @@ p_val <- sum(heads_array == 6 | heads_array == 0) / 10000
 p_val
 ```
 
-Note that this is a *simulated* p-value, which can only be an approximation of the theoretical p-value. The answer to the previous PollEverywhere question was the theoretical p-value!
+Note that this is a *simulated* p-value, which can only be an approximation of the theoretical p-value. The answer to the previous ClassClicker question was the theoretical p-value!
 
 ## Binomial distribution {.t}
 Flipping a coin and observing the number of heads is an example of the **Binomial Distribution** (which you sort of saw in DSC 40A, but definitely in MATH 180A, MATH 183, etc):
@@ -378,35 +408,51 @@ So either way, we find that there is a fairly low probability of observing somet
 ::: {.block}
 ### Simulated p-values as you learned in DSC 10 and 80 are good, but:
 \vspace{-2mm}
- - They are more computationally expensive (not a big burden in this example, but in more complex cases it can matter)
- - They (may) have lower *statistical power* than theoretical p-values (though this is often fairly minor in practice)
+ - They are more computationally expensive (imagine if you had to compute a simulated p-value for each of $10{,}000$ genes or $500{,}000$ image pixels)
+ - Theoretical p-values have higher *statistical power* than simulated p-values if the proper conditions are met (though this is often fairly minor in practice)
    - (what do we mean by statistical power? we'll talk in lots more depth about that)
 :::
 
 ::: {.block}
 ### Advantages of simulated p-values
 \vspace{-2mm}
- - They require fewer distributional conditions on your data (and often none whatsoever)
- - They may have better Type I Error rates, if the distributional conditions of a theoretical test are not met
+ - They require fewer distributional conditions on your data
+ - They may have better Type I Error rates if the distributional conditions of a theoretical test are **not** met
  - They do not require you to know much math (only coding)
 :::
 
 Both have their uses in practice, and in this class, we will use both!
 
 
+## Class Clicker: Type I Errors {.t}
+
+**Which of the following is the correct definition of a Type I Error?**
+
+A. When you reject $H_0$ but $H_0$ is actually true
+
+B. When you reject $H_0$ but $H_0$ is actually false
+
+C. When you fail to reject $H_0$ but $H_0$ is actually true
+
+D. When you fail to reject $H_0$ but $H_0$ is actually false
+
+E. None of these
+
+F. I have no idea
+
+
 ## Type I Errors {.t}
-Reminder: what's a Type I Error? https://pollev.com/chi
 
-\pause
-
-\vspace{3mm}
-### Rejection Region
-\vspace{-2mm}
-To determine the Type I Error of a test, we first must define our \underline{rejection region}. 
-
-\vspace{4mm}
+To determine the Type I Error of a test, we first must define the \underline{rejection region}. 
 
 That is, the values that are *extreme enough* to lead us to reject $H_0$.
+
+\vspace{3mm}
+::: {.block}
+### Rejection Region
+\vspace{-2mm}
+To ensure the Type I error is correct, the rejection region must be chosen \underline{before} evaluating the test. 
+:::
 
 \vspace{2mm}
 
@@ -462,18 +508,9 @@ Next time: what exactly do we mean by that?
    - https://posit.co/download/rstudio-desktop/
 
 \vspace{3mm}
-
- - Tomorrow's discussion section will be an introduction to R and R Markdown. If you are new to either of these, please plan to attend.
-   - You may attend either the 3pm or the 4pm section (both are in Center Hall 216).
-
-\vspace{3mm}
    
- - Read the course syllabus and complete the Syllabus Check by tomorrow 4/1 at midnight
- 
+ - Read the course syllabus and complete the Syllabus Check in Gradescope by Thursday Oct 1 at midnight
+
 \vspace{3mm}
 
- - Complete the Welcome Survey by tomorrow 4/1 at midnight
- 
-\vspace{3mm}
-
- - Complete today's Daily Check by **tonight at midnight**
+ - Complete today's Daily Check in Gradescope by **tonight at midnight**
