@@ -6,7 +6,7 @@ days:
     events:
       - name: DISC 4
         type: disc
-        title: HW1 and Quiz 1 review
+        title: HW1 and Midterm 1 review
         url:
   - date: 2026-10-27
     events:

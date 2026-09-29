@@ -266,8 +266,8 @@ There will be two midterm exams, adminstered during the discussion section times
 - Oct 19 (Week 4)
 - Nov 9 (Week 7)
 
-You will have the entire 50 minutes for each quiz. There will be no other material or activity
-during discussion sections on the day of a quiz. 
+You will have the entire 50 minutes for each midterm. There will be no other material or activity
+during discussion sections on the day of a midterm.
 
 You'll be allowed to use one 8.5 by 11 inch page of 
 double-sided handwritten notes, but no calculators, computers, or other resources.
@@ -287,9 +287,9 @@ However, please refer to the [homepage of this website](..) for the most up-to-d
 
 | | **Monday** | **Tuesday** | **Wednesday** | **Thursday** | **Friday** |
 | **morning** |  | Lecture |  | Lecture |  |
-| **afternoon** |  | | Discussion / <b style="color:red">Quiz</b> | | |
-| **night** | <b style="color:red">Lab due</b> | <b style="color:red">Daily Check due</b> |  | <b style="color:red">Daily Check due</b> | |
-| **night** | | | | <b style="color:red">Homework sometimes due</b> | |
+| **afternoon** | Discussion / <b style="color:red">Midterms</b> |  |  |  |  |
+| **night** |  | <b style="color:red">Daily Check due</b> |  | <b style="color:red">Daily Check due</b> | <b style="color:red">Lab due</b> |
+| **night** |  | <b style="color:red">Homework 3 due</b> |  | <b style="color:red">Homework 1 and 2 due</b> |  |
 
 ---
 
@@ -358,10 +358,10 @@ software to help detect plagiarism.
  to be duplicates of each other, or with clear egregious AI usage, will be considered
  violations of academic integrity.
  
- - On quizzes and exams:
+ - On midterms and exams:
    - You may have your 8.5 x 11 double-sided cheat sheet
    - No calculators or any other devices whatsoever
-   - Refrain from looking at other students' quiz/exam
+   - Refrain from looking at other students' midterm/exam
 
 ### Generative AI Usage:
 Generative AI / LLM tools such as ChatGPT or Claude have incredible capabilities and you are 
