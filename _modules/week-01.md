@@ -13,7 +13,7 @@ days:
       - name: LEC 1
         type: lecture
         title: Introduction and Background
-        url: 
+        url: resources/lectures/lec01/Lec01.Rmd
         html: resources/lectures/lec01/Lec01.pdf
         podcast:
         readings:

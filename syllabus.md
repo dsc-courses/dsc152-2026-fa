@@ -97,7 +97,6 @@ after you join the class.
 1. Make sure you are signed up for [Piazza](site.urls.piazza) to reecive communications.
 2. Check if you can access [Gradescope](site.urls.gradescope). If not, make a post on Piazza to "instructors & TAs" with your name, PID, and email address, then we can add you so you can submit assignments.
 3. Read the syllabus and course website and complete the Syllabus Check on Canvas/Gradescope.
-4. Fill out the Welcome Survey on Canvas/Gradescope.
 
 ### Technology
 
@@ -133,10 +132,6 @@ To demonstrate that you have read and understood the policies on the syllabus an
 You must complete the Syllabus Check before the deadline with a score of **100% to earn credit**. However, you may modify your answers after receiving your score, so please resubmit as necessary in order to receive the required score.
 
 If you have questions about any course-related policies in the future, always refer to the syllabus and course website first!
-
-### Welcome Survey
-
-Please fill out the short Welcome Survey on Canvas/Gradescope at the start of the quarter. This is required of all students.
 
 
 ---
@@ -262,9 +257,6 @@ This class has one Final Exam:
 The Final Exam will cover the entire quarter, with emphasis on material after Week 5
 of the quarter. It will be held **in-person and on-paper**. You'll be allowed to use one 8.5 by 11 inch page of 
 double-sided handwritten notes, but no calculators, computers, or other resources.
-
-If you have a conflict with the exam, please let us know right away via the 
-Welcome Survey (in Canvas/Gradescope) to see if accommodations can be made. 
 
 
 ### Midterms
