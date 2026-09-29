@@ -39,5 +39,5 @@ days:
       - name: LAB 1
         type: lab
         title: Introduction to R
-        url:
+        url: http://datahub.ucsd.edu/user-redirect/git-sync?repo=https://github.com/dsc-courses/dsc152-2026-fa&subPath=labs/Lab1/Lab1.ipynb
 ---
