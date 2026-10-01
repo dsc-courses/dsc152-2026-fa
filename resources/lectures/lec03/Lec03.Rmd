@@ -7,9 +7,9 @@ author: |
   | One-sample Nonparametric tests
   | and Type I Error rates
 date: |
-  | Tuesday, April 7
-  | Spring Quarter 2026
-  | Peter Chi
+  | Tuesday, October 6
+  | Fall Quarter 2026
+  | Armin Schwartzman
 output: 
   beamer_presentation:
     theme: "Warsaw"
@@ -82,7 +82,24 @@ Consider:
 
 \vspace{4mm}
 
-pollev.com/chi
+clacl.com/spxozdgyn
+
+
+---
+
+## Lecture 3 — Poll 1
+
+**Which of the following cannot possibly be consistent with $H_0 : \mu = \mu_0$?**
+
+A. All values of the distribution are above $\mu_0$
+
+B. All values of the distribution are below $\mu_0$
+
+C. All values of the distribution except for one of them are above $\mu_0$
+
+D. All values of the distribution except for one of them are below $\mu_0$
+
+E. Half of the values of the distribution are above $\mu_0$, half of the values of the distribution are below $\mu_0$
 
 
 ## The Sign Test {.t}
@@ -92,13 +109,13 @@ One common example of a one-sample non-parametric test is known as the \underlin
 ### Sign test
 
  - Take each data value and subtract $\mu_0^{***}$
-   - If the difference is positive, assign a "+" value
-   - If the difference is negative, assign a "-" value
+   - If the difference is positive, assign a "$+$" value
+   - If the difference is negative, assign a "$-$" value
    - If the difference is 0, ignore that value
    
 \vspace{4mm}
 
- - Under $H_0$, there should be $50\%$ "+" and $50\%$ "-". We then calculate the probability of observing at least as many "+" or "-" as what was actually observed, under a Binomial distribution with $p=0.5$.
+ - Under $H_0$, there should be $50\%$ "$+$" and $50\%$ "$-$". We then calculate the probability of observing at least as many "$+$" or "$-$" as what was actually observed, under a Binomial distribution with $p=0.5$.
 :::
 
 $^{***}$Almost. See next slide for correction.
@@ -136,11 +153,29 @@ $$
 -, +, -, -, -
 $$
 
-pollev.com/chi
+\vspace{5mm}
 
-\vspace{2mm}
+clacl.com/spxozdgyn
 
-(Don't look at the next slide yet!)
+---
+
+## Lecture 3 — Poll 2
+
+**Which of the following represent data that are at least as extreme as the observed data?**
+
+A. 0 "$-$" and 5 "$+$"
+
+B. 1 "$-$" and 4 "$+$"
+
+C. 2 "$-$" and 3 "$+$"
+
+D. 3 "$-$" and 2 "$+$"
+
+E. 4 "$-$" and 1 "$+$"
+
+F. 5 "$-$" and 0 "$+$"
+
+---
 
 
 ## The Sign Test {.t}
@@ -150,7 +185,7 @@ $$
 P(X=4) + P(X=5) + P(X=0) + P(X=1)
 $$
 
-where $X \sim Binomial(n=5, p=0.5)$. In R, this is:
+where $X \sim {\rm Binomial}(n=5, p=0.5)$. In R, this is:
 
 ```{r, size="footnotesize"}
 dbinom(x=4, size=5, prob=0.5) + dbinom(x=5, size=5, prob=0.5) + 
@@ -396,3 +431,5 @@ Upload your R Markdown pdf output file to Gradescope, consisting of:
 \vspace{4mm}
 
 3. Your Turn \#2 from Slides \ref{boot1} - \ref{boot2} consisting of the simulations to estimate Type I Error rate from the bootstrap hypothesis test for the three cases (Gamma, normal, uniform).
+
+

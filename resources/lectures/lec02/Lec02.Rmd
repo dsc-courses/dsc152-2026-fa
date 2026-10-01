@@ -6,9 +6,9 @@ author: |
   | Lecture \#2
   | The t-Test and Type I Error Estimation
 date: |
-  | Thursday, April 2
-  | Spring Quarter 2026
-  | Peter Chi
+  | Thursday, October 1
+  | Fall Quarter 2026
+  | Armin Schwartzman
 output: 
   beamer_presentation:
     theme: "Warsaw"
@@ -34,8 +34,6 @@ header-includes:
 ```
 
 
-
-
 ## Last time {.t}
 Let $X$ be the number of heads when we flip a coin 6 times. We have:
 
@@ -55,8 +53,6 @@ dbinom(x=0, size=6, prob=0.5) + dbinom(x=1, size=6, prob=0.5) +
 ```
 
 
-
-
 ## Last time {.t}
 What if we used a smaller rejection region, say of $\{X=0, X=6\}$?
 
@@ -70,8 +66,18 @@ dbinom(x=0, size=6, prob=0.5) + dbinom(x=6, size=6, prob=0.5)
 Side question: if shrinking the rejection region leads to a lower probability of making a Type I Error, then why don't we always just use the smallest possible rejection region?
 
 
+## When is statistics useful?
+
+- **Big picture**: Statistics is the foundation of learning from data
+
+- **Small picture**: How are traditional statistical methods useful in the era of big data and AI?
+
+  - When datasets are small
+
+
 ## Type I Error with a t-Test {.t}
-Suppose we want to know if there is evidence that the average amount of sleep that a UCSD student gets is \underline{different from} 6 hours per night. We obtain the following data on a random sample of five students and ask them how many hours of sleep they got on the previous night, with the data below:
+
+Suppose we want to know if there is evidence that the average amount of sleep that a UCSD student gets is \underline{different from} 6 hours per night. We obtain the following data on a *random sample* of five students and ask them how many hours of sleep they got on the previous night, with the data below:
 
 $$
 3, 7, 1, 2, 2
@@ -159,6 +165,7 @@ model1$p.value
 
 So either way works, and again, we reject $H_0$ at $\alpha=0.05$. But\ldots
 
+
 ## Type I Error with a t-Test {.t}
 \label{typei}
 
@@ -166,19 +173,54 @@ So either way works, and again, we reject $H_0$ at $\alpha=0.05$. But\ldots
 ### Might we have made a Type I Error?
 \vspace{-2mm}
 We can't know for sure in any given case, but we CAN know the probability of making a Type I Error.
-
 :::
 
 If the conditions of the test are met, the probability of making a \ Type I error should just be the $\alpha$ level of the test (here, 0.05). Why?
 
-https://pollev.com/chi
+clacl.com/spxozdgyn
 
+---
+
+## Lecture 2 — Poll 1
+
+**Which of the following best describes why the probability of a Type I Error is equal to 0.05 in this case, if the conditions for the t-Test are met?**
+
+A. There is a 0.05 probability that $H_0$ is true
+
+B. There is a 0.05 probability that $H_0$ is false
+
+C. If $H_0$ is false, then there is a 0.05 probability of getting a test statistic that falls in the rejection region
+
+D. If $H_0$ is false, then there is a 0.05 probability of getting a test statistic that falls outside of the rejection region
+
+E. If $H_0$ is true, then there is a 0.05 probability of getting a test statistic that falls in the rejection region
+
+F. If $H_0$ is true, then there is a 0.05 probability of getting a test statistic that falls outside of the rejection region
+
+---
 
 ## Type I Error with a t-Test {.t}
 \label{conditions}
 But wait, what conditions?
 
-https://pollev.com/chi
+clacl.com/spxozdgyn
+
+
+## Lecture 2 — Poll 2
+
+**Which of the following are conditions required for a t-Test to be valid?**
+
+A. The data must follow a normal distribution
+
+B. The data must follow a t-distribution
+
+C. The sampling distribution of the sample mean of the data must follow a normal distribution
+
+D. The sampling distribution of the sample mean of the data must follow a t-distribution
+
+E. The data must be a random sample from the population
+
+---
 
 ## Type I Error with a t-Test {.t}
 And what are the consequences of performing a test when its conditions are not met?
@@ -196,7 +238,7 @@ In other words, if you thought you were doing a 0.05-level test, but the conditi
 
 \vspace{4mm}
 
-(P.S. this is really bad!!)
+(P.S. this is not good!)
 
 
 ## Type I Error with a t-Test {.t}
@@ -301,7 +343,7 @@ is when $X$ follows a Gamma distribution, and then use that to determine the pro
 ::: {.t}
 ### Unfortunately...
 \vspace{-2mm}
-There is actually no closed-form solution to the distribution of $t_s$ if $X$ follows a Gamma distribution. :(
+There is no easy closed-form solution to the distribution of $t_s$ if $X$ follows a Gamma distribution. :(
 :::
 
 
@@ -403,3 +445,4 @@ Upload your .pdf output file from R Markdown to Gradescope, consisting of:
 \vspace{3mm}
 
 If you have not yet been able to get R Markdown to output to a pdf file, we will be lenient on that for this assignment; please just find some way to upload a single pdf with your answers, code and output.
+
