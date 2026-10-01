@@ -28,8 +28,8 @@ days:
       - name: LEC 2
         type: lecture
         title: Type I Error Estimation with the t-Test
-        url:
-        html:
+        url: resources/lectures/lec02/Lec02.Rmd
+        html: resources/lectures/lec02/Lec02.pdf
         podcast:
         readings:
           - name: MD 9.5

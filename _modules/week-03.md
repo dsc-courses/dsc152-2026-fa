@@ -13,8 +13,8 @@ days:
       - name: LEC 5
         type: lecture
         title: Statistical Significance vs. Effect Size
-        url:
-        html:
+        url: resources/lectures/lec03/Lec03.Rmd
+        html: resources/lectures/lec03/Lec03.pdf
         podcast:
         readings:
           - name: Forbes

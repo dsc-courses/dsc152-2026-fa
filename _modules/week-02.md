@@ -7,7 +7,8 @@ days:
       - name: DISC 2
         type: disc
         title: Simulations in R
-        url:
+        url: resources/lectures/lec03/Lec03.Rmd
+        html: resources/lectures/lec03/Lec03.pdf
   - date: 2026-10-6
     events:
       - name: LEC 3
