@@ -7,11 +7,8 @@ days:
       - name: DISC 1
         type: disc
         title: Getting Started with R and R Markdown
-        url: resources/discussions/disc1/Week 1.pptx
-      - name: code
-        type: disc
-        title: Discussion R code
-        url: resources/discussions/disc1/intro.R
+        url: resources/discussions/Week 1/Week 1.R
+        html: resources/discussions/Week 1/Week 1.pptx
   - date: 2026-9-29
     events:
       - name: LEC 1

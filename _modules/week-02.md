@@ -6,7 +6,9 @@ days:
     events:
       - name: DISC 2
         type: disc
-        title: Simulations in R
+        title: tidyverse basics
+        url: resources/discussions/Week 2/Week 2.R
+        html: resources/discussions/Week 2/Week 2.pdf
   - date: 2026-10-6
     events:
       - name: LEC 3

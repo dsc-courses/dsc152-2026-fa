@@ -6,7 +6,7 @@ days:
     events:
       - name: DISC 3
         type: disc
-        title: tidyverse basics (dplyr, ggplot2, etc)
+        title: Midterm 1 preparation
         url:
   - date: 2026-10-13
     events:
