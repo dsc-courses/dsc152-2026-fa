@@ -6,7 +6,7 @@ days:
     events:
       - name: DISC 7
         type: disc
-        title: Extra Office Hours
+        title: Final exam prep
         url:
   - date: 2026-11-24
     events:

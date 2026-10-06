@@ -6,7 +6,7 @@ days:
     events:
       - name: DISC 2
         type: disc
-        title: tidyverse basics
+        title: tidyverse basics (dplyr, ggplot2, etc)
         url: resources/discussions/Week 2/Week 2.R
         html: resources/discussions/Week 2/Week 2.pdf
   - date: 2026-10-6

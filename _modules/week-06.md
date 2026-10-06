@@ -6,7 +6,7 @@ days:
     events:
       - name: DISC 5
         type: disc
-        title: Extra Office Hours
+        title: Midterm 2 prep
         url:
   - date: 2026-11-3
     events:
