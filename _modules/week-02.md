@@ -23,8 +23,8 @@ days:
       - name: LEC 4
         type: lecture
         title: One sample tests and power
-        url:
-        html:
+        url: resources/lectures/lec04/Lec04.Rmd
+        html: resources/lectures/lec04/Lec04.pdf
         podcast:
         readings:
           - name: DHVS 23

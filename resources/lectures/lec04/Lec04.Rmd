@@ -6,9 +6,9 @@ author: |
   | Lecture \#4
   | The t-Test and Statistical Power
 date: |
-  | Thursday, April 9
-  | Spring Quarter 2026
-  | Peter Chi
+  | Thursday, October 8
+  | Fall Quarter 2026
+  | Armin Schwartzman
 output: 
   beamer_presentation:
     theme: "Warsaw"
@@ -34,6 +34,17 @@ header-includes:
 ```
 
 
+## Exploratory analysis versus confirmatory analysis
+
+- **Exploratory analysis**: Initial, temporary conclusions.
+  - Open ended
+  - Flexible
+  - Helps design a bigger study
+
+- **Confirmatory analysis**: Final, decisive conclusions.
+  - Specific goals
+  - Strict design
+  - Needs enough \underline{statistical power}
 
 
 ## Statistical Power {.t}
@@ -51,7 +62,22 @@ header-includes:
 
 Now, in general terms, what is statistical power?
 
-https://pollev.com/chi
+https://clacl.com/spxozdgyn
+
+
+## Lecture 4 — Poll 1
+
+**Which of the following best describes the definition of statistical power?**
+
+A. The probability of correctly rejecting $H_0$
+
+B. The probability of correctly rejecting $H_A$
+
+C. The probability that $H_0$ is false
+
+D. The probability that $H_0$ is true
+
+E. The probability of rejecting $H_0$ when $H_0$ is true
 
 
 ## Statistical Power {.t}
@@ -122,14 +148,13 @@ Posthoc is obviously the least desirable, and I am philosophically against this 
 
 ## Statistical Power {.t}
 \framesubtitle{Example: UCSD students' sleep again}
-Let us suppose that from a literature review, we believe that the variance of the hours of sleep a UCSD student gets is 1 hour, and that the average UCSD student might only sleep for 4 hours per night. That is, if $X_i$ is the amount of sleep that the $i^{th}$ student gets, then we will proceed by assuming that:
-
+Let us suppose that from a literature review or EDA, we hypothesize that the variance of the hours of sleep a UCSD student gets is 1 hour, and that the average UCSD student might only sleep for 4 hours per night. That is, if $X_i$ is the amount of sleep that the $i^{th}$ student gets, we have the *alternative hypothesis*:
 $$
-X_i \sim N(\mu=4, \sigma^2=1)
+H_A: \quad X_i \sim N(\mu=4, \sigma^2=1)
 $$
 
 \vspace{4mm}
-A power calculation proceeds by determining the probability that we would reject $H_0$ if the above values are actually true.
+The \underline{statistical power} is the probability that we would reject the null hypothesis $H_0: \mu_0 = 6$ if the alternative hypothesis is true.
 
 
 ### What is the distribution of $t_s$ under this reality?
@@ -162,8 +187,7 @@ $$
 t_s = \frac{\overline{x} - \mu_0}{s/\sqrt{n}} &= \frac{\overline{x} - 6}{s/\sqrt{5}}
 \end{aligned}
 $$
-but we are operating under the assumption that the mean of $\overline{X}$ is 4, so this does not actually have
-a t distribution. But...
+but we are operating under the assumption that the mean of $\overline{X}$ is 4, so this does not actually have a t distribution. But...
 
 $$
 \begin{aligned}
@@ -176,8 +200,6 @@ $$
 :::
 
 The first quantity after the $=$ sign is a $t$ random variable with df=4. The second quantity is a \textit{random shift} to the left...
-
-
 
 
 ## Statistical Power {.t}
@@ -464,11 +486,27 @@ legend("right", pch=c(17, 15, 19), legend=c(expression(paste(mu, "=4")),
 ## Power Curves {.t}
 What do we observe in the power curves shown on the previous slide?
 
-https://pollev.com/chi
+https://clacl.com/spxozdgyn
 
-\pause
 
-\vspace{4mm}
+## Lecture 4 — Poll 2
+
+**Which of the following are indicated by the power curves shown on the slide?**
+
+A. As sample size goes up, power goes up
+
+B. As the effect size goes up, power goes down
+
+C. As the effect size goes up, power goes up
+
+D. At an effect size of 0.5, a sample size of approximately 30 is sufficient to attain 80% power
+
+E. At an effect size of 1, a sample size of approximately 10 is sufficient to attain 80% power
+
+F. As the variance goes up, power goes down
+
+
+## Power Curves {.t}
 
 ::: {.block}
 ### Now, how do we make them? 
@@ -558,3 +596,4 @@ Upload your pdf output file to Gradescope by midnight tonight.
 \vspace{1mm}
 
  - Question: if power always increases with sample size, then will there always be a sample size at which we would detect even a negligible difference -- that is, a difference that is so small that we wouldn't actually care about it even if it is real?
+
