@@ -46,8 +46,8 @@ I am grateful for multiple conversations with Dr. Peter Chi and Justin Eldridge 
 
 We will hold the following weekly office hours this quarter:
 
-- Mondays 10-11am (Aditya): HDSI 455
-- Mondays 2-3pm (Zida): HDSI 355
+- Mondays 10-11am (Aditya): [Zoom](https://ucsd.zoom.us/j/91031023904)
+- Mondays 2-3pm (Zida): HDSI 138
 - Tuesdays 11am-12pm (Reva): HDSI 455
 - Thursdays 3:30-4:30pm (Armin): HDSI 455
 - Fridays 11:30-12:30pm (Arunima): HDSI 455
