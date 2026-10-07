@@ -21,6 +21,13 @@ days:
             url: https://www.forbes.com/sites/jvchamary/2015/10/27/bacon-cancer/
           - name: Guardian
             url: https://www.theguardian.com/society/2015/oct/26/bacon-ham-sausages-processed-meats-cancer-risk-smoking-says-who
+      - name: HW 1
+        type: hw
+        title: One Sample Type I Errors and Power
+        url: https://github.com/dsc-courses/dsc152-2026-fa/blob/gh-pages/resources/homework/HW1.pdf
+        readings:
+          - name: Dataset (TSV)
+            url: resources/homework/ai_study_habits.tsv
   - date: 2026-10-15
     events:
       - name: LEC 6
@@ -38,10 +45,6 @@ days:
             url: https://data36.com/statistical-significance-in-ab-testing/
           - name: Unbounce
             url: https://unbounce.com/landing-page-articles/what-is-ab-testing/
-      - name: HW 1
-        type: hw
-        title: One Sample Type I Errors and Power
-        url:
   - date: 2026-10-16
     events:
       - name: LAB 3
