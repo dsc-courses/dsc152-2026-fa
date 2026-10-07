@@ -24,7 +24,7 @@ days:
       - name: HW 1
         type: hw
         title: One Sample Type I Errors and Power
-        url: https://github.com/dsc-courses/dsc152-2026-fa/blob/gh-pages/resources/homework/HW1.pdf
+        url: resources/homework/HW1.pdf
         readings:
           - name: Dataset (TSV)
             url: resources/homework/ai_study_habits.tsv
