@@ -48,7 +48,7 @@ We will hold the following weekly office hours this quarter:
 
 - Mondays 10-11am (Aditya): [Zoom](https://ucsd.zoom.us/j/91031023904)
 - Mondays 2-3pm (Zida): HDSI 138
-- Tuesdays 11am-12pm (Reva): HDSI 455
+- Tuesdays 11am-12pm (Reva): [Google Meet: By Appointment](https://calendar.app.google/sdea7mbkjnEEMg2s8)
 - Thursdays 3:30-4:30pm (Armin): HDSI 455
 - Fridays 11:30-12:30pm (Arunima): HDSI 455
 
