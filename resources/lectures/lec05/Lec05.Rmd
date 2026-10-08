@@ -6,9 +6,9 @@ author: |
   | Lecture \#5
   | Statistical Significance vs. Effect Size
 date: |
-  | Tuesday, April 14
-  | Spring Quarter 2026
-  | Peter Chi
+  | Tuesday, October 13
+  | Fall Quarter 2026
+  | Armin Schwartzman
 output: 
   beamer_presentation:
     theme: "Warsaw"
@@ -107,7 +107,7 @@ points(powers[2,] ~ n, pch=15, cex=2)
 lines(powers[2,] ~ n)
 points(powers[3,] ~ n, pch=17, cex=2)
 lines(powers[3,] ~ n)
-legend("right", pch=c(19, 15, 17), legend=c(expression(paste(mu, "=5hr55min")), 
+legend("right", pch=c(17, 15, 19), legend=c(expression(paste(mu, "=5hr55min")), 
                                             expression(paste(mu, "=5hr58min")), 
                                             expression(paste(mu, "=5hr59min"))), cex=2)
 ```
@@ -132,15 +132,12 @@ And in our era of Big Data, sample sizes on this order are not uncommon!
 
 
 ## Example: Sleep of UCSD students {.t}
-\label{yourturn}
 \framesubtitle{Your Turn}
 ```{r, echo=FALSE}
 set.seed(1)
 sleep50k <- rnorm(n=50000, mean=(5 + 59/60), sd=1)
 ```
 
-
-### Daily Check Question #1
 Open up an RStudio session (no need to start an R Markdown file), and then:
 
  - Simulate a sample of size 50,000, with values of sleep that come from a $N\bigg(\mu = 5 \frac{59}{60}, \sigma^2 = 1\bigg)$ distribution.
@@ -150,7 +147,7 @@ Open up an RStudio session (no need to start an R Markdown file), and then:
 
 \vspace{2mm}
 
- - Put your responses in Question \#1 of the Daily Check \#5 assignment in Gradescope when you are ready to.
+ - Put your responses in the Daily Check \#5 assignment in Gradescope when you are ready.
 
 
 ## Example: Sleep of UCSD students {.t}
@@ -172,8 +169,6 @@ t.test(sleep50k, mu=6)$conf.int
 
 
 ## Quote of the Day
-\framesubtitle{Daily Check Question \#2}
-
 ![](bacon.jpeg)
 
 
@@ -219,8 +214,6 @@ t.test(sleep50k, mu=6)$conf.int
 
 
 ## And so again...
-\framesubtitle{Daily Check Question \#2}
-
 ![](bacon.jpeg)
 
 
@@ -265,7 +258,7 @@ and \underline{effect size}?
 
 ## Example: Poker {.t}
 
-Background: In November 2019, the state of Pennsylvania (where I lived at the time) introduced fully legalized and regulated online gambling, including poker.
+Background: In November 2019, the state of Pennsylvania introduced fully legalized and regulated online gambling, including poker.
 
 \vspace{5mm}
 
@@ -273,6 +266,8 @@ Background: In November 2019, the state of Pennsylvania (where I lived at the ti
 
 
 ## Example: Poker {.t}
+
+A story from the DSC 10 instructor Peter Chi:
 
 In my younger days, I played a lot of online poker (often on shady offshore sites), but even with the promise of a safe regulated environment, I did not initially feel inclined to start playing again. 
 
@@ -303,6 +298,8 @@ If you have never played poker before (or otherwise do not have much knowledge o
 
 ## Example: Poker {.t}
 
+Peter continues:
+
 ::: {.t}
 ### I have a history of being an overall winning player, but:
 
@@ -317,8 +314,28 @@ So the question I had was, am I now (in 2020) a theoretically winning player?
 
 Ideally, I would like to know this as quickly as possible...
 
-https://pollev.com/chi
+https://clacl.com/spxozdgyn
 
+
+## Lecture 5 — Poll 1
+
+**Suppose that I play for 2 hours per day, 6 tables at a time (meaning approximately 300 hands per hour). If I am a theoretically winning player, how long will I need to play in order to have reasonably statistical power to detect it?**
+
+A. 2 hours (n = 300)
+
+B. 2 days (n = 600)
+
+C. 1 week (n = 2,100)
+
+D. 2 weeks (n = 4,100)
+
+E. 1 month (n = 8,200)
+
+F. 6 weeks (n = 12,600)
+
+G. 2 months (n = 16,400)
+
+---
 
 ## Example: Poker {.t}
 \framesubtitle{Some data}
@@ -335,14 +352,14 @@ https://pollev.com/chi
 
 ![](poker_df2.png)
 
+<!--
 \pause
 
 ### Sidenote: how were we all doing on May 7, 2020?
 \vspace{-2mm}
  - We were about 1 month into stay-at-home orders
  - I was under 2 months from becoming a dad
- 
-
+ -->
 
 
 ## Example: Poker {.t}
@@ -353,14 +370,27 @@ How exactly would we formulate this as a statistical test?
 
 \vspace{4mm}
 
-https://pollev.com/chi
+https://clacl.com/spxozdgyn
 
-\pause
+## Lecture 5 — Poll 2
 
-\vspace{8mm}
+**How might we formulate the question of whether Peter is a theoretically winning poker player into a statistical test? Select all that are valid.**
+
+A. Test $H_0: \bar{x} = 0$ vs. $H_A: \bar{x} > 0$ where $\bar{x}$ is the sample average amount of money that Peter won per hand from a large sample
+
+B. Test $H_0: \mu = 0$ vs. $H_A: \mu > 0$ where $\mu$ is the true average amount of money that Peter wins on any hand
+
+C. Test $H_0: T = 0$ vs. $H_A: T > 0$ where $T$ is the total amount of money that Peter won over a large sample of hands
+
+D. Test $H_0: \tau = 0$ vs. $H_A: \tau > 0$ where $\tau$ is the true total amount of money that Peter would win over any given sample size
+
+---
+
+
+## Example: Poker {.t}
 
 ### The data
-\vspace{-2mm}
+
 I have pulled the results from my first 10,000 hands at the stake of "\$1 NL (6 max)" (corresponding to approximately five weeks of data). Let's see what this sample tells us.
 
 
@@ -386,7 +416,23 @@ ggplot(df, aes(x = won)) +
 
 
 ## Example: Poker {.t}
-\framesubtitle{What does the evidence suggest? (https://pollev.com/chi)}
+\framesubtitle{What does the evidence suggest?}
+
+https://clacl.com/spxozdgyn
+
+
+## Lecture 5 — Poll 3
+
+**Do you think that what you currently see on the screen is evidence that Peter is a theoretically winning poker player in 2020?**
+
+A. Yes
+
+B. No
+
+---
+
+
+## Example: Poker {.t}
 
 ::: {.t}
 ### Some summary statistics:
@@ -447,29 +493,38 @@ mean(won)
 \framesubtitle{https://www.thepokerbank.com/strategy/other/winrate/}
 ![](winrate.png)
 
-### Notes:
-\vspace{-2mm}
+\vspace{2mm}
  - bb/100 = "big blinds per 100 hands"
  - In my case, $\approx 0.10$ per hand corresponds to 10 bb/100, which is on the very high end of what is attainable in the long run.
  
 ## Example: Poker {.t}
-
-### Daily Check Question \#3
-\label{fail}
-\vspace{-2mm}
 So, we failed to reject $H_0$. What does that mean here?
 
-https://pollev.com/chi
+https://clacl.com/spxozdgyn
+
+
+## Lecture 5 — Poll 4
+
+**We failed to reject $H_0$. Which of the following best describes what we should conclude?**
+
+A. Since we did not reject $H_0$, we accept that Peter is probably not a theoretically winning poker player.
+
+B. Since we did not reject $H_0$, it is most likely that Peter is not a theoretically winning poker player.
+
+C. Peter might be a theoretically winning poker player, but there is no way to know.
+
+D. Peter might be a theoretically winning poker player, but if we want evidence at the $\alpha = 0.05$ level, the data are insufficient.
+
+E. Peter won over $1000 in five weeks, so he probably is a theoretically winning poker player.
 
 
 ## Example: Poker {.t}
-\label{power}
 So how big of a sample do we need?
 
-### We can do a power calculation! (Daily Check Question \#4)
-\vspace{-2mm}
-How might we do that here?
-
+```{r}
+power.t.test(delta=0.102295, sd=7.181245, power=0.80, 
+             alternative="one.sided", type="one.sample")
+```
 
 ## Example: Poker {.t}
 \framesubtitle{Now, the full data}
@@ -502,13 +557,13 @@ t.test(won_all, alternative="greater")
 \vspace{-2mm}
 I mean, losing more than \$1500 in the last 20k hands didn't help.
 
-## Recap
+## Example: Poker
 
 ::: {.t}
 ### Parting thoughts
 \vspace{-2mm}
 
- - Recall that a t-Test requires that the observations are independent in order to be valid. Do we think that condition is met here?
+ - A t-Test requires that the observations are independent in order to be valid. Do we think that condition is met here?
    - We'll revisit this as time-series data in Week 9. 
  
 \vspace{3mm} 
@@ -523,34 +578,3 @@ I mean, losing more than \$1500 in the last 20k hands didn't help.
 
 The primary point of both examples from today was: the \underline{p-value} is not everything!
 
-
-## Recap
-
-::: {.t}
-### Summary of today's Daily Check
-\vspace{-2mm}
- - Overall conclusions from the t-Test on Slide \ref{yourturn}
-
-\vspace{2mm}
-
- - Explanation of Quote of the Day in your own words
- 
-\vspace{2mm}
-
- - What we should or should not conclude from the result of failing to reject $H_0$ on Slide \ref{fail}
- 
-\vspace{2mm}
-
- - Explanation of power calculation and results on Slide \ref{power}
-:::
-
-\vspace{3mm}
-
-::: {.t}
-### Next time
-\vspace{-2mm}
- - A/B testing
-   - Also known as \underline{experimental studies} (as opposed to observational)
-   - This is a very rich topic that we do not have time to treat fully; we will focus on the statistical inference aspects therein.
- 
-:::
