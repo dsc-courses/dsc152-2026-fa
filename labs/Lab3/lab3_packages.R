@@ -66,18 +66,33 @@ lab3_ensure_packages <- function(mode = c("student", "grader"),
   if (length(remaining)) {
     stopifnot(length(remaining) == 0L)
   }
-  loaded_old <- required$Package[vapply(seq_len(nrow(required)), function(i) {
-    package <- required$Package[i]
+  # IRkernel loads dependencies before this setup cell runs. Their installed
+  # versions are checked above; R checks the loaded versions against each
+  # package's actual import requirements when ottr/testthat are loaded.
+  # Request a student restart only for an outdated grader/testthat namespace.
+  runtime_required <- if (mode == "student")
+    required[required$Package %in% c("ottr", "testthat"), ] else required
+  loaded_old <- runtime_required$Package[vapply(seq_len(nrow(runtime_required)), function(i) {
+    package <- runtime_required$Package[i]
     package %in% loadedNamespaces() &&
-      getNamespaceVersion(package) < installed_version(package)
+      getNamespaceVersion(package) < package_version(runtime_required$Version[i])
   }, logical(1))]
   if (length(loaded_old)) {
+    if (mode == "student") {
+      message("The required package versions are installed. Restart the R kernel ",
+              "(Kernel > Restart Kernel), then run this setup cell again before continuing.")
+      return(invisible(FALSE))
+    }
     stopifnot(length(loaded_old) == 0L)
   }
   if (!all(c("expect_all_true", "expect_all_false") %in% getNamespaceExports("testthat"))) {
     stopifnot(all(c("expect_all_true", "expect_all_false") %in% getNamespaceExports("testthat")))
   }
-  message("Lab packages ready: ottr ", installed_version("ottr"),
-          "; testthat ", installed_version("testthat"), ".")
+  runtime_version <- function(package) {
+    if (package %in% loadedNamespaces()) getNamespaceVersion(package) else
+      installed_version(package)
+  }
+  message("Lab packages ready: ottr ", runtime_version("ottr"),
+          "; testthat ", runtime_version("testthat"), ".")
   invisible(TRUE)
 }
