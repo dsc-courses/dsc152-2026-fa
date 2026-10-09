@@ -8,10 +8,21 @@ lab3_ensure_packages <- function(mode = c("student", "grader"),
     stopifnot(getRversion() >= "4.1.0")
   }
   if (is.null(lib)) {
-    r_series <- paste(R.version$major, strsplit(R.version$minor, ".", fixed = TRUE)[[1]][1],
-                      sep = ".")
-    lib <- Sys.getenv("LAB3_R_LIBRARY", unset = file.path(path.expand("~"), "R",
-                                                         "lab3-library", r_series))
+    # Use a library R searches before IRkernel starts, so a restart picks up
+    # updated dependencies instead of loading the same older versions again.
+    user_libraries <- strsplit(Sys.getenv("R_LIBS_USER"), .Platform$path.sep,
+                               fixed = TRUE)[[1]]
+    user_libraries <- path.expand(user_libraries[nzchar(user_libraries) &
+                                                   user_libraries != "NULL"])
+    stopifnot(length(user_libraries) > 0L)
+    for (candidate in user_libraries) {
+      if (!dir.exists(candidate)) dir.create(candidate, recursive = TRUE, showWarnings = FALSE)
+      if (dir.exists(candidate) && file.access(candidate, 2) == 0L) {
+        lib <- candidate
+        break
+      }
+    }
+    stopifnot(!is.null(lib))
   }
   if (dir.exists(lib)) .libPaths(c(lib, .libPaths()))
   required <- read.csv(manifest, stringsAsFactors = FALSE)
@@ -66,10 +77,8 @@ lab3_ensure_packages <- function(mode = c("student", "grader"),
   if (length(remaining)) {
     stopifnot(length(remaining) == 0L)
   }
-  # IRkernel loads dependencies before this setup cell runs. Their installed
-  # versions are checked above; R checks the loaded versions against each
-  # package's actual import requirements when ottr/testthat are loaded.
-  # Request a student restart only for an outdated grader/testthat namespace.
+  # Allow compatible dependencies preloaded by IRkernel, but detect actual
+  # Depends/Imports conflicts before trying to load ottr or testthat.
   runtime_required <- if (mode == "student")
     required[required$Package %in% c("ottr", "testthat"), ] else required
   loaded_old <- runtime_required$Package[vapply(seq_len(nrow(runtime_required)), function(i) {
@@ -77,10 +86,47 @@ lab3_ensure_packages <- function(mode = c("student", "grader"),
     package %in% loadedNamespaces() &&
       getNamespaceVersion(package) < package_version(runtime_required$Version[i])
   }, logical(1))]
+  pending <- c("ottr", "testthat")
+  if (mode == "grader") pending <- c(pending, "IRkernel", "rmarkdown")
+  inspected <- character()
+  while (length(pending)) {
+    package <- pending[1]
+    pending <- pending[-1]
+    if (package %in% inspected) next
+    inspected <- c(inspected, package)
+    # An already-loaded namespace has already validated its own imports.
+    # Its version is checked by its parent's requirement (or the root baseline).
+    if (package %in% loadedNamespaces()) next
+    description <- utils::packageDescription(package, lib.loc = .libPaths(),
+                                             fields = c("Depends", "Imports"))
+    declarations <- as.character(unlist(description, use.names = FALSE))
+    declarations <- declarations[!is.na(declarations)]
+    for (declaration in unlist(strsplit(declarations, ",", fixed = TRUE))) {
+      entry <- trimws(declaration)
+      match <- regmatches(entry, regexec(
+        "^([[:alnum:].]+)[[:space:]]*(?:\\(([<>=!]+)[[:space:]]*([^()[:space:]]+)\\))?$",
+        entry, perl = TRUE))[[1]]
+      stopifnot(length(match) >= 2L)
+      dependency <- match[2]
+      if (dependency == "R") next
+      pending <- c(pending, dependency)
+      if (length(match) == 4L && nzchar(match[3]) &&
+          dependency %in% loadedNamespaces()) {
+        operator <- match[3]
+        stopifnot(operator %in% c(">=", ">", "<=", "<", "==", "=", "!="))
+        if (operator == "=") operator <- "=="
+        compatible <- do.call(operator, list(getNamespaceVersion(dependency),
+                                              package_version(match[4])))
+        if (!isTRUE(compatible)) loaded_old <- c(loaded_old, dependency)
+      }
+    }
+  }
+  loaded_old <- unique(loaded_old)
   if (length(loaded_old)) {
     if (mode == "student") {
-      message("The required package versions are installed. Restart the R kernel ",
-              "(Kernel > Restart Kernel), then run this setup cell again before continuing.")
+      message("Updated packages are installed, but this session needs a restart (",
+              paste(loaded_old, collapse = ", "), "). Choose Kernel > Restart Kernel, ",
+              "then run this setup cell again before continuing.")
       return(invisible(FALSE))
     }
     stopifnot(length(loaded_old) == 0L)
