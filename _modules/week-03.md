@@ -7,7 +7,7 @@ days:
       - name: DISC 3
         type: disc
         title: Midterm 1 preparation
-        url:
+        html: resources/discussions/Week 3/Week 3.pdf
   - date: 2026-10-13
     events:
       - name: LEC 5
