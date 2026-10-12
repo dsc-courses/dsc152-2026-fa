@@ -289,7 +289,7 @@ However, please refer to the [homepage of this website](..) for the most up-to-d
 | **morning** |  | Lecture |  | Lecture |  |
 | **afternoon** | Discussion / <b style="color:red">Midterms</b> |  |  |  |  |
 | **night** |  | <b style="color:red">Daily Check due</b> |  | <b style="color:red">Daily Check due</b> | <b style="color:red">Lab due</b> |
-| **night** |  | <b style="color:red">Homework 3 due</b> |  | <b style="color:red">Homework 1 and 2 due</b> |  |
+| **night** |  | <b style="color:red">Homework 1 and 3 due</b> |  | <b style="color:red">Homework 2 due</b> |  |
 
 ---
 
