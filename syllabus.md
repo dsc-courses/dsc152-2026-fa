@@ -340,6 +340,12 @@ as possible if it seems like this might be the case.
 
 ---
 
+## Late policy
+
+Late HW assignments will be accepted up to a day late with a 1% deduction penalty per hour (or fraction thereof) after the due time. For example, a HW assignment submitted 90 minutes late will be deducted 2% of the total points possible. A HW assignment submitted more than 24 hours late will not be accepted. The largest possible penalty for an accepted late assignment is 24%.
+
+---
+
 ## Academic Integrity 
 
 All students are expected to uphold UCSD's standards of Academic Integrity. Essentially
