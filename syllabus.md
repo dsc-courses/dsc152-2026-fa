@@ -289,7 +289,7 @@ However, please refer to the [homepage of this website](..) for the most up-to-d
 | **morning** |  | Lecture |  | Lecture |  |
 | **afternoon** | Discussion / <b style="color:red">Midterms</b> |  |  |  |  |
 | **night** |  | <b style="color:red">Daily Check due</b> |  | <b style="color:red">Daily Check due</b> | <b style="color:red">Lab due</b> |
-| **night** |  | <b style="color:red">Homework 3 due</b> |  | <b style="color:red">Homework 1 and 2 due</b> |  |
+| **night** |  | <b style="color:red">Homework 1 and 3 due</b> |  | <b style="color:red">Homework 2 due</b> |  |
 
 ---
 
@@ -337,6 +337,12 @@ Grades may be curved at the end of the quarter if appropriate.
 If you have extenuating circumstances that prohibit your completion of
 coursework, you may be eligible for an Incomplete grade. Please reach out as soon
 as possible if it seems like this might be the case.
+
+---
+
+## Late policy
+
+Late HW assignments will be accepted up to a day late with a 1% deduction penalty per hour (or fraction thereof) after the due time. For example, a HW assignment submitted 90 minutes late will be deducted 2% of the total points possible. A HW assignment submitted more than 24 hours late will not be accepted. The largest possible penalty for an accepted late assignment is 24%.
 
 ---
 

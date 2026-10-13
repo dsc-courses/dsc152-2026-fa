@@ -7,7 +7,7 @@ days:
       - name: DISC 3
         type: disc
         title: Midterm 1 preparation
-        url:
+        html: resources/discussions/Week 3/Week 3.pdf
   - date: 2026-10-13
     events:
       - name: LEC 5
@@ -50,5 +50,5 @@ days:
       - name: LAB 3
         type: lab
         title: Effect Size, A/B Testing
-        url:
+        url: http://datahub.ucsd.edu/user-redirect/git-sync?repo=https://github.com/dsc-courses/dsc152-2026-fa&subPath=labs/Lab3/Lab3.ipynb
 ---
