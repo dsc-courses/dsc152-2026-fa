@@ -7,9 +7,9 @@ author: |
   | A/B Testing Principles,
   | t-Test vs. Permutation Test
 date: |
-  | Thursday, April 16
-  | Spring Quarter 2026
-  | Peter Chi
+  | Thursday, October 15
+  | Fall Quarter 2026
+  | Armin Schwartzman
 output: 
   beamer_presentation:
     theme: "Warsaw"
@@ -152,17 +152,17 @@ rect(
 \vspace{-2mm}
  - All participants take the pre-test.
 
-\vspace{0.5mm}
+\vspace{2mm}
 
  - Participants then get randomly assigned to either:
    - Do the handwritten exercises
    - Do the coding exercises
    
-\vspace{0.5mm}
+\vspace{2mm}
 
  - Participants then take the post-test.
  
-\vspace{0.5mm}
+\vspace{2mm}
 
  - We record (post-test score - pre-test score) for each participant.
  
@@ -210,12 +210,7 @@ This \underline{random assignment} is the key to being able to infer causation. 
 
 
 ## Example: Coding vs. Handwritten Exercises {.t}
-More space for notes if needed
-
-
-
-## Example: Coding vs. Handwritten Exercises {.t}
-We are collecting the real data now so we don't have any to show yet. Let us consider the following small set of preliminary, fictional data:
+Let us consider the following small set of preliminary, fictional data:
 
 ```{r, echo=FALSE}
 handwritten <- c(2, 5, 3, -3, 8)
@@ -295,23 +290,39 @@ t.test(score_diff ~ group, data=prob_df)
 \label{validity}
 What are the conditions required for validity of a two-sample t-Test?
 
-https://pollev.com/chi
-
-\pause
-
+https://clacl.com/spxozdgyn
 
 \vspace{10mm}
 ::: {.t}
 ### And as a reminder, what do we even mean by "validity"?
 \vspace{20mm}
-
-
 :::
 
 
 \vspace{5mm}
 
 (the answer to this will go in your R Markdown file for today's Daily Check)
+
+
+## Lecture 6 — Poll 1
+
+**Which of the following are required conditions for validity of the two-sample t-Test?**
+
+A. The data across both groups must follow a normal distribution
+
+B. The data within each group must follow a normal distribution
+
+C. The sample mean of each group must have a normal distribution
+
+D. The total sample size across both groups must be greater than 30
+
+E. The sample size must be greater than 30 in each group
+
+F. The observations within each group are independent from each other
+
+G. The variances of each group must be equal to each other
+
+---
 
 
 ## The Permutation Test {.t}
@@ -412,7 +423,22 @@ Some things will work very similarly in R, but other things may need slightly di
 \label{compare}
 So, which one should we do?
 
-https://pollev.com/chi
+https://clacl.com/spxozdgyn
+
+
+## Lecture 6 — Poll 2
+
+**Which of the following are true regarding the differences and similarities between a two-sample t-Test and a permutation test?**
+
+A. A permutation test is more robust to distributional assumptions than a two-sample t-Test
+
+B. A permutation test always has greater statistical power than a two-sample t-Test
+
+C. A permutation test and a two-sample t-Test answer different questions from each other
+
+D. A permutation test will take longer to code and run than a two-sample t-Test
+
+E. Both tend to perform better with larger sample sizes
 
 
 ## t-Test vs. Permutation Test {.t}
@@ -483,3 +509,5 @@ Put all of this into an R Markdown, and submit your pdf output to Gradescope.
 Regression!
 
 :::
+
+
