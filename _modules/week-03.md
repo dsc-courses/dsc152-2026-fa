@@ -28,6 +28,8 @@ days:
         readings:
           - name: Dataset (TSV)
             url: resources/homework/ai_study_habits.tsv
+          - name: The Cult of Statistical Significance
+            url: https://www.youtube.com/shorts/r9krLZkNRco
   - date: 2026-10-15
     events:
       - name: LEC 6
