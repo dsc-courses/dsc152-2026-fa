@@ -4,6 +4,10 @@ weekNumber: 4
 days:
   - date: 2026-10-19
     events:
+      - name: PRACTICE
+        type: quiz
+        title: Practice Midterm
+        html: resources/midterms/FA26_DSC152_Practice_Midterm_Problems.pdf
       - name: MIDTERM 1
         type: quiz
         title: Midterm 1 covers Lectures 1-5
