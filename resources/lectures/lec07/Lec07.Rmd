@@ -1,14 +1,14 @@
 ---
 title: |
   | DSC 152: 
-  | Applied Statistical Data Analysis and Inference
+  | Applied Statistical Data Analysis
 author: | 
   | Lecture \#7
   | Simple Linear Regression
 date: |
-  | Tuesday, April 21
-  | Spring Quarter 2026
-  | Peter Chi
+  | Tuesday, October 20
+  | Fall Quarter 2026
+  | Armin Schwartzman
 output: 
   beamer_presentation:
     theme: "Warsaw"
@@ -36,33 +36,21 @@ header-includes:
 ## What is Simple Linear Regression?
 
 ::: {.block}
-### In DSC 40A...
+### Formulation:
 \vspace{-2mm}
-You likely saw a simple linear regression model written as 
-
-\vspace{-4mm}
-$$
-H^*(x) = w_0^* + w_1^*x
-$$
-
-
-Statisticians tend to write it as: 
-
-\vspace{-4mm}
-$$
-\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x
-$$
-
+A simple linear regression model is $\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x$
 :::
 
-\vspace{3mm}
+(In DSC 40A, you may have seen this as $H(x) = w_0 + w_1x$; mathematically these are equivalent, but statisticians tend to use $\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x$).
+
+\vspace{2mm}
 
 ::: {.block}
 ### Typically, when we think of simple linear regression, we think of:
 
 \vspace{-2mm}
+ - A quantitative predictor variable
  - A quantitative outcome variable
- - A quantitative predictor variable (or primary covariate)
 
 :::
 
@@ -89,7 +77,7 @@ ggplot(data = march_madness, aes(y = bracket_score, x=knowledge)) +
 ## Example: March Madness knowledge vs. bracket scores {.t}
 \framesubtitle{The data}
 
-1. Students from a class I was teaching in Spring 2019 at Villanova University were asked to fill out March Madness brackets for the NCAA Men's College Basketball Championship (n=50). 
+1. Students from a class in Spring 2019 at Villanova University were asked to fill out March Madness brackets for the NCAA Men's College Basketball Championship ($n=50$). 
 
 \pause
 \vspace{1mm}
@@ -125,6 +113,7 @@ ggplot(data = march_madness, aes(y = bracket_score, x=knowledge)) +
 ```
 
 
+
 ## Least Squares Solutions {.t}
 Then, if we want to model their relationship...
 
@@ -140,27 +129,6 @@ $$
 :::
 
 \pause 
-
-\center
-Quote of the Day:
-
-![](willard.png){width=30%}
-
-
-## Least Squares Solutions {.t}
-Then, if we want to model their relationship...
-
-::: {.block}
-### In DSC 40A you derived the least squares solutions:
-
-\vspace{-3mm}
-$$
-\hat{\beta}_1 = \frac{\sum_{i=1}^n (x_i - \overline{x})(y_i - \overline{y})}{\sum_{i=1}^n (x_i - \overline{x})^2}, \qquad \hat{\beta}_0 = \overline{y} - \hat{\beta}_1 \overline{x}
-$$
-
-(how the heck did we get these again?)
-:::
-
 
 In this particular case these would give:
 ```{r, size="scriptsize"}
@@ -193,7 +161,7 @@ ggplot(data = march_madness, aes(y = bracket_score, x=knowledge)) +
 
 
 
-## Least Squares Regression Line
+## Least Squares Regression Line?
 The blue line drawn on the scatterplot is the best fitting line to the data, in the sense that the quantity
 $$
 RSS = \sum_{i=1}^n (y_i - \hat{y}_i)^2
@@ -225,7 +193,7 @@ But it's ultimately the same thing, and either way the point is that the line th
 \vspace{8mm}
 
  - What is a "parameter"?
-   - ML definition vs. statistical definition
+   - ML definition vs. statistical definition:
      - In ML, the word "parameter" is often used to refer to any input value for a model. 
      - This is NOT how we use the word parameter in statistics!
 
@@ -404,7 +372,6 @@ Does it??
 ## Statistical Inference for Regression {.t}
 \framesubtitle{Normality of $\hat{\beta}_1$:}
 Yes it does, if we assume normally distributed residuals in our model:
-
 $$
 y_i = \beta_0 + \beta_1 x_i + \epsilon_i
 $$
@@ -421,8 +388,7 @@ The assumption of normally distributed residuals means that each $y_i$ value dev
 It follows somewhat intuitively that if $\epsilon_i$ follows a normal distribution then $\hat{\beta}_1$ also will, but a rigorous proof of that is beyond the scope of this course. 
 
 ## Conditions for Validity {.t}
-These are the required conditions for statistical inference in the context of a linear model to be valid:
-
+These are the required conditions for \underline{default} statistical inference (as assumed by the funciton {\tt lm} in {\tt R}) in the context of a linear model to be valid:
 
  - The relationship between $X$ and $Y$, if there is one, is actually \underline{linear}
    - e.g. not quadratic, exponential, etc.
@@ -555,12 +521,12 @@ We can get an idea of how much variability is present in the system by looking a
 
 \pause
 
-From inspection of the graph, it looks like $\sigma=150$ might be reasonable (based on 68\% of observations falling within 1 standard deviation)
+From the {\tt R} output of the regression fit, a value of $\sigma=230$ might be reasonable:
 
 ## Statistical Power {.t}
 ```{r, size="scriptsize"}
 march_madness$bracket_score <- 623 + march_madness$knowledge * 20 + 
-  rnorm(50, 0, 150)
+  rnorm(50, 0, 230)
 ```
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE, out.width="85%"}
@@ -584,10 +550,9 @@ Statistical power is the probability of correctly rejecting $H_0$.
 So, here if $\beta_1=20$, then we \underline{should} reject $H_0$.
 
 ## Statistical Power {.t}
-\framesubtitle{Your Turn}
 Now, how do we estimate power?
 
- - Simulate samples of size $n=50$ under $\beta_1=20, \epsilon \sim N(0, \sigma=150)$.
+ - Simulate data under $\beta_1=20, \epsilon \sim N(0, \sigma=230)$.
  
 \vspace{4mm}
 
@@ -601,28 +566,8 @@ Now, how do we estimate power?
 
  - Repeat many times, count the proportion of the time that $H_0$ is rejected
  
-## Recap and Looking Ahead
+## Statistical Power {.t}
+\framesubtitle{Your Turn}
 
-::: {.t}
-### Today's Daily Check
-\vspace{-2mm}
-Just the Your Turn on the previous slide
-:::
+Daily check \#7: Do the simulation
 
-\vspace{3mm}
-
-:::{.t}
-### Recap
-\vspace{-2mm}
- - Simple Linear Regression refers to the scenario in which we have one quantitative outcome variable and one quantitative predictor variable
- - Statistical inference in this setting asks questions about $\beta_1$, the slope
- - Conditions for validity are summarized by LINE
-:::
-
-\vspace{3mm}
-
-### Looking Ahead
-\vspace{-2mm}
-Multiple Linear Regression!
-
-## Quiz Review
