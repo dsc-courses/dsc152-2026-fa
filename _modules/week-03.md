@@ -47,21 +47,17 @@ days:
             url: https://www.youtube.com/shorts/r9krLZkNRco
   - date: 2026-10-15
     events:
-      - name: LEC 6
+      - name: LEC 7
         type: lecture
-        title: A/B Testing Principles and t-Test vs. Permutation Test
-        url: resources/lectures/lec06/Lec06.Rmd
-        html: resources/lectures/lec06/Lec06.pdf
+        title: Statistical Inference for Simple Linear Regression
+        url: resources/lectures/lec07/Lec07.Rmd
+        html: resources/lectures/lec07/Lec07pdf
         podcast:
         readings:
-          - name: Jalapic
-            url: https://jalapic.github.io/introstats/permutation-testing.html
-          - name: Medium
-            url: https://medium.com/thedeephub/permutation-test-a-robust-alternative-to-traditional-statistical-tests-2b8784554547
-          - name: data36
-            url: https://data36.com/statistical-significance-in-ab-testing/
-          - name: Unbounce
-            url: https://unbounce.com/landing-page-articles/what-is-ab-testing/
+          - name: MD 10
+            url: https://moderndive.com/v2/inference-for-regression.html
+          - name: SPA 6.12-6.13
+            url: https://bookdown.org/jefftemplewebb/IS-6489/linear-regression.html#inference-in-the-context-of-regression
   - date: 2026-10-16
     events:
       - name: LAB 3
