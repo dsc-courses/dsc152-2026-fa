@@ -8,6 +8,10 @@ days:
         type: quiz
         title: Practice Midterm
         html: resources/midterms/FA26_DSC152_Practice_Midterm_Problems.pdf
+      - name: SOLUTIONS
+        type: quiz
+        title: Practice Midterm Solutions
+        html: resources/midterms/FA26_DSC152_Practice_Midterm_Solutions.pdf
       - name: MIDTERM 1
         type: quiz
         title: Midterm 1 covers Lectures 1-5
