@@ -8,6 +8,10 @@ days:
         type: quiz
         title: Practice Midterm
         html: resources/midterms/FA26_DSC152_Practice_Midterm_Problems.pdf
+      - name: SOLUTIONS
+        type: quiz
+        title: Practice Midterm Solutions
+        html: resources/midterms/FA26_DSC152_Practice_Midterm_Solutions.pdf
       - name: MIDTERM 1
         type: quiz
         title: Midterm 1 covers Lectures 1-5
@@ -42,5 +46,5 @@ days:
       - name: LAB 4
         type: lab
         title: Type I Error rates and power in Regression
-        url:
+        url: http://datahub.ucsd.edu/user-redirect/git-sync?repo=https://github.com/dsc-courses/dsc152-2026-fa&subPath=labs/Lab4/Lab4.ipynb
 ---
