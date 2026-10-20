@@ -6,9 +6,9 @@ author: |
   | Lecture \#8
   | Multiple Linear Regression
 date: |
-  | Thursday, April 23
-  | Spring Quarter 2026
-  | Peter Chi
+  | Tuesday, October 20
+  | Fall Quarter 2026
+  | Armin Schwartzman
 output: 
   beamer_presentation:
     theme: "Warsaw"
@@ -115,17 +115,17 @@ ggplot(data=FEV, mapping = aes(x = age, y=fev)) +
 
 
 ## Example \#1: FEV {.t}
-So let's start to fix the analysis. The framework of linear models will be useful.
+So let's start to fix the analysis.
 
- - First we note that the original t-Test could have been performed as a linear model:
+ - Let's fit a linear model instead:
  
 $$
-\widehat{FEV} = \hat{\beta}_0 + \hat{\beta}_1 \cdot smoke
+\widehat{\tt FEV} = \hat{\beta}_0 + \hat{\beta}_1 \cdot {\tt smoke}
 $$
 
 What would be the interpretations of $\hat{\beta}_0$ and $\hat{\beta}_1$ in this context?
-https://pollev.com/chi
 
+https://clacl.com/spxozdgyn
 
 
 ## Example \#1: FEV {.t} 
@@ -135,8 +135,32 @@ model1 <- lm(fev ~ smoke, data=FEV)
 summary(model1)
 ```
  
+
+---
+
+## Lecture 8 — Poll 1
+
+**What are the interpretations of $\hat{\beta}_0$ and $\hat{\beta}_1$ in this context?**
+
+A. The average FEV of smokers is 2.6
+
+B. The average FEV of non-smokers is 2.6
+
+C. The average FEV of smokers is 0.7
+
+D. The average FEV of non-smokers is 0.7
+
+E. The average FEV of smokers is 0.7 higher than non-smokers
+
+F. The average FEV of non-smokers is 0.7 higher than smokers
+
+---
+
+
 ## Example \#1: FEV {.t} 
-\framesubtitle{Sidenote: is it really identical?}
+\framesubtitle{Linear regression vs. t-test}
+Is linear regression better than the t-test in this case or viceversa?
+
 Note that the p-value from the two-sample t-Test was:
 ```{r}
 t.test(fev ~ smoke, data=FEV)$p.value
@@ -159,7 +183,7 @@ So they aren't exactly equal. But...
 ```
  
 ## Example \#1: FEV {.t} 
-\framesubtitle{Sidenote: is it really identical?}
+\framesubtitle{Linear regression vs. t-test}
 
 Recall that linear regression has the condition of equal variances, whereas the version of the t-Test that we do doesn't. But what if we do the equal variance version of the t-Test?
 
@@ -175,16 +199,28 @@ summary(model1)$coefficients[2,4]
 So the point is that a t-Test can be formulated as a linear regression question, with a single binary predictor variable.
 
 ## Example \#1: FEV {.t} 
+\framesubtitle{Linear regression vs. t-test}
+
+So which one is better?
+
+- If the variances of the groups are equal, then the t-test (with equal variances) and this version of linear regression are equivalent
+
+- If the variances are substantially different, then the t-test (with unequal variances) is more accurate. But there exist versions of linear regression (\emph{weighted} linear regression) that can handle unequal variances too.
+
+- Linear regression can be generalized to multiple predictors.
+
+
+## Example \#1: FEV {.t} 
 Then, under this linear model formulation, we can add additional predictor variables!
 
 
 $$
-\widehat{FEV} = \hat{\beta}_0 + \hat{\beta}_1 \cdot smoke
+\widehat{\tt FEV} = \hat{\beta}_0 + \hat{\beta}_1 \cdot {\tt smoke}
 $$
 becomes 
 
 $$
-\widehat{FEV} = \hat{\beta}_0 + \hat{\beta}_1 \cdot smoke + \hat{\beta}_2 \cdot age
+\widehat{\tt FEV} = \hat{\beta}_0 + \hat{\beta}_1 \cdot {\tt smoke} + \hat{\beta}_2 \cdot {\tt age}
 $$
 
 ### How does this help us?
@@ -196,7 +232,7 @@ model2 <- lm(fev ~ smoke + age, data=FEV)
 ```
 
 ## Example \#1: FEV {.t} 
-And instead of just printing the summary (like I did on Slide \ref{slr}) we can easily clean up the presentation of the output using the `kable` function:
+And instead of printing the summary (like I did on Slide \ref{slr}) we can clean up the presentation of the output using the `kable` function:
 ```{r, warning=FALSE}
 library(knitr)
 kable(summary(model2)$coefficients)
@@ -204,21 +240,76 @@ kable(summary(model2)$coefficients)
 
 ### A couple of questions...
 \vspace{-2mm}
-https://pollev.com/chi
+https://clacl.com/spxozdgyn
+
+
+## Lecture 8 — Poll 2
+
+**What is the interpretation of the model coefficients?**
+
+A. The average FEV for smokers is 0.21 lower than that of non-smokers
+
+B. The average FEV for smokers is 0.21 lower than that of non-smokers for kids of the same age
+
+C. The FEV goes up by 0.23 per year
+
+D. The FEV goes up by 0.23 per year for non-smoking kids and for smoking kids
+
+E. The average FVE of non-smokers is 0.37
+
+B. The average FVE of non-smoking newborns is 0.37
+
+
+## Lecture 8 — Poll 3
+
+**What is $H_0$ for the reported p-values and how do we interpret them?**
+
+A. $\beta_1 = 0$, meaning that smoking does not affect FEV
+
+B. $\beta_1 = 0$, meaning that smoking does not affect FEV for kids of the same age
+
+C. $\beta_2 = 0$, meaning that FEV does not change with age
+
+D. $\beta_2 = 0$, meaning that FEV does not change with age for kids of the same smoking group
+
+E. $\beta_0 = 0$, meaning that newborns do not breathe, whether they smoke or not
+
 
 ## Example \#1: FEV {.t} 
 \label{dc}
 
 ### Two Daily Check Questions:
 \vspace{-2mm}
- - Which p-value(s) from this output do we care about? What is $H_0$ for each one that we do care about?
+ - What is the interpretation of the three coefficient estimates 0.37, -0.21 and 0.23, in the context of this scenario?
 
 \vspace{2mm}
+ - Which p-value(s) from this output do we care about? What is $H_0$ for each one that we do care about?
 
- - What is the interpretation of the output value of -0.2089949, in the context of this scenario?
 
-## Example \#1: FEV {.t} 
-(more space for notes if needed)
+## Example \#1: Centering
+
+The interpretation of the intercept can be improved a lot by centering the continuous predictors:
+$$
+\widehat{\tt FEV} = \hat{\beta}_0 + \hat{\beta}_1 \cdot {\tt smoke} + \hat{\beta}_2 \cdot ({\tt age} - \overline{\tt age})
+$$
+
+In {\tt R}:
+```{r}
+FEV$age.c <- FEV$age - mean(FEV$age)
+model3 <- lm(fev ~ smoke + age.c, data=FEV)
+```
+
+
+## Centering
+
+```{r, warning=FALSE}
+library(knitr)
+kable(summary(model3)$coefficients)
+```
+
+- What is the meaning of the intercept now?
+
+- Note that all the other coefficients and their p-values remain the same as before
 
 
 ## Example \#1: FEV {.t} 
@@ -406,3 +497,4 @@ table(penguins$species)
  - What if our primary covariate is categorical (with more than two categories, so it's not just binary)? How do we get a proper p-value for inference in that situation?
  
  - Model diagnostics for checking required conditions for valid inference
+

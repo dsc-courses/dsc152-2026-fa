@@ -13,29 +13,26 @@ days:
         title: Midterm 1 covers Lectures 1-5
   - date: 2026-10-20
     events:
-      - name: LEC 7
-        type: lecture
-        title: Statistical Inference for Simple Linear Regression
-        url:
-        html:
-        podcast:
-        readings:
-          - name: MD 10
-            url: https://moderndive.com/v2/inference-for-regression.html
-          - name: SPA 6.12-6.13
-            url: https://bookdown.org/jefftemplewebb/IS-6489/linear-regression.html#inference-in-the-context-of-regression
-  - date: 2026-10-22
-    events:
       - name: LEC 8
         type: lecture
         title: Statistical Inference for Multiple Linear Regression
-        url:
-        html:
+        url: resources/lectures/lec08/Lec08.Rmd
+        html: resources/lectures/lec08/Lec08.pdf
         podcast:
         readings:
           - name: HRM 4.3
             url: https://peopleanalytics-regression-book.org/linear_regression.html#sec-multiple-linear-regression
-
+  - date: 2026-10-22
+    events:
+      - name: LEC 9
+        type: lecture
+        title: Model Diagnostics in Regression 
+        url:
+        html:
+        podcast:
+        readings:
+          - name: HRM 4.5
+            url: https://peopleanalytics-regression-book.org/linear_regression.html#testing-your-model-assumptions
       - name: SUR
         type: survey
         title: Mid-Quarter Survey
