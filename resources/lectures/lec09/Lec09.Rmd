@@ -6,9 +6,9 @@ author: |
   | Lecture \#9
   | Inference with Categorical Predictor Variables
 date: |
-  | Tuesday, April 28
-  | Spring Quarter 2026
-  | Peter Chi
+  | Thursday, October 22
+  | Fall Quarter 2026
+  | Armin Schwartzman
 output: 
   beamer_presentation:
     theme: "Warsaw"
@@ -109,7 +109,7 @@ ggplot(data=lonely, mapping=aes(x=Group, y=diff)) +
  - A categorical primary covariate (treatment group)
 :::
 
-What's our null hypothesis?? And our alternative hypothesis??
+What's our null hypothesis? And our alternative hypothesis?
 
 ## Example: Mental Health Dogs {.t} 
 \label{dummy}
@@ -138,17 +138,19 @@ where
    - 0 if they were not
    
 
-   
+## Example: Mental Health Dogs {.t} 
+
+```{r, size="scriptsize"}
+model.matrix(groups_model)
+```
+
+
 ## Example: Mental Health Dogs {.t} 
 \label{dc1}
 
 ### Daily Check Question \#1 (in an R Markdown document)
 \vspace{-2mm}
 According to the model output on Slide \ref{dummy}, what are the estimated means of each treatment group?
-
-\vspace{3mm}
-
-First answer it at pollev.com, and then put in your Rmd file once you know that you are right. 
 
 
 ## Example: Mental Health Dogs {.t} 
@@ -169,10 +171,10 @@ How does this work?
 ## Example: Mental Health Dogs {.t} 
 
 ::: {.t}
-### $RSS$ has the same definition that it did from Lecture 7:
+### RSS has the same definition that it did from Lecture 7:
 
 $$
-RSS = \sum_{i=1}^n (y_i - \hat{y}_i)^2
+{\rm RSS} = \sum_{i=1}^n (y_i - \hat{y}_i)^2
 $$
 :::
 
@@ -210,18 +212,44 @@ In an R Markdown file,
 
 ### Now, where exactly does the p-value come from?
 \vspace{-2mm}
-If $H_0$ is actually true, what do we expect to be the case regarding $RSS_{full}$ vs. $RSS_{null}$?
+If $H_0$ is actually true, what do we expect to be the case regarding ${\rm RSS}_{\rm full}$ vs. ${\rm RSS}_{\rm null}$?
 
 \vspace{2mm}
-pollev.com
+https://clacl.com/spxozdgyn
 
 ### Daily Check Question
 \vspace{-2mm}
 Explain each of these answers. 
 
-## Example: Mental Health Dogs {.t} 
-More space for notes if needed
+---
 
+## Lecture 9 — Poll 1
+
+**If $H_0$ is actually true, what should be the case regarding ${\rm RSS}_{\rm full}$ vs. ${\rm RSS}_{\rm null}$?**
+
+A. ${\rm RSS}_{\rm full}$ should be smaller than ${\rm RSS}_{\rm null}$
+
+B. ${\rm RSS}_{\rm full}$ should be equal to ${\rm RSS}_{\rm null}$
+
+C. ${\rm RSS}_{\rm full}$ should be bigger than ${\rm RSS}_{\rm null}$
+
+D. There should be no relationship between ${\rm RSS}_{\rm full}$ and ${\rm RSS}_{\rm null}$
+
+---
+
+## Lecture 9 — Poll 2
+
+**Now, if $H_A$ is actually true, what should be the case regarding ${\rm RSS}_{\rm full}$ vs. ${\rm RSS}_{\rm null}$?**
+
+A. ${\rm RSS}_{\rm full}$ should be smaller than ${\rm RSS}_{\rm null}$
+
+B. ${\rm RSS}_{\rm full}$ should be equal to ${\rm RSS}_{\rm null}$
+
+C. ${\rm RSS}_{\rm full}$ should be bigger than ${\rm RSS}_{\rm null}$
+
+D. There should be no relationship between ${\rm RSS}_{\rm full}$ and ${\rm RSS}_{\rm null}$
+
+---
 
 ## Example: Mental Health Dogs {.t} 
 ```{r, size="footnotesize", echo=FALSE}
@@ -234,7 +262,7 @@ anova(null_model, groups_model)
 ### The test statistic for this output is:
 \vspace{-4mm}
 $$
-\mathcal{F} = \frac{(RSS_{null} - RSS_{full})/p}{RSS_{full} / (n-k)}
+\mathcal{F} = \frac{({\rm RSS}_{\rm null} - {\rm RSS}_{\rm full})/p}{{\rm RSS}_{\rm full} / (n-k)}
 $$
 :::
 
@@ -344,7 +372,7 @@ If this is our null hypothesis, then what is our null model?
  
 \vspace{3mm}
 
- - Report your p-value and conclusions, at $\alpha=0.0$.
+ - Report your p-value and conclusions, at $\alpha=0.05$.
  
 ## Recap and Looking Ahead 
 
@@ -383,3 +411,4 @@ If this is our null hypothesis, then what is our null model?
 ### Looking Ahead
 \vspace{-2mm}
 Model Diagnostics!
+
