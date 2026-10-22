@@ -40,7 +40,7 @@ days:
       - name: SUR
         type: survey
         title: Mid-Quarter Survey
-        url:
+        url: https://forms.gle/y8XJ3G3Efr87bneL6
   - date: 2026-10-23
     events:
       - name: LAB 4
