@@ -21,9 +21,9 @@ header-includes:
 - \definecolor{codegray}{HTML}{f4f4f4}
 - \let\textttOrig\texttt
 - \renewcommand{\texttt}[1]{\textttOrig{\colorbox{codegray}{#1}}}
-render_with_liquid: false
 ---
-    
+
+{% raw %}
 ```{r setup, include=FALSE}
   knitr::opts_chunk$set(echo = TRUE)
   knitr::opts_chunk$set(dev = 'pdf')
@@ -412,3 +412,4 @@ If this is our null hypothesis, then what is our null model?
 ### Looking Ahead
 \vspace{-2mm}
 Model Diagnostics!
+{% endraw %}
