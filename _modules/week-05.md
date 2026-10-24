@@ -35,5 +35,5 @@ days:
       - name: LAB 5
         type: lab
         title: Model Diagnostics, Dummy Variables
-        url:
+        url: http://datahub.ucsd.edu/user-redirect/git-sync?repo=https://github.com/dsc-courses/dsc152-2026-fa&subPath=labs/Lab5/Lab5.ipynb
 ---
