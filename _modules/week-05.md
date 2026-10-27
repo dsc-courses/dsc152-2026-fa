@@ -1,5 +1,5 @@
 ---
-title: Week 5 – Interaction
+title: Week 5 – Diagnostics and Interactions
 weekNumber: 5
 days:
   - date: 2026-10-26
@@ -23,7 +23,7 @@ days:
     events:
       - name: LEC 11
         type: lecture
-        title: Categorical Predictor Variables
+        title: Introduction to Interactions
         url:
         html:
         podcast:

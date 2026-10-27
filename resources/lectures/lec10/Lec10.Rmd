@@ -37,7 +37,7 @@ header-includes:
 ## Conditions for Validity in Linear Regression
 Recall: these are the required conditions for \underline{default} statistical inference in the context of a linear model to be valid:
 
- - The relationship between $X$ and the mean of $Y$ given $X$ is \textbf{L}inear
+ - The relationship between $X$ and the mean of $Y$ given $X$ is indeed \textbf{L}inear
    - e.g. not quadratic, exponential, etc.
 
 \vspace{2mm}
@@ -237,7 +237,7 @@ model1$residuals[1:6]
 ## Residual Analysis {.t}
 \framesubtitle{Now, how do we use them?}
 
- - The relationship between $X$ and the mean of $Y$ given $X$ is \textbf{L}inear
+ - The relationship between $X$ and the mean of $Y$ given $X$ is indeed \textbf{L}inear
    - e.g. not quadratic, exponential, etc.
 
 \vspace{2mm}
@@ -256,7 +256,7 @@ model1$residuals[1:6]
 
 
 ## Residual Analysis {.t}
-\framesubtitle{The relationship between $X$ and the mean of $Y$ given $X$ is \textbf{L}inear}
+\framesubtitle{The relationship between $X$ and the mean of $Y$ given $X$ is indeed \textbf{L}inear}
 ```{r, size="footnotesize", out.width="75%"}
 march_madness$residuals <- model1$residuals
 ggplot(data=march_madness, mapping=aes(x=knowledge, y=residuals)) + 
@@ -286,7 +286,7 @@ ggplot(data=march_madness, mapping=aes(x=knowledge, y=residuals)) +
    
 
 ## Residual Analysis {.t}
-\framesubtitle{The relationship between $X$ and the mean of $Y$ given $X$ is \textbf{L}inear}
+\framesubtitle{The relationship between $X$ and the mean of $Y$ given $X$ is indeed \textbf{L}inear}
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 theme_update(text = element_text(size = 20))
@@ -298,7 +298,7 @@ ggplot(data = march_madness, aes(y = bracket_score, x=knowledge)) +
 
 
 ## Residual Analysis {.t}
-\framesubtitle{The relationship between $X$ and the mean of $Y$ given $X$ is \textbf{L}inear}
+\framesubtitle{The relationship between $X$ and the mean of $Y$ given $X$ is indeed \textbf{L}inear}
 
 ```{r, out.width="75%"}
 march_madness$fitted <- model1$fitted.values
@@ -307,7 +307,7 @@ ggplot(data=march_madness, aes(x=fitted, y=residuals)) +
 ```
 
 ## Residual Analysis {.t}
-\framesubtitle{The relationship between $X$ and the mean of $Y$ given $X$ is \textbf{L}inear}
+\framesubtitle{The relationship between $X$ and the mean of $Y$ given $X$ is indeed \textbf{L}inear}
 
  - There does not appear to be much of a pattern here
 
@@ -318,7 +318,7 @@ ggplot(data=march_madness, aes(x=fitted, y=residuals)) +
    
    
 ## Residual Analysis {.t}
-\framesubtitle{The relationship between $X$ and the mean of $Y$ given $X$ is \textbf{L}inear}
+\framesubtitle{The relationship between $X$ and the mean of $Y$ given $X$ is indeed \textbf{L}inear}
 
 Let $y_i = 600 + 4 x^2 + \epsilon_i$, $i = 1,\ldots,100$
 
@@ -338,7 +338,7 @@ ggplot(data=dat, aes(x=x, y=y)) +
    
    
 ## Residual Analysis {.t}
-\framesubtitle{The relationship between $X$ and the mean of $Y$ given $X$ is \textbf{L}inear}
+\framesubtitle{The relationship between $X$ and the mean of $Y$ given $X$ is indeed \textbf{L}inear}
 
 ```{r, echo=FALSE, out.width="90%"}
 
@@ -350,7 +350,7 @@ ggplot(data=dat, aes(x=fitted, y=residuals)) +
 
 
 ## Residual Analysis {.t}
-\framesubtitle{The relationship between $X$ and the mean of $Y$ given $X$ is \textbf{L}inear}
+\framesubtitle{The relationship between $X$ and the mean of $Y$ given $X$ is indeed \textbf{L}inear}
 
 What do you think are the consequences of linearity being violated?
 
@@ -372,71 +372,9 @@ D. Decreased Type I Error Rate
 
 
 ## Residual Analysis {.t}
-\framesubtitle{The relationship between $X$ and the mean of $Y$ given $X$ is \textbf{L}inear}
-
-::: {.t}
-### How do we check if the parameter estimates are biased?
-\vspace{-2mm}
-And what do we even mean by "biased?"
-
-It is the difference in a statistic from the true parameter value it is trying to estimate. That is, e.g. for $\beta_1$:
-$$
-{\rm bias} = \hat{\beta}_1 - \beta_1
-$$
-:::
-
-\vspace{5mm}
-
-### Wait but we can't ever know what this is right?
-\vspace{-2mm}
-True. But, we can get simulated estimates under any given scenario.
-
-## Residual Analysis {.t}
-\framesubtitle{The relationship between $X$ and the mean of $Y$ given $X$ is \textbf{L}inear}
-
-::: {.t}
-### Your Turn \#1
-\vspace{-2mm}
-Suppose that we have a true relationship of: 
-$$
-y_i = 600 + 4 x_i^2 + \epsilon_i
-$$ 
-
-where $\epsilon_i \sim N(0, 5x_i)$. Then,
-
- - We can simulate data according to this model
- - Get $\hat{\beta}_1$ from the linear regression output
- - Calculate $\hat{\beta}_1 - \beta_1$
- - Do this lots of times to get an estimate of the bias
-:::
-
-
-## Residual Analysis {.t}
-\framesubtitle{The relationship between $X$ and the mean of $Y$ given $X$ is \textbf{L}inear}
-
-### Your Turn \#1
-\vspace{-2mm}
-
-```{r, eval=FALSE}
-reps <- 10000
-beta_1 <- NULL
-
-for(i in 1:reps){
-  x <- ...
-  y <- ...
-  dat <- data.frame(x=x, y=y)
-  beta_1[i] <- ...
-}
-
-mean(...)
-
-```
-
-
-## Residual Analysis {.t}
 \framesubtitle{Now, how do we use them?}
 
- - The relationship between $X$ and the mean of $Y$ given $X$ is \textbf{L}inear
+ - The relationship between $X$ and the mean of $Y$ given $X$ is indeed \textbf{L}inear
    - e.g. not quadratic, exponential, etc.
 
 \vspace{2mm}
@@ -463,12 +401,13 @@ ggplot(data=march_madness, mapping=aes(x=knowledge, y=residuals)) +
 ```
 
 
-### Residual Analysis {.t}
+## Residual Analysis {.t}
 \framesubtitle{\textbf{E}qual variance across all values of $X$}
 
 - Here, it looks like there is not a whole lot of difference in the vertical spread of the points across all values of $x$, so it looks like the condition of homoskedasticity is probably satisfied. 
    
 - What would the residual plot look like is the homoskedasticity condition were not satisfied?
+
 
 ## Residual Analysis {.t}
 Here is another example:
@@ -520,9 +459,72 @@ D. Decreased Type I Error Rate
 
 
 ## Residual Analysis {.t}
+\framesubtitle{\textbf{E}qual variance across all values of $X$}
+
+::: {.t}
+### How do we check if the parameter estimates are biased?
+\vspace{-2mm}
+And what do we even mean by "biased?"
+
+It is the difference in a statistic from the true parameter value it is trying to estimate. That is, e.g. for $\beta_1$:
+$$
+{\rm bias} = \hat{\beta}_1 - \beta_1
+$$
+:::
+
+\vspace{5mm}
+
+### Wait but we can't ever know what this is right?
+\vspace{-2mm}
+True. But, we can get simulated estimates under any given scenario.
+
+
+## Residual Analysis {.t}
+\framesubtitle{\textbf{E}qual variance across all values of $X$}
+
+::: {.t}
+### Your Turn \#1
+\vspace{-2mm}
+Suppose that we have a true relationship of: 
+$$
+y_i = 600 + 25 x_i + \epsilon_i
+$$ 
+
+where $x \sim$Uniform(0,10) and $\epsilon_i \sim N(0, 5x_i)$. Then,
+
+ - We can simulate data according to this model
+ - Get $\hat{\beta}_1$ from the linear regression output
+ - Calculate $\hat{\beta}_1 - \beta_1$
+ - Do this lots of times to get an estimate of the bias
+:::
+
+
+## Residual Analysis {.t}
+\framesubtitle{\textbf{E}qual variance across all values of $X$}
+
+### Your Turn \#1
+\vspace{-2mm}
+
+```{r, eval=FALSE}
+reps <- 10000
+beta_1 <- NULL
+
+for(i in 1:reps){
+  x <- ...
+  y <- ...
+  dat <- data.frame(x=x, y=y)
+  beta_1[i] <- ...
+}
+
+mean(...)
+
+```
+
+
+## Residual Analysis {.t}
 \framesubtitle{Now, how do we use them?}
 
- - The relationship between $X$ and the mean of $Y$ given $X$ is \textbf{L}inear
+ - The relationship between $X$ and the mean of $Y$ given $X$ is indeed \textbf{L}inear
    - e.g. not quadratic, exponential, etc.
 
 \vspace{2mm}
@@ -577,7 +579,7 @@ $H_0$ for this test is that the residuals do follow a normal distribution.
 ## Residual Analysis {.t}
 \framesubtitle{Now, how do we use them?}
 
- - The relationship between $X$ and the mean of $Y$ given $X$ is \textbf{L}inear
+ - The relationship between $X$ and the mean of $Y$ given $X$ is indeed \textbf{L}inear
    - e.g. not quadratic, exponential, etc.
 
 \vspace{2mm}
@@ -696,18 +698,18 @@ Comment briefly on what you observe.
 ## Recap {.t}
 \framesubtitle{A complete residual analysis would consist of all of the following:}
 
- - The relationship between $X$ and the mean of $Y$ given $X$ is \textbf{L}inear
-   - **Diagnostic: residuals vs. fitted values**
+1. The relationship between $X$ and the mean of $Y$ given $X$ is indeed \textbf{L}inear
+   - **Diagnostic: residuals vs. x values or fitted values**
 
 \vspace{1mm}
 
- - \textbf{I}ndependence of observations
-   - **Diagnostic: residuals vs. order of entry into study**
+4. \textbf{I}ndependence of observations
+   - **Diagnostic: residuals vs. order of data collection**
    - Reminder: this is only ONE possible dependence structure!!
 
 \vspace{1mm}
 
- - \textbf{N}ormality of $\epsilon_i$
+3. \textbf{N}ormality of $\epsilon_i$
    - **Diagnostics:**
      - **Histogram of residuals**
      - **QQ-plot**
@@ -716,8 +718,8 @@ Comment briefly on what you observe.
 
 \vspace{1mm}
 
- - \textbf{E}qual variance across all values of $X$
-   - **Diagnostic: residuals vs. x values**
+2. \textbf{E}qual variance across all values of $X$
+   - **Diagnostic: residuals vs. x values or fitted values**
 
 
 ## Recap {.t}
