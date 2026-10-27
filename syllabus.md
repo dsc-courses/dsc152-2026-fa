@@ -255,8 +255,7 @@ This class has one Final Exam:
 - Thursday, Dec 10, 3:00pm to 6:00pm, location TBD.
 
 The Final Exam will cover the entire quarter, with emphasis on material after Week 5
-of the quarter. It will be held **in-person and on-paper**. You'll be allowed to use one 8.5 by 11 inch page of 
-double-sided handwritten notes, but no calculators, computers, or other resources.
+of the quarter. It will be held **in-person and on-paper**. You'll be allowed to use one 8.5 by 11 inch page of double-sided handwritten notes, but no calculators, computers, or other resources.
 
 
 ### Midterms
@@ -365,7 +364,7 @@ software to help detect plagiarism.
  violations of academic integrity.
  
  - On midterms and exams:
-   - You may have your 8.5 x 11 double-sided cheat sheet
+   - You may have your handwritten 8.5 x 11 double-sided cheat sheet
    - No calculators or any other devices whatsoever
    - Refrain from looking at other students' midterm/exam
 

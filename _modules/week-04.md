@@ -35,6 +35,8 @@ days:
         html: resources/lectures/lec09/Lec09.pdf
         podcast:
         readings:
+          - name: dog_data_lonely.csv
+            url: resources/lectures/lec09/dog_data_lonely.csv
           - name: HRM 4.5
             url: https://peopleanalytics-regression-book.org/linear_regression.html#testing-your-model-assumptions
       - name: SUR
