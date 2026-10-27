@@ -19,6 +19,13 @@ days:
         readings:
           - name: HRM 4.6.1
             url: https://peopleanalytics-regression-book.org/linear_regression.html#interactions-between-input-variables
+      - name: HW 2
+        type: hw
+        title: Inference in Regression
+        url: resources/homework/HW2.pdf
+        readings:
+          - name: Dataset (TSV)
+            url: resources/homework/shuttle_trips.tsv
   - date: 2026-11-5
     events:
       - name: LEC 12
@@ -28,10 +35,6 @@ days:
         html:
         podcast:
         readings:
-      - name: HW 2
-        type: hw
-        title: Inference in Regression
-        url:
   - date: 2026-11-6
     events:
       - name: LAB 6
