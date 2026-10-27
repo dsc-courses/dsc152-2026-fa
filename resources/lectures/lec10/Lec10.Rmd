@@ -6,9 +6,9 @@ author: |
   | Lecture \#10
   | Regression Model Diagnostics
 date: |
-  | Thursday, April 30
-  | Spring Quarter 2026
-  | Peter Chi
+  | Tuesday, October 27
+  | Fall Quarter 2026
+  | Armin Schwartzman
 output: 
   beamer_presentation:
     theme: "Warsaw"
@@ -35,9 +35,9 @@ header-includes:
 ```
 
 ## Conditions for Validity in Linear Regression
-Recall: these are the required conditions for statistical inference in the context of a linear model to be valid:
+Recall: these are the required conditions for \underline{default} statistical inference in the context of a linear model to be valid:
 
- - The relationship between $X$ and $Y$, if there is one, is actually \underline{\textbf{L}inear}
+ - The relationship between $X$ and the mean of $Y$ given $X$ is \textbf{L}inear
    - e.g. not quadratic, exponential, etc.
 
 \vspace{2mm}
@@ -46,12 +46,12 @@ Recall: these are the required conditions for statistical inference in the conte
 
 \vspace{2mm}
 
- - \textbf{N}ormality of $\epsilon_i$
+ - \textbf{N}ormality of the errors $\epsilon_i$
    - Note that this can also be achieved, due to the central limit theorem, with a large sample size even if $\epsilon_i$ does not follow a normal distribution
 
 \vspace{2mm}
 
- - \textbf{E}qual variance across all values of $X$
+ - \textbf{E}qual variance of the errors across all values of $X$
    - Also known as homoskedasticity
 
 
@@ -105,7 +105,7 @@ Today we will run through a complete set of model diagnostics for each of the LI
 
 :::
 
-Note: we can never actually know for sure if the conditions are met or not (just like we can never know if we had made a Type I Error). But, we CAN (and should) look at what the data suggest.
+Note: we can never know for sure if the conditions are met or not (just like we can never know if we had made a Type I Error). But, we CAN (and should) look at what the data suggest.
 
 ## Residual Analyses
 ::: {.block}
@@ -151,8 +151,26 @@ On the other hand, note that violation of conditions can lead to greater predict
 
 
 ## Residual Analyses {.t}
-Typically, regression model diagnostics proceed by utilizing the \underline{residuals} of the model. What's a residual again??
+Typically, regression model diagnostics proceed by checking the \underline{residuals} of the model. What's a residual again??
 
+\vspace{2mm}
+https://clacl.com/spxozdgyn
+
+
+## Lecture 10 — Poll 1
+
+**What are the residuals of a fitted model?**
+
+A. The differences between the observed responses in the training set and their predictions in the test set
+
+B. The differences between the observed responses in the training set and their predictions in the training set
+
+C. The differences between the observed responses in the test set and their predictions in the test set
+
+D. The differences between the observed responses in the test set and their predictions in the training set
+
+
+## Residual Analyses {.t}
 
 ::: {.t}
 ### Recall from Lecture \#7:
@@ -202,24 +220,223 @@ where $x_i$ is the knowledge score of the $i^{th}$ participant. Here's a snapsho
 knitr::kable(march_madness[1:6,9:10])
 ```
 
-What are the residuals? https://pollev.com/chi
 
 ## Residual Analysis {.t}
-Thankfully, we don't actually have to do that every time (I just wanted us to do it to make sure we know how to get them in principle). The `model1` object has them for us:
+The residuals are already stored in the `model1` object:
 
 ```{r, size="footnotesize"}
 names(model1)
 ```
 
-### Let's grab the first 6 just to compare to the table:
+### Let's grab the first 6:
 ```{r, size="footnotesize"}
 model1$residuals[1:6]
 ```
 
+
 ## Residual Analysis {.t}
 \framesubtitle{Now, how do we use them?}
 
- - The relationship between $X$ and $Y$, if there is one, is actually \underline{\textbf{L}inear}
+ - The relationship between $X$ and the mean of $Y$ given $X$ is \textbf{L}inear
+   - e.g. not quadratic, exponential, etc.
+
+\vspace{2mm}
+
+ - \textbf{I}ndependence of observations
+
+\vspace{2mm}
+
+ - \textbf{N}ormality of $\epsilon_i$
+   - Note that this can also be achieved, due to the central limit theorem, with a large sample size even if $\epsilon_i$ does not follow a normal distribution
+
+\vspace{2mm}
+
+ - \textbf{E}qual variance across all values of $X$
+   - Also known as homoskedasticity
+
+
+## Residual Analysis {.t}
+\framesubtitle{The relationship between $X$ and the mean of $Y$ given $X$ is \textbf{L}inear}
+```{r, size="footnotesize", out.width="75%"}
+march_madness$residuals <- model1$residuals
+ggplot(data=march_madness, mapping=aes(x=knowledge, y=residuals)) + 
+  geom_point() + geom_hline(yintercept = 0, linetype = "solid", color = "black", linewidth = 1) + labs(title="Residual Plot")
+```
+
+
+## Residual Analysis {.t}
+
+### Some Questions
+\vspace{-2mm}
+
+ - What does this tell us that just looking at the original scatterplot doesn't?
+   - Answer: Often, not that much! But, it CAN make patterns more apparent.
+
+\pause
+\vspace{4mm}
+
+ - But wait so I'm supposed to just look at it and make a judgment call? What about a definitive answer??
+   - There exist formal diagnostic tests but they are hard to calibrate because Type II error is more important than Type I error. 
+
+\pause   
+\vspace{4mm}
+
+ - Ok, so what judgement call would you make in this case?
+   - Here, it looks like there is not a whole lot of variation in vertical shift across all values of $x$, so it looks like the condition of linearity is probably satisfied. 
+   
+
+## Residual Analysis {.t}
+\framesubtitle{The relationship between $X$ and the mean of $Y$ given $X$ is \textbf{L}inear}
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+theme_update(text = element_text(size = 20))
+ggplot(data = march_madness, aes(y = bracket_score, x=knowledge)) +
+  geom_point() + geom_smooth(method='lm', se=FALSE) +
+  xlab("knowledge score") + ylab("bracket score") + 
+  ggtitle("It looks fairly reasonable...")
+```
+
+
+## Residual Analysis {.t}
+\framesubtitle{The relationship between $X$ and the mean of $Y$ given $X$ is \textbf{L}inear}
+
+```{r, out.width="75%"}
+march_madness$fitted <- model1$fitted.values
+ggplot(data=march_madness, aes(x=fitted, y=residuals)) + 
+  geom_point() + labs(x="fitted values")
+```
+
+## Residual Analysis {.t}
+\framesubtitle{The relationship between $X$ and the mean of $Y$ given $X$ is \textbf{L}inear}
+
+ - There does not appear to be much of a pattern here
+
+\vspace{4mm}
+
+ - What might it look like if the relationship was NOT linear?
+   - For example, a quadratic relationship
+   
+   
+## Residual Analysis {.t}
+\framesubtitle{The relationship between $X$ and the mean of $Y$ given $X$ is \textbf{L}inear}
+
+Let $y_i = 600 + 4 x^2 + \epsilon_i$, $i = 1,\ldots,100$
+
+```{r, echo=FALSE, out.width="90%", warning = FALSE}
+set.seed(1)
+x <- seq(0, 10, by = 0.1)
+y <- 600 + 4 * x^2 + rnorm(100, 0, 45)
+dat <- data.frame(x=x, y=y)
+
+model_nonind <- lm(y ~ x, data=dat)
+dat$residuals <- model_nonind$residuals
+dat$fitted <- model_nonind$fitted.values
+
+ggplot(data=dat, aes(x=x, y=y)) + 
+  geom_point() + labs(x="knowledge", y="score", title="From this plot, it is not that obvious that anything is wrong...")
+```
+   
+   
+## Residual Analysis {.t}
+\framesubtitle{The relationship between $X$ and the mean of $Y$ given $X$ is \textbf{L}inear}
+
+```{r, echo=FALSE, out.width="90%"}
+
+ggplot(data=dat, aes(x=fitted, y=residuals)) + 
+  geom_point() + geom_hline(yintercept = 0, linetype = "solid", color = "black", linewidth = 1) + 
+  labs(x="fitted value", title="The residual plot makes it a bit more obvious")
+
+```
+
+
+## Residual Analysis {.t}
+\framesubtitle{The relationship between $X$ and the mean of $Y$ given $X$ is \textbf{L}inear}
+
+What do you think are the consequences of linearity being violated?
+
+\vspace{2mm}
+https://clacl.com/spxozdgyn
+
+
+## Lecture 10 — Poll 2
+
+**Which of the following are consequences of linearity being violated in a linear model?**
+
+A. Decrease in statistical power
+
+B. Biased parameter estimates
+
+C. Inflated Type I Error Rate
+
+D. Decreased Type I Error Rate
+
+
+## Residual Analysis {.t}
+\framesubtitle{The relationship between $X$ and the mean of $Y$ given $X$ is \textbf{L}inear}
+
+::: {.t}
+### How do we check if the parameter estimates are biased?
+\vspace{-2mm}
+And what do we even mean by "biased?"
+
+It is the difference in a statistic from the true parameter value it is trying to estimate. That is, e.g. for $\beta_1$:
+$$
+{\rm bias} = \hat{\beta}_1 - \beta_1
+$$
+:::
+
+\vspace{5mm}
+
+### Wait but we can't ever know what this is right?
+\vspace{-2mm}
+True. But, we can get simulated estimates under any given scenario.
+
+## Residual Analysis {.t}
+\framesubtitle{The relationship between $X$ and the mean of $Y$ given $X$ is \textbf{L}inear}
+
+::: {.t}
+### Your Turn \#1
+\vspace{-2mm}
+Suppose that we have a true relationship of: 
+$$
+y_i = 600 + 4 x_i^2 + \epsilon_i
+$$ 
+
+where $\epsilon_i \sim N(0, 5x_i)$. Then,
+
+ - We can simulate data according to this model
+ - Get $\hat{\beta}_1$ from the linear regression output
+ - Calculate $\hat{\beta}_1 - \beta_1$
+ - Do this lots of times to get an estimate of the bias
+:::
+
+
+## Residual Analysis {.t}
+\framesubtitle{The relationship between $X$ and the mean of $Y$ given $X$ is \textbf{L}inear}
+
+### Your Turn \#1
+\vspace{-2mm}
+
+```{r, eval=FALSE}
+reps <- 10000
+beta_1 <- NULL
+
+for(i in 1:reps){
+  x <- ...
+  y <- ...
+  dat <- data.frame(x=x, y=y)
+  beta_1[i] <- ...
+}
+
+mean(...)
+
+```
+
+
+## Residual Analysis {.t}
+\framesubtitle{Now, how do we use them?}
+
+ - The relationship between $X$ and the mean of $Y$ given $X$ is \textbf{L}inear
    - e.g. not quadratic, exponential, etc.
 
 \vspace{2mm}
@@ -242,44 +459,31 @@ model1$residuals[1:6]
 ```{r, size="footnotesize", out.width="75%"}
 march_madness$residuals <- model1$residuals
 ggplot(data=march_madness, mapping=aes(x=knowledge, y=residuals)) + 
-  geom_point() + labs(title="Residual Plot")
+  geom_point() + geom_hline(yintercept = 0, linetype = "solid", color = "black", linewidth = 1) + labs(title="Residual Plot")
 ```
 
 
+### Residual Analysis {.t}
+\framesubtitle{\textbf{E}qual variance across all values of $X$}
 
-## Residual Analysis {.t}
-
-### Some Questions
-\vspace{-2mm}
-
- - What does this tell us that just looking at the original scatterplot doesn't?
-   - Answer: Often, not that much! But, it CAN make patterns more apparent.
-
-\pause
-\vspace{4mm}
-
- - But wait so I'm supposed to just look at it and make a judgment call? What about a definitive answer??
-   - Yeah... while you could conceivably cook up a statistical test for this question, it is not typically done. 
-
-\pause   
-\vspace{4mm}
-
- - Ok, so what judgement call would you make in this case?
-   - Here, it looks like there is not a whole lot of difference in the vertical spread of the points across all values of $x$, so it looks like the condition of homoskedasticity is probably satisfied. 
+- Here, it looks like there is not a whole lot of difference in the vertical spread of the points across all values of $x$, so it looks like the condition of homoskedasticity is probably satisfied. 
    
+- What would the residual plot look like is the homoskedasticity condition were not satisfied?
+
 ## Residual Analysis {.t}
 Here is another example:
 ```{r, echo=FALSE, out.width="90%"}
 set.seed(10)
 x <- runif(100, 0, 10)
-y <- 600 + 25 * x + rnorm(100, mean=0, sd=(20+x*3))
+a <- 600; b <- 25
+y <- a + b*x + rnorm(100, mean=0, sd=(20+x*3))
 dat <- data.frame(x=x, y=y)
 
 ggplot(data=dat, aes(x=x, y=y)) + 
-  geom_point()
-
-
+  geom_point() +
+  geom_abline(intercept = a, slope = b, color = "blue", linewidth = 1)
 ```
+
 
 ## Residual Analysis {.t}
 And here the residual plot makes the problem more obvious:
@@ -287,7 +491,8 @@ And here the residual plot makes the problem more obvious:
 model_dat <- lm(y ~ x, data=dat)
 dat$residuals <- model_dat$residuals
 ggplot(data=dat, aes(x=x, y=residuals)) + 
-  geom_point() + labs(title="Residual Plot")
+  geom_point() + labs(title="Residual Plot") +
+  geom_hline(yintercept = 0, linetype = "solid", color = "black", linewidth = 1)
 ```
 
 
@@ -297,75 +502,27 @@ ggplot(data=dat, aes(x=x, y=residuals)) +
 
 What do you think are the consequences of this condition being violated?
 
-https://pollev.com/chi
+\vspace{2mm}
+https://clacl.com/spxozdgyn
 
 
-## Residual Analysis {.t}
-\framesubtitle{\textbf{E}qual variance across all values of $X$}
+## Lecture 10 — Poll 3
 
-::: {.t}
-### How do we check if the parameter estimates are biased?
-\vspace{-2mm}
-And what do we even mean by "biased?"
+**Which of the following are consequences of heteroskedasticity in a linear model?**
 
-It is the difference in a statistic from the true parameter value it is trying to estimate. That is, e.g. for $\beta_1$:
-$$
-bias = \hat{\beta}_1 - \beta_1
-$$
-:::
+A. Decrease in statistical power
 
-\vspace{5mm}
+B. Biased parameter estimates
 
-### Wait but we can't ever know what this is right?
-\vspace{-2mm}
-True. But, we can get simulated estimates under any given scenario.
+C. Inflated Type I Error Rate
 
-## Residual Analysis {.t}
-\framesubtitle{\textbf{E}qual variance across all values of $X$}
-
-::: {.t}
-### Your Turn \#1
-\vspace{-2mm}
-Suppose that we have a true relationship of: 
-$$
-y_i = 600 + 25x_i + \epsilon_i
-$$ 
-
-where $\epsilon_i \sim N(0, 5x_i)$. Then,
-
- - We can simulate data according to this model
- - Get $\hat{\beta}_1$ from the linear regression output
- - Calculate $\hat{\beta}_1 - \beta_1$
- - Do this lots of times to get an estimate of the bias
-:::
-
-
-## Residual Analysis {.t}
-\framesubtitle{\textbf{E}qual variance across all values of $X$}
-
-### Your Turn \#1
-\vspace{-2mm}
-
-```{r, eval=FALSE}
-reps <- 10000
-beta_1 <- NULL
-
-for(i in 1:reps){
-  y <- ...
-  dat <- data.frame(x=x, y=y)
-  beta_1[i] <- ...
-}
-
-mean(...)
-
-```
-
+D. Decreased Type I Error Rate
 
 
 ## Residual Analysis {.t}
 \framesubtitle{Now, how do we use them?}
 
- - The relationship between $X$ and $Y$, if there is one, is actually \underline{\textbf{L}inear}
+ - The relationship between $X$ and the mean of $Y$ given $X$ is \textbf{L}inear
    - e.g. not quadratic, exponential, etc.
 
 \vspace{2mm}
@@ -397,7 +554,7 @@ ggplot(data=march_madness, aes(x=residuals)) +
 ### Some Questions
 \vspace{-2mm}
  - Again, I'm supposed to just look at it and make a judgment call? What about a definitive answer??
-   - For assessing normality, there actually is a statistical test that is often used!
+   - For assessing normality, there is a statistical test that is often used!
    - Also, there's the QQ-plot
 
 ## Residual Analysis {.t}
@@ -420,7 +577,7 @@ $H_0$ for this test is that the residuals do follow a normal distribution.
 ## Residual Analysis {.t}
 \framesubtitle{Now, how do we use them?}
 
- - The relationship between $X$ and $Y$, if there is one, is actually \underline{\textbf{L}inear}
+ - The relationship between $X$ and the mean of $Y$ given $X$ is \textbf{L}inear
    - e.g. not quadratic, exponential, etc.
 
 \vspace{2mm}
@@ -457,7 +614,7 @@ $H_0$ for this test is that the residuals do follow a normal distribution.
 ```{r, out.width="75%"}
 march_madness$order <- 1:dim(march_madness)[1]
 ggplot(march_madness, aes(x=order, y=residuals)) + 
-  geom_point() + labs(x="order of entry")
+  geom_point() + geom_hline(yintercept = 0, linetype = "solid", color = "black", linewidth = 1) + labs(x="order of entry")
 ```
  
 ## Residual Analysis {.t}
@@ -508,7 +665,7 @@ ggplot(data=dat, aes(x=z, y=y)) +
 ```{r, echo=FALSE, out.width="90%"}
 
 ggplot(data=dat, aes(x=z, y=residuals)) + 
-  geom_point() + labs(x="order of entry", title="But with the residual plot you can see the temporal trend")
+  geom_point() + geom_hline(yintercept = 0, linetype = "solid", color = "black", linewidth = 1) + labs(x="order of entry", title="But with the residual plot you can see the temporal trend")
 
 ```
 
@@ -536,92 +693,10 @@ In Lab 4, you investigated the Type I Error rate in the presence of non-independ
 Comment briefly on what you observe.
 
 
-## Residual Analysis {.t}
-\framesubtitle{Now, how do we use them?}
-
- - The relationship between $X$ and $Y$, if there is one, is actually \underline{\textbf{L}inear}
-   - e.g. not quadratic, exponential, etc.
-
-\vspace{2mm}
-
- - \textbf{I}ndependence of observations
-
-\vspace{2mm}
-
- - \textbf{N}ormality of $\epsilon_i$
-   - Note that this can also be achieved, due to the central limit theorem, with a large sample size even if $\epsilon_i$ does not follow a normal distribution
-
-\vspace{2mm}
-
- - \textbf{E}qual variance across all values of $X$
-   - Also known as homoskedasticity
-
-
-## Residual Analysis {.t}
-\framesubtitle{The relationship between $X$ and $Y$, if there is one, is actually \underline{\textbf{L}inear}}
-
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
-theme_update(text = element_text(size = 20))
-ggplot(data = march_madness, aes(y = bracket_score, x=knowledge)) +
-  geom_point() + geom_smooth(method='lm', se=FALSE) +
-  xlab("knowledge score") + ylab("bracket score") + 
-  ggtitle("It looks fairly reasonable...")
-```
-
-
-## Residual Analysis {.t}
-\framesubtitle{The relationship between $X$ and $Y$, if there is one, is actually \underline{\textbf{L}inear}}
-
-```{r, out.width="75%"}
-march_madness$fitted <- model1$fitted.values
-ggplot(data=march_madness, aes(x=fitted, y=residuals)) + 
-  geom_point() + labs(x="fitted values")
-```
-
-## Residual Analysis {.t}
-\framesubtitle{The relationship between $X$ and $Y$, if there is one, is actually \underline{\textbf{L}inear}}
-
- - There does not appear to be much of a pattern here
-
-\vspace{4mm}
-
- - What might it look like if the relationship was NOT linear?
-   - For example, a quadratic relationship
-   
-## Residual Analysis {.t}
-\framesubtitle{The relationship between $X$ and $Y$, if there is one, is actually \underline{\textbf{L}inear}}
-
-```{r, echo=FALSE, out.width="90%"}
-set.seed(1)
-y <- 600 + 4 * x^2 + rnorm(100, 0, 45)
-dat <- data.frame(x=x, y=y)
-
-model_nonind <- lm(y ~ x, data=dat)
-dat$residuals <- model_nonind$residuals
-dat$fitted <- model_nonind$fitted.values
-
-ggplot(data=dat, aes(x=x, y=y)) + 
-  geom_point() + labs(x="knowledge", y="score", title="From this plot, it is not that obvious that anything is wrong...")
-
-
-```
-   
-   
-## Residual Analysis {.t}
-\framesubtitle{The relationship between $X$ and $Y$, if there is one, is actually \underline{\textbf{L}inear}}
-
-```{r, echo=FALSE, out.width="90%"}
-
-ggplot(data=dat, aes(x=fitted, y=residuals)) + 
-  geom_point() + labs(x="fitted value", title="The residual plot makes it a bit more obvious")
-
-```
-
-
 ## Recap {.t}
 \framesubtitle{A complete residual analysis would consist of all of the following:}
 
- - The relationship between $X$ and $Y$, if there is one, is actually \underline{\textbf{L}inear}
+ - The relationship between $X$ and the mean of $Y$ given $X$ is \textbf{L}inear
    - **Diagnostic: residuals vs. fitted values**
 
 \vspace{1mm}
@@ -650,3 +725,4 @@ ggplot(data=dat, aes(x=fitted, y=residuals)) +
 ### Today's Daily Check
 \vspace{-2mm}
 Both of the Your Turns.
+

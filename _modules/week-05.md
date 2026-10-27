@@ -10,18 +10,18 @@ days:
         url:
   - date: 2026-10-27
     events:
-      - name: LEC 9
+      - name: LEC 10
         type: lecture
         title: Model Diagnostics in Regression 
-        url:
-        html:
+        url: resources/lectures/lec10/Lec10.Rmd
+        html: resources/lectures/lec10/Lec10.pdf
         podcast:
         readings:
           - name: HRM 4.5
             url: https://peopleanalytics-regression-book.org/linear_regression.html#testing-your-model-assumptions
   - date: 2026-10-29
     events:
-      - name: LEC 10
+      - name: LEC 11
         type: lecture
         title: Categorical Predictor Variables
         url:
