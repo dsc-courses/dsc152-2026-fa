@@ -30,7 +30,7 @@ days:
     events:
       - name: LEC 9
         type: lecture
-        title: Model Diagnostics in Regression 
+        title: Inference with Categorical Predictors 
         url: resources/lectures/lec09/Lec09.Rmd
         html: resources/lectures/lec09/Lec09.pdf
         podcast:
