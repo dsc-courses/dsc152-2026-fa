@@ -6,9 +6,9 @@ author: |
   | Lecture \#11
   | Introduction to Interactions
 date: |
-  | Tuesday, May 5
-  | Spring Quarter 2026
-  | Peter Chi
+  | Thursday, October 29
+  | Fall Quarter 2026
+  | Armin Schwartzman
 output: 
   beamer_presentation:
     theme: "Warsaw"
@@ -73,7 +73,7 @@ She will perform an experiment that will last for 28 days
  - At the end of each day, she will rate her happiness on a scale of 0 to 10
 :::
 
-This is another example of A/B testing! As there are two factors, each of which has two levels, this is known as a $2^2$ Factorial Experiment. 
+This is another example of A/B testing! As there are two factors, each of which has two levels, this is known as a $2\times 2$ Factorial Experiment. 
 
 ## Example: Mental Health Self-Experiment {.t}
 
@@ -98,11 +98,12 @@ gym <- c(5, 1, 8, 8, 9, 7, 6)
 meditate <- c(7, 5, 5, 8, 5, 6, 5)
 both <- c(9, 6, 8, 9, 9, 8, 10)
 
+L <- 7
 mh_df <- data.frame(
   score = c(neither, gym, meditate, both),
-  gym = c(rep("no", 7), rep("yes", 7),
-          rep("no", 7), rep("yes", 7)),
-  meditate = c(rep("no", 14), rep("yes",14))
+  gym = c(rep("no", L), rep("yes", L),
+          rep("no", L), rep("yes", L)),
+  meditate = c(rep("no", 2*L), rep("yes", 2*L))
 )
 ```
 :::
@@ -177,12 +178,32 @@ ggplot(data=tmp, aes(y=mean, x=gym,
   ylab("mean score")
 ```
 
-What should go in the `group_by` function here? pollev.com
+What should go in the `group_by` function here?
+
+www.abcwebsites.online/wp-content/uploads/2026/05/quickpoll-cloud.html
+
+---
+
+## Lecture 11 — Poll 1
+
+**What code do you think goes in the blank line within the `group_by` function?**
+
+A. `gym`
+
+B. `gym | meditate`
+
+C. `gym + meditate | score`
+
+D. `gym, meditate`
+
+E. `gym + meditate`
+
+---
 
 
 ## Your Turn \#1 {.t} 
 \framesubtitle{Now for some real data...}
-Consider the data from Winter's data collection of my probability theory research project... 
+Consider the data from teaching probability theory used in a previous class:
 
 ```{r, echo=FALSE, message=FALSE}
 library(readr)
@@ -193,8 +214,7 @@ show <- learn_prob %>%
 knitr::kable(show[1:9,])
 ```
 
-
-Recall, as mentioned in a previous class, that the study design then was different than it is now. 
+Note that the study design then was different than it is now. 
 
 ## Your Turn \#1 {.t} 
 Just like in the Mental Health example, in the Winter study design there are two factors:
@@ -202,7 +222,7 @@ Just like in the Mental Health example, in the Winter study design there are two
  - Coding Exercises (Yes/No)
  - Handwritten Exercises (Yes/No)
 
-So this is also a $2^2$ Factorial Experiment. We can therefore visualize the data in exactly the same manner as the Mental Health example.
+So this is also a $2\times 2$ Factorial Experiment. We can therefore visualize the data in exactly the same manner as the Mental Health example.
 
 ::: {.block}
 ### In an R Markdown file: 
@@ -210,7 +230,7 @@ So this is also a $2^2$ Factorial Experiment. We can therefore visualize the dat
 Load the `learn_prob.csv` dataset into R Markdown, and then:
 
  - Make the better version of the boxplots following the code on Slide \ref{box}
- - Make a line graph following the code on Slide \ref{lines} (note that it will get unhappy about the NA values...)
+ - Make a line graph following the code on Slide \ref{lines}
 :::
  
 Note: in this dataframe, the outcome variable is `score`; the relevant covariates are `handwritten` and `coding`.
@@ -353,7 +373,7 @@ What about the p-values?
 
 Briefly, each of them is for the corresponding coefficient. But we need to exercise some caution when utilizing them...
 
-## Global $\mathcal{F}$-test
+## Full Model F-test
 
 ```{r, size="scriptsize", echo=FALSE}
 model1 <- lm(score ~ gym + meditate + gym*meditate, data=mh_df)
@@ -362,13 +382,12 @@ summary(model1)
 The p-value of `r pf(summary(model1)$fstatistic[1], summary(model1)$fstatistic[2], summary(model1)$fstatistic[3], lower.tail=FALSE)`...
 
 
-## Global $\mathcal{F}$-test
+## Full Model F-test
 
 The p-value of `r pf(summary(model1)$fstatistic[1], summary(model1)$fstatistic[2], summary(model1)$fstatistic[3], lower.tail=FALSE)` is for the overall null hypothesis:
 
 ::: {.block}
-### Global $\mathcal{F}$-test hypotheses
-\vspace{-2mm}
+### F-test for linear regression
 $$
 \begin{aligned}
 H_0&: \beta_0 = \beta_1 = \beta_2 = \beta_3 = 0 \\
@@ -384,6 +403,24 @@ Here, with a p-value of `r pf(summary(model1)$fstatistic[1], summary(model1)$fst
 \vspace{4mm}
 
 *Note: there is a mistake in $H_0$ here! What is it??*
+
+---
+
+## Lecture 11 — Poll 2
+
+www.abcwebsites.online/wp-content/uploads/2026/05/quickpoll-cloud.html
+
+**What is the mistake in the null hypothesis statement?**
+
+A. $\beta_3$ should not be there
+
+B. $\beta_2$ should not be there
+
+C. $\beta_1$ should not be there
+
+D. $\beta_0$ should not be there
+
+---
 
 
 ## Back to the Individual p-values
@@ -419,7 +456,30 @@ We generally want to test main effects *in combination* with any interaction ter
 
 For example, if we were primarily interested in the impact of meditation, then we would compare the full model against what null model?
 
-pollev.com
+www.abcwebsites.online/wp-content/uploads/2026/05/quickpoll-cloud.html
+
+
+---
+
+## Lecture 11 — Poll 3
+
+**What should be our null model to test for meditation as our primary factor of interest?**
+
+A. $\hat{y} = \beta_0$
+
+B. $\hat{y} = \beta_0 + \beta_1 x_1$
+
+C. $\hat{y} = \beta_0 + \beta_2 x_2$
+
+D. $\hat{y} = \beta_0 + \beta_1 x_1 + \beta_2 x_2$
+
+E. $\hat{y} = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \beta_3 x_1 x_2$
+
+F. $\hat{y} = \beta_0 + \beta_1 x_1 + \beta_3 x_1 x_2$
+
+G. $\hat{y} = \beta_0 + \beta_2 x_2 + \beta_3 x_1 x_2$
+
+---
 
 ## Your Turn \#2{.t}
 Consider again the `learn_prob.csv` data that should already be loaded into your R Markdown file.
@@ -431,31 +491,3 @@ Consider again the `learn_prob.csv` data that should already be loaded into your
  - Based on the regression output, what is the estimated impact of coding exercises among those who did not do handwritten exercises? How about among those who DID do handwritten exercises?
 
 
-## Recap and Looking Ahead {.t}
-
-::: {.t}
-### Recap
-\vspace{-2mm}
-
- - Interaction terms are used when the impact of one covariate may DIFFER across values of another covariate
- - Main effect p-values are typically not of interest; main effects should generally be assessed \underline{in combination} with any interaction term involving it, using a partial $\mathcal{F}$-test
- 
-:::
-
-\vspace{3mm}
-
-::: {.t}
-### Looking ahead
-\vspace{-2mm}
-
- - How do we test other comparisons we might be interested in?
- - What if one or both of the covariates is/are not binary?
-:::
-
-\vspace{3mm}
-
-### Today's Daily Check
-\vspace{-2mm}
-
- - Both Your Turns
- - A screenshot of the confirmation of completion of the Midway Survey

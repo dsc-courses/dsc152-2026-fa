@@ -10,13 +10,15 @@ days:
         url:
   - date: 2026-11-3
     events:
-      - name: LEC 11
+      - name: LEC 12
         type: lecture
         title: "Interaction Terms: Interpretation and Inference "
-        url:
-        html:
+        url: resources/lectures/lec12/Lec12.Rmd
+        html: resources/lectures/lec12/Lec12.pdf
         podcast:
         readings:
+          - name: smith.txt
+            url: resources/lectures/lec11/smith.txt
           - name: HRM 4.6.1
             url: https://peopleanalytics-regression-book.org/linear_regression.html#interactions-between-input-variables
       - name: HW 2

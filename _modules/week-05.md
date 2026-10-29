@@ -24,10 +24,12 @@ days:
       - name: LEC 11
         type: lecture
         title: Introduction to Interactions
-        url:
-        html:
+        url: resources/lectures/lec11/Lec11.Rmd
+        html: resources/lectures/lec11/Lec11.pdf
         podcast:
         readings:
+          - name: learn_prob.csv
+            url: resources/lectures/lec11/learn_prob.csv
           - name: HRM 4.4.3
             url: https://peopleanalytics-regression-book.org/linear_regression.html#transforming-categorical-inputs-to-dummy-variables
   - date: 2026-10-30
