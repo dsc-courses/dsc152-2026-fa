@@ -6,8 +6,8 @@ days:
     events:
       - name: DISC 5
         type: disc
-        title: Midterm 2 prep
-        url:
+        title: Midterm 2 preparation
+        html: resources/discussions/Week 6/Week 6.pdf
   - date: 2026-11-3
     events:
       - name: LEC 12
