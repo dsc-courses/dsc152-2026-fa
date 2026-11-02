@@ -42,5 +42,5 @@ days:
       - name: LAB 6
         type: lab
         title: Interaction Terms
-        url:
+        url: http://datahub.ucsd.edu/user-redirect/git-sync?repo=https://github.com/dsc-courses/dsc152-2026-fa&subPath=labs/Lab6/Lab6.ipynb
 ---
