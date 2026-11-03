@@ -320,6 +320,10 @@ Note that in each category, all assignments in that category will be worth the s
 regardless of the number of points they are graded out of.
 
 
+### Regrade Requests
+
+For all graded assignments and exams, submit regrade requests through Gradescope within 72 hours (3 days) of grades being published, identifying the part to review and explaining the suspected grading error; requests after this window will not be considered.
+
 ### Letter Grades and Incompletes
 
 We will use a standard scale for assigning letter grades:

@@ -6,8 +6,8 @@ days:
     events:
       - name: DISC 5
         type: disc
-        title: Midterm 2 prep
-        url:
+        title: Midterm 2 preparation
+        html: resources/discussions/Week 6/Week 6.pdf
   - date: 2026-11-3
     events:
       - name: LEC 12
@@ -44,5 +44,5 @@ days:
       - name: LAB 6
         type: lab
         title: Interaction Terms
-        url:
+        url: http://datahub.ucsd.edu/user-redirect/git-sync?repo=https://github.com/dsc-courses/dsc152-2026-fa&subPath=labs/Lab6/Lab6.ipynb
 ---

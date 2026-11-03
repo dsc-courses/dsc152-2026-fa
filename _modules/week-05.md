@@ -25,7 +25,7 @@ days:
         type: lecture
         title: Introduction to Interactions
         url: resources/lectures/lec11/Lec11.Rmd
-        html: resources/lectures/lec11/Lec11.pdf
+        html: resources/lectures/lec11/lec11.pdf
         podcast:
         readings:
           - name: learn_prob.csv
