@@ -251,7 +251,7 @@ summary(model1)
 ## Recall: FEV and Smoking {.t}
 *Adjusting* for age is NOT the same thing as including an *interaction* with age. 
 
-In other words, what again is the interpretation of `r summary(model1)$coefficients[2,1]` on the previous slide?
+In other words, what again is the interpretation of `r round(summary(model1)$coefficients[2,1], 4)` on the previous slide?
 
 
 ## Recall: FEV and Smoking {.t}
@@ -265,13 +265,13 @@ summary(model2)
 \framesubtitle{Interaction model}
 Now what are the interpretations of each of the coefficient estimates from this output?
 
-1. *The (Intercept) coefficient* — What does $\hat{\beta}_0$ represent?
+1. The (Intercept) coefficient — What does $\hat{\beta}_0$ represent?
 
-2. *The smoke coefficient* — What does $\hat{\beta}_{smoke}$ represent?
+2. The \texttt{smoke} coefficient — What does $\hat{\beta}_{\texttt{smoke}}$ represent?
 
-3. *The age coefficient* — What does $\hat{\beta}_{age}$ represent?
+3. The \texttt{age} coefficient — What does $\hat{\beta}_{\texttt{age}}$ represent?
 
-4. *The smoke:age coefficient* — What does $\hat{\beta}_{smoke \times age}$ represent?
+4. The \texttt{smoke:age} coefficient — What does $\hat{\beta}_{\texttt{smoke} \times \texttt{age}}$ represent?
 
 
 ## Recall: FEV and Smoking {.t}
@@ -283,7 +283,7 @@ anova(null_model, model2)
 ### If the full model is:
 \vspace{-2mm}
 $$
-\widehat{FEV} = \hat{\beta}_0 + \hat{\beta}_1 \cdot smoke + \hat{\beta}_2 \cdot age + \hat{\beta}_3 \cdot smoke \times age,
+\widehat{\texttt{FEV}} = \hat{\beta}_0 + \hat{\beta}_1 \cdot \texttt{smoke} + \hat{\beta}_2 \cdot \texttt{age} + \hat{\beta}_3 \cdot \texttt{smoke} \times \texttt{age},
 $$
 
 then what is the $H_0$ for the test shown here?
@@ -376,11 +376,11 @@ where, again, our primary covariate of interest is `MIN`.
 ### Looking Ahead
 \vspace{-2mm}
 
- - Transformations
+ - Caution with Model Selection
 
 \vspace{1mm}
 
- - Caution with Model Selection
+ - Transformations
 :::
 
 \vspace{2mm}

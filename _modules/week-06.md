@@ -30,13 +30,15 @@ days:
             url: resources/homework/shuttle_trips.tsv
   - date: 2026-11-5
     events:
-      - name: LEC 12
+      - name: LEC 13
         type: lecture
-        title: "Interaction Terms: Inference and Diagnostics"
-        url:
-        html:
+        title: Pitfalls of Mixing Model Selection with Inference
+        url: resources/lectures/lec13/Lec13.Rmd
+        html: resources/lectures/lec13/Lec13.pdf
         podcast:
         readings:
+          - name: Berk 2013
+            url: https://dsc152.com/resources/references/Berk2013_post-selection.pdf
   - date: 2026-11-6
     events:
       - name: LAB 6

@@ -7,9 +7,9 @@ author: |
   | Pitfalls of Mixing Model Selection
   | with Statistical Inference
 date: |
-  | Tuesday, May 12
-  | Spring Quarter 2026
-  | Peter Chi
+  | Thursday, November 5
+  | Fall Quarter 2026
+  | Armin Schwartzman
 output: 
   beamer_presentation:
     theme: "Warsaw"
@@ -34,6 +34,34 @@ header-includes:
   })
 ```
 
+
+## Model selection
+
+**Model selection (variable selection):**
+
+- Choose which predictors to include in the model among many candidates.
+- Not choosing a predictor means setting its coefficient to **zero**.
+
+**Goals of variable selection:**
+
+- *Parameter assessment:* Assess the effect of one or a few specific variables on the response. Including other predictors is necessary to reduce confounding (e.g. age and sex in clinical or economic studies).
+- *Discovery of important predictors:* Identify important predictors that affect the outcome. These are sometimes called *risk factors* (e.g. clinical or economic studies).
+- *Prediction:* Find a model that will best predict the outcome (e.g. machine learning).
+
+---
+
+## Bias vs. variance trade-off
+
+**Pros of more complex models:** Including more variables
+
+- reduces bias and confounding
+- can help capture intricate relationships
+
+**Cons of more complex models:** Including more variables
+
+- increases variance of the estimated coefficients and fitted values
+- may increase correlation between predictors
+- makes interpretation harder (e.g., neural networks)
 
 
 ## A common (flawed) workflow
@@ -299,6 +327,10 @@ So, what should we do instead?
 
 \vspace{3mm}
 
+**Split the data!**
+
+\vspace{3mm}
+
 ### A proper statistical inference workflow consists of the following:
 \vspace{-2mm}
 
@@ -306,7 +338,7 @@ So, what should we do instead?
 
 \vspace{2mm}
 
- - The statistical inference must be done using a model that is pre-specified, either based on scientific rationale, prior studies, or a combination of both. This constitutes the "primary analysis."
+ - The statistical inference must be done using a model that is pre-specified. This can be based on scientific rationale, prior studies, or obtained from a training set. Then the inference can be done on the inference set. This constitutes the "primary analysis."
  
 
 
@@ -327,7 +359,10 @@ Once the primary analysis is done, THEN secondary analyses should be performed. 
 
  - Possibly a permutation test (particularly if model diagnostics give you any cause for concern that can't be fixed by model building)
 
-   
+\vspace{2mm}
+
+ - If possible, use the inference set for the secondary analysis, not the training set.
+
 
 ## Example: March Madness (again) {.t}
 
@@ -459,3 +494,5 @@ Transformations
 \vspace{-2mm}
 Both Your Turns
 :::
+
+
