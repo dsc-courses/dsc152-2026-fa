@@ -6,9 +6,9 @@ author: |
   | Lecture \#14
   | Transformations
 date: |
-  | Thursday, May 14
-  | Spring Quarter 2026
-  | Peter Chi
+  | Thursday, November 12
+  | Fall Quarter 2026
+  | Armin Schwartzman
 output: 
   beamer_presentation:
     theme: "Warsaw"
@@ -36,23 +36,6 @@ header-includes:
 
 ## Recall: Conditions for Linear Regression {.t}
 
- - The relationship between $X$ and $Y$, if there is one, is actually \underline{\textbf{L}inear}
-   - e.g. not quadratic, exponential, etc.
-
-\vspace{2mm}
-
- - \textbf{I}ndependence of observations
-
-\vspace{2mm}
-
- - \textbf{N}ormality of $\epsilon_i$
-   - Note that this can also be achieved, due to the central limit theorem, with a large sample size even if $\epsilon_i$ does not follow a normal distribution
-
-\vspace{2mm}
-
- - \textbf{E}qual variance across all values of $X$
-   - Also known as homoskedasticity
-
 
 ## What if the relationship looks like this? {.t}
 \framesubtitle{A dataset from DSC 10}
@@ -72,18 +55,7 @@ ggplot(data=hybrid, aes(x=mpg, y=price)) +
  
  - Are we screwed?
  
-\vspace{5mm} 
-
-### No, there are things we can do. But...
-\vspace{-2mm}
- - Everything we are going to talk about in the first part of today's lecture falls under "Sensitivity Analyses." 
-
-\vspace{2mm}
-
- - In other words, hunting for the "right" transformation is a type of Model Selection, and we should not use a model selected in this manner for inference. Once we start hunting, the inference phase of our workflow is over. 
- 
- 
-## We can still run a linear model on the original data... {.t}
+## We can still run a linear model... {.t}
 ```{r, size="footnotesize"}
 model1 <- lm(price ~ mpg, data=hybrid)
 summary(model1)
@@ -104,55 +76,12 @@ ggplot(data=hybrid, aes(x=mpg, y=price)) +
 
 
 ## But clearly this line is ridiculous {.t}
-\framesubtitle{And what about the $R^2$ value?}
-Recall (e.g. from DSC 10 and other courses):
-
-::: {.t}
-### What is $R^2$?
-\vspace{-2mm}
- - $R^2$ is a metric that indicates the degree to which the data follow a linear fit
- - Its mathematical definition is:
- 
-$$
-R^2 = 1 - \frac{RSS}{TSS} = \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2}{\sum_{i=1}^n (y_i - \overline{y})^2}
-$$
-
-:::
-
-where
-
- - $\hat{y}_i$ is still just the predicted value of $y$ according to the model
- - $\overline{y}$ is the overall mean of $y$
- 
-Question: why is this a reasonable measure of linear fit?
-
-## But clearly this line is ridiculous {.t}
-\framesubtitle{And what about the $R^2$ value?}
-
-::: {.t}
-### More about $R^2$
-\vspace{-2mm}
-
-It is NOT an absolute measure; any guidelines for what is a "good" $R^2$ is doomed to be inadequate, particularly as different things will happen in different situations. For example,
-
- - In certain types of physics experiments, \underline{extremely high} $R^2$ values are expected because e.g. gravity and friction do pretty much the same thing every time.
-
-\vspace{3mm}
-
- - In any study involving human subjects, e.g. public health, sociology, education research, etc., $R^2$ values will tend to be \underline{very low} EVEN IF there truly is a linear trend (because people can be very different from each other, in every way imaginable).
-
-:::
-
-https://jumpingrivers.github.io/datasauRus/
-
-## But clearly this line is ridiculous {.t}
 
 ::: {.t}
 ### What's wrong with fitting a linear model to non-linear data?
 \vspace{-2mm}
 
  - The line will be a terrible fit at certain (if not all) values of the predictor variable (as seen on the previous slide)
- - This is, to some degree, indicated by the $R^2$ value on the output (`r round(summary(model1)$r.squared, 4)`)
  - Validity of inference is in question! (as we saw in Lab 4)
  
 :::
@@ -196,24 +125,10 @@ hybrid$logx_residuals <- model2$residuals
 
 
 ggplot(data=hybrid, aes(x=logx_fitted, y=logx_residuals)) + 
-  geom_point() + labs(y="residuals", x="fitted values", title="Residuals vs. Fitted Values with log(mpg)")
+  geom_point() +
+  geom_hline(yintercept = 0) +
+  labs(y="residuals", x="fitted values", title="Residuals vs. Fitted Values with log(mpg)")
 ```
-
-
-## Log transformation of MPG {.t}
-And the new $R^2$ value:
-```{r}
-model2 <- lm(price ~ log(mpg), data=hybrid)
-summary(model2)$r.squared
-```
-
-We do see some improvement from that of the untransformed model (again, `r round(summary(model1)$r.squared, 4)`), but it's not by all that much.
-
-\vspace{3mm}
-
-### Question: how much would be enough?
-\vspace{-2mm}
-Again, any guidelines are not going to be universally correct. A reasonable goal might be to find the transformation that gives the greatest increase in $R^2$, *in combination* with an improved residual plot. 
 
 
 
@@ -250,32 +165,10 @@ df$logx_fitted <- model_logx$fitted
 df$logx_residuals <- model_logx$residuals
 
 ggplot(data=df, aes(x=logx_fitted, y=logx_residuals)) + 
-  geom_point() + labs(y="residuals", x="fitted values", title="Residuals vs. Fitted Values with log(x)")
+  geom_point() +
+  geom_hline(yintercept = 0) +
+  labs(y="residuals", x="fitted values", title="Residuals vs. Fitted Values with log(x)")
 ```
-
-
-
-## Log transformation of x {.t}
-And the improvement in $R^2$:
-
-::: {.t}
-### Untransformed model:
-```{r}
-model_x <- lm(y ~ x, data=df)
-summary(model_x)$r.squared
-```
-:::
-
-\vspace{5mm}
-
-
-::: {.t}
-### Transformed model:
-```{r}
-model_logx <- lm(y ~ log(x), data=df)
-summary(model_logx)$r.squared
-```
-:::
 
 
 ## Log transformation of x {.t}
@@ -362,31 +255,10 @@ hybrid$logy_fitted <- model3$fitted
 hybrid$logy_residuals <- model3$residuals
 
 ggplot(data=hybrid, aes(x=logy_fitted, y=logy_residuals)) + 
-  geom_point() + labs(y="residuals", x="fitted values", title="Residuals vs. Fitted Values with log(price)")
+  geom_point() +
+  geom_hline(yintercept = 0) +
+  labs(y="residuals", x="fitted values", title="Residuals vs. Fitted Values with log(price)")
 ```
-
-
-## Back to the Hybrid Vehicle Dataset {.t}
-\framesubtitle{Log transformation of price} 
-And here are the $R^2$ values:
-
-::: {.t}
-### Untransformed model (same as before):
-```{r}
-summary(model1)$r.squared
-```
-:::
-
-\vspace{5mm}
-
-
-::: {.t}
-### log(price) model:
-```{r}
-model3 <- lm(log(price) ~ mpg, data=hybrid)
-summary(model3)$r.squared
-```
-:::
 
 
 
@@ -422,32 +294,10 @@ df$logy_fitted <- model_logy$fitted
 df$logy_residuals <- model_logy$residuals
 
 ggplot(data=df, aes(x=logy_fitted, y=logy_residuals)) + 
-  geom_point() + labs(y="residuals", x="fitted values", title="Residuals vs. Fitted Values with log(y)")
+  geom_point() +
+  geom_hline(yintercept = 0) +
+  labs(y="residuals", x="fitted values", title="Residuals vs. Fitted Values with log(y)")
 ```
-
-
-## Log transformation of y {.t}
-And, the improvement in $R^2$:
-
-::: {.t}
-### Untransformed model:
-```{r}
-model_y <- lm(y ~ x, data=df)
-summary(model_y)$r.squared
-```
-:::
-
-\vspace{5mm}
-
-
-::: {.t}
-### Transformed model:
-```{r}
-model_logy <- lm(log(y) ~ x, data=df)
-summary(model_logy)$r.squared
-```
-:::
-
 
 
 
@@ -488,38 +338,11 @@ hybrid$logb_residuals <- model4$residuals
 
 
 ggplot(data=hybrid, aes(x=logb_fitted, y=logb_residuals)) + 
-  geom_point() + labs(y="residuals", x="fitted values", title="Residuals vs. Fitted Values with both logged")
+  geom_point() +
+  geom_hline(yintercept = 0) +
+  labs(y="residuals", x="fitted values", title="Residuals vs. Fitted Values with both logged")
 ```
 
-
-## Back to the Hybrid Vehicle Dataset Again {.t}
-\framesubtitle{All the $R^2$ values}
-
-::: {.t}
-###  Untransformed model
-\vspace{-2mm}
-`r summary(model1)$r.squared`
-:::
-
-::: {.t}
-### log(MPG) model
-\vspace{-2mm}
-`r summary(model2)$r.squared`
-:::
-
-::: {.t}
-### log(price) model
-\vspace{-2mm}
-`r summary(model3)$r.squared`
-:::
-
-::: {.t}
-### double-log model
-\vspace{-2mm}
-`r summary(model4)$r.squared`
-:::
-
-So the double-log model doesn't actually have the best $R^2$ value, but I like its residual plot better than that of the log(MPG) model...
 
 
 ## Back to the Hybrid Vehicle Dataset Again {.t}
@@ -538,143 +361,40 @@ The value of `r round(model4$coefficients[2], 4)` is...
 
 
 ## Centering and Scaling {.t}
-Recall the FEV dataset from previous lectures:
-```{r, echo=FALSE, message=FALSE, out.width="90%"}
+Recall the FEV dataset and the interaction model from Lecture \#12:
+
+```{r, echo=FALSE, message=FALSE, size="footnotesize"}
 library(readr)
 FEV <- read_delim("FEV.txt", delim = "\t", escape_double = FALSE, trim_ws = TRUE)
 
-ggplot(data=FEV, mapping = aes(x = age, y=fev, color=factor(smoke))) + 
-  geom_jitter(aes(shape=factor(smoke)), size=3) + 
-  theme(text=element_text(size=20)) + 
-  labs(y="FEV", title="Lung Function vs. Smoking Status with Age", shape="smoke", color="smoke")
-```
-
-
-
-## Centering and Scaling {.t}
-And the adjusted (no interaction) model:
-
-```{r, echo=FALSE, message=FALSE, size="footnotesize"}
-model <- lm(fev ~ smoke + age, data=FEV)
+model <- lm(fev ~ smoke*age, data=FEV)
 summary(model)
 ```
 
 ## Centering and Scaling {.t}
-From this output, in one sense it appears that smoking status and age have approximately the same impact on FEV, since their coefficient values are approximately of the same magnitude.
+From this output, in one sense it appears that smoking status has a much larger impact on FEV than a child's age does (since its coefficient value is much larger than the coefficient for age).
 
 But, is this really the case?
 
 
-\vspace{5mm}
-
-Also, what happens to coefficient interpretations when we center and scale?
-
 ## Centering and Scaling {.t}
-\framesubtitle{First let's center the variables}
-```{r}
-FEV$age_c <- (FEV$age - mean(FEV$age))
+
+#```{r, echo=FALSE, message=FALSE, size="footnotesize", warning=FALSE}
+#library(arm)
+#models <- standardize(lm(fev ~ smoke*age, data=FEV))
+#summary(models)
+#```
+
+```{r, echo=FALSE, message=FALSE, size="footnotesize", warning=FALSE}
+FEV$z.age <- scale(FEV$age)
+models <- lm(fev ~ smoke*z.age, data=FEV)
+summary(models)
 ```
 
-Now, for a binary variable, a typical thing to do is to set:
-
- - 0 $\rightarrow$ -0.5
- - 1 $\rightarrow$ 0.5
-
-Strictly speaking, this is not centering the variable (since its mean is not necessarily exactly 0.5). But, let's see what happens when we do this:
-
-```{r}
-FEV$smoke_c <- ifelse(FEV$smoke==0, -0.5, 0.5)
-```
-
-
-
-
 ## Centering and Scaling {.t}
-\framesubtitle{First let's center the variables}
-```{r, size="footnotesize"}
-model_c <- lm(fev ~ smoke_c + age_c, data=FEV)
-summary(model_c)
-```
-
-
-## Centering and Scaling {.t}
-\framesubtitle{First let's center the variables}
-What changed, and why?
-
-
-## Centering and Scaling {.t}
-\framesubtitle{Now let's also scale age}
-```{r}
-FEV$age_s <- (FEV$age - mean(FEV$age))/(2*sd(FEV$age))
-```
-
-Wait why divide by 2sd?
-
-
-## Centering and Scaling {.t}
-\framesubtitle{Now let's also scale age}
-
-```{r, size="footnotesize"}
-model_s <- lm(fev ~ smoke_c + age_s, data=FEV)
-summary(model_s)
-```
-
-
-
-## Centering and Scaling {.t}
-When we center and scale the covariates, a couple of things happen:
+When we center and scale the covariates, a few things happen:
 
 1) Coefficients become more directly comparable to each other
 2) The intercept term is now the estimated value of the outcome variable at the average value of the predictor variables (as opposed to when the predictor variables equal 0)
+3) The individual main effect p-values are for that covariate at the average value of the other covariate (as opposed to when the other covariate is equal to 0)
 
-\vspace{5mm}
-
-### Your Turn \#2
-\vspace{-2mm}
-What happens in the interaction model??
-
-
-## Centering and Scaling {.t}
-\framesubtitle{Your Turn \#2}
-
- - Load the FEV dataframe into R
-
-\vspace{3mm}
-
- - Run the interaction model with age and smoking status (using the original untransformed values)
-
-\vspace{3mm}
-
- - Then center both variables and re-run the interaction model.
-   - Briefly comment on what has changed, and give new interpretations of each regression coefficient
-
-\vspace{3mm}
-
- - Finally, scale the age variable and re-run the interaction model
-   - Again briefly comment on what has changed, and give new interpretations of each regression coefficient 
-   
-   
-## Recap and Looking Ahead
-
-::: {.t}
-### Recap
-\vspace{-2mm}
- - Transformations (e.g. log, and others not covered here) can fix violations to the linearity condition
- - Transformations (e.g. centering and scaling) can also be helpful with interpretations of regression coefficients
-:::
-
-\vspace{4mm}
-
-::: {.t}
-### Looking Ahead
-\vspace{-2mm}
-Logistic Regression
-:::
-
-\vspace{4mm}
-
-::: {.t}
-### Today's Daily Check
-\vspace{-2mm}
-Both Your Turns.
-:::
