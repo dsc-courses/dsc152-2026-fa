@@ -4,6 +4,14 @@ weekNumber: 7
 days:
   - date: 2026-11-9
     events:
+      - name: PRACTICE
+        type: quiz
+        title: Practice Midterm 2
+        html: resources/midterms/FA26_DSC152_Practice_Midterm_2_Problems.pdf
+      - name: SOLUTIONS
+        type: quiz
+        title: Practice Midterm 2 Solutions
+        html: resources/midterms/FA26_DSC152_Practice_Midterm_2_Solutions.pdf
       - name: MIDTERM 2
         type: quiz
         title: Midterm 2 covers Lectures 6-11
@@ -36,5 +44,5 @@ days:
       - name: LAB 7
         type: lab
         title: Transformations, Model Selection and Inference
-        url:
+        url: http://datahub.ucsd.edu/user-redirect/git-sync?repo=https://github.com/dsc-courses/dsc152-2026-fa&subPath=labs/Lab7/Lab7.ipynb
 ---
