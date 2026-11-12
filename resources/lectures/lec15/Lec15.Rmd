@@ -6,7 +6,7 @@ author: |
   | Lecture \#15
   | Relative Risks and Odds Ratios
 date: |
-  | Tuesday, November 17
+  | Thursday, November 17
   | Fall Quarter 2026
   | Armin Schwartzman
 output: 
