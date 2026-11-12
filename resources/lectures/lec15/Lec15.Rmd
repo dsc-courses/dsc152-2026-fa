@@ -6,9 +6,9 @@ author: |
   | Lecture \#15
   | Relative Risks and Odds Ratios
 date: |
-  | Tuesday, May 19
-  | Spring Quarter 2026
-  | Peter Chi
+  | Tuesday, November 17
+  | Fall Quarter 2026
+  | Armin Schwartzman
 output: 
   beamer_presentation:
     theme: "Warsaw"
@@ -139,7 +139,12 @@ Here, they said it's 1.18...
 :::
 
 $$
-\widehat{RR} = \frac{\frac{13,513}{229,238}}{\frac{12,018}{240,373}} \approx 1.18
+\begin{gathered}
+\hat{p}_1 = \frac{13{,}513}{229{,}238} = 0.05895, \qquad
+\hat{p}_2 = \frac{12{,}018}{240{,}373} = 0.04999 \\
+\Rightarrow \qquad
+\widehat{RR} = \frac{\hat{p}_1}{\hat{p}_2} \approx 1.18
+\end{gathered}
 $$
 
 Now, what about a statistical test?
@@ -169,8 +174,9 @@ There are lots of different ways to test this...
 Here is a sample of the dataframe:
 
 ```{r, echo=FALSE}
-bacon <- data.frame(colon_cancer=c(rep(1, 13513+12018), rep(0, 215725+228355)),
-                    eat_meats=c(rep(1, 13513), rep(0, 12018), rep(1, 215725), rep(0, 228355)))
+a <- 13513; b <- 12018; c <- 215725; d <- 228355
+bacon <- data.frame(colon_cancer=c(rep(1, a+b), rep(0, c+d)),
+                    eat_meats=c(rep(1, a), rep(0, b), rep(1, c), rep(0, d)))
 
 knitr::kable(bacon[sample(dim(bacon)[1], 10), ])
 ```
@@ -198,10 +204,9 @@ Write R code for a permutation test here:
 
 For this illustration, here is code to create a smaller dataframe that you may simply copy/retype:
 ```{r, eval=FALSE, size="footnotesize"}
-bacon <- data.frame(colon_cancer=c(rep(1, 135+120), 
-                                   rep(0, 2157+2283)),
-                    eat_meats=c(rep(1, 135), rep(0, 120), 
-                                rep(1, 2157), rep(0, 2283)))
+a <- 135; b <- 120; c <- 2157; d <- 2283
+bacon <- data.frame(colon_cancer=c(rep(1, a+b), rep(0, c+d)),
+                    eat_meats=c(rep(1, a), rep(0, b), rep(1, c), rep(0, d)))
 ```
 
 A couple of points:
@@ -304,7 +309,10 @@ Side question: what would be the ideal study design and why can't we do that?
 
 If we wanted to calculate an estimate of the RR, it would be:
 $$
-\widehat{RR} = \frac{\frac{33}{58}}{\frac{67}{142}}
+\hat{p}_1 = \frac{33}{58} = 0.5690, \quad
+\hat{p}_2 = \frac{67}{142} = 0.4718 \quad
+\Rightarrow \quad
+\widehat{RR} = \frac{\hat{p}_1}{\hat{p}_2} \approx 1.21
 $$
 
 But based on our study design, 58 and 142 are not valid denominators! 
@@ -369,9 +377,9 @@ What are Odds Ratios?
 
 \vspace{3mm}
 
-First, let's define an "odds."
+First, let's define "odds."
 
-## What is an "odds"? {.t}
+## What are "odds"? {.t}
 In everyday language, the words "probability" and "odds" are frequently used interchangeably. 
 
 ::: {.t}
@@ -383,7 +391,7 @@ In everyday language, the words "probability" and "odds" are frequently used int
 
 When we hear questions like this, we usually answer it as if it was asking for a probability. This is generally accepted in daily conversation, but is technically incorrect!
 
-## Mathematical definition of an "odds" {.t}
+## Mathematical definition of "odds" {.t}
 
 If $p$ is a probability of some event, then the odds of that event is defined as:
 $$
@@ -447,7 +455,7 @@ A couple of notes:
 \vspace{-2mm}
 The odds ratio on the previous slide is also equal to just:
 $$
-\widehat{OR} = \frac{33 \times 75}{25 \times 76}
+\widehat{OR} = \frac{33 \times 75}{25 \times 67}
 $$
 :::
 
@@ -524,7 +532,7 @@ What this means is that:
 
  - In a case-control study where it is impossible to calculate a relative risk of being a case comparing exposed to unexposed individuals:
    - We can still calculate the odds ratio of being exposed comparing cases to controls!
-   - And this is actually mathematically equal to the thing rather know!
+   - And this is mathematically equal to what we want!
 :::
 
 
@@ -646,3 +654,4 @@ Logistic Regression
 ### Today's Daily Check
 \vspace{-2mm}
 The two Your Turns (one coding, one math)
+

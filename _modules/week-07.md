@@ -1,5 +1,5 @@
 ---
-title: Week 7 – Transformations, Logistic Regression
+title: Week 7 – Transformations, Relative Risks and Odds Ratios
 weekNumber: 7
 days:
   - date: 2026-11-9
@@ -32,13 +32,13 @@ days:
     events:
       - name: LEC 15
         type: lecture
-        title: 
-        url:
-        html:
+        title: Relative Risks and Odds Ratios
+        url: resources/lectures/lec15/Lec15.Rmd
+        html: resources/lectures/lec15/Lec15.pdf
         podcast:
         readings:
-          - name: Berk 2013
-            url: https://dsc152.com/resources/references/Berk2013_post-selection.pdf
+          - name: 
+            url: 
   - date: 2026-11-13
     events:
       - name: LAB 7
