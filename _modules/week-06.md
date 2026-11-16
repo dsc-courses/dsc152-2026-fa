@@ -1,5 +1,5 @@
 ---
-title: Week 6 – More on Interactions
+title: Week 6 – More on Interactions, Model selection
 weekNumber: 6
 days:
   - date: 2026-11-2
