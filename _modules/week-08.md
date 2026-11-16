@@ -39,5 +39,5 @@ days:
       - name: LAB 8
         type: lab
         title: Logistic Regression
-        url:
+        url: http://datahub.ucsd.edu/user-redirect/git-sync?repo=https://github.com/dsc-courses/dsc152-2026-fa&subPath=labs/Lab8/Lab8.ipynb
 ---
