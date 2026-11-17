@@ -6,9 +6,9 @@ author: |
   | Lecture \#16
   | Introduction to Logistic Regression
 date: |
-  | Thursday, May 21
-  | Spring Quarter 2026
-  | Peter Chi
+  | Tuesday, November 17
+  | Fall Quarter 2026
+  | Armin Schwartzman
 output: 
   beamer_presentation:
     theme: "Warsaw"
@@ -123,7 +123,7 @@ Last time, we learned about transformations. Can we do a transformation that wou
 First note: from the simple linear regression output on the previous slide, we have:
 
 $$
-\hat{y} = `r round(model1$coefficients[1], 4)` + `r round(model1$coefficients[2], 4)` \cdot BMI
+\hat{y} = `r round(model1$coefficients[1], 4)` + `r round(model1$coefficients[2], 4)` \cdot {\rm BMI}
 $$
 
 What even does $\hat{y}$ mean in this context?
@@ -141,14 +141,11 @@ So whatever transformation we are going to do, we need it to be such that $\hat{
 It turns out that this works quite well:
 
 $$
-log\bigg(\frac{\hat{y}}{1 - \hat{y}}\bigg) = \hat{\beta}_0 + \hat{\beta}_1 \cdot x
+\log\bigg(\frac{\hat{y}}{1 - \hat{y}}\bigg) = \hat{\beta}_0 + \hat{\beta}_1 \cdot x
 $$
 :::
 
 Wait why?
-
-## logit transformation {.t}
-More space for notes if needed
 
 
 ## Example: Diabetes and BMI {.t}
@@ -186,7 +183,7 @@ summary(model_logit)
 So this gives us the following linear model:
 
 $$
-log\bigg(\frac{\hat{y}}{1 - \hat{y}}\bigg) = `r round(model_logit$coefficients[1], 4)` + `r round(model_logit$coefficients[2], 4)` \cdot BMI
+\log\bigg(\frac{\hat{y}}{1 - \hat{y}}\bigg) = `r round(model_logit$coefficients[1], 4)` + `r round(model_logit$coefficients[2], 4)` \cdot {\rm BMI}
 $$
 
 where $\hat{y}$ is the estimated probability of getting diabetes. 
@@ -194,7 +191,7 @@ where $\hat{y}$ is the estimated probability of getting diabetes.
 ### What are the interpretations of these coefficients??
 \vspace{-2mm}
  - It is technically correct to say, e.g., that 
-   - `r round(model_logit$coefficients[2], 4)` is the estimated difference in $log\bigg(\frac{\hat{y}}{1 - \hat{y}}\bigg)$ corresponding to a 1-unit increase in BMI. 
+   - `r round(model_logit$coefficients[2], 4)` is the estimated difference in $\log\bigg(\frac{\hat{y}}{1 - \hat{y}}\bigg)$ corresponding to a 1-unit increase in BMI. 
 
 \vspace{2mm}
    
@@ -212,7 +209,7 @@ where $\hat{y}$ is the estimated probability of getting diabetes.
 ### Here's the model again:
 \vspace{-4mm}
 $$
-log\bigg(\frac{\hat{y}}{1 - \hat{y}}\bigg) = `r round(model_logit$coefficients[1], 4)` + `r round(model_logit$coefficients[2], 4)` \cdot BMI
+\log\bigg(\frac{\hat{y}}{1 - \hat{y}}\bigg) = `r round(model_logit$coefficients[1], 4)` + `r round(model_logit$coefficients[2], 4)` \cdot {\rm BMI}
 $$
 :::
 
@@ -223,16 +220,14 @@ $$
 \vspace{-8mm}
 $$
 \begin{align*}
-\frac{\hat{y}}{1 - \hat{y}} &= e^{`r round(model_logit$coefficients[1], 4)` + `r round(model_logit$coefficients[2], 4)` \cdot BMI} \\
-&= \bigg(e^{-3.6864}\bigg) \bigg(e^{0.0935}\bigg)^{BMI}
+\frac{\hat{y}}{1 - \hat{y}} &= e^{`r round(model_logit$coefficients[1], 4)` + `r round(model_logit$coefficients[2], 4)` \cdot {\rm BMI}} \\
+&= \bigg(e^{-3.6864}\bigg) \bigg(e^{0.0935}\bigg)^{\rm BMI}
 \end{align*}
 $$
 :::
 
 What does a 1-unit increase in BMI do to $\hat{y}$ now?
 
-## Example: Diabetes and BMI {.t}
-More space for notes if needed
 
 ## Conclusions {.t}
 
@@ -242,7 +237,7 @@ More space for notes if needed
 Recall that our question of interest is in whether BMI is associated with getting diabetes, and our logistic regression model is:
 
 $$
-log\bigg(\frac{\widehat{diabetes}}{1- \widehat{diabetes}}\bigg) = \hat{\beta}_0 + \hat{\beta}_1 \cdot BMI
+\log\bigg(\frac{\widehat{\rm diabetes}}{1- \widehat{\rm diabetes}}\bigg) = \hat{\beta}_0 + \hat{\beta}_1 \cdot {\rm BMI}
 $$
 :::
 
@@ -255,7 +250,7 @@ H_A\colon \beta_1 &\neq 0 \\
 \end{aligned}
 $$
 
-So the p-value for this is... pollev.com
+So the p-value for this is... 
 
 
 ## Conclusions {.t}
@@ -492,7 +487,7 @@ ggplot(data=diabetes, aes(x=fitted, y=residuals)) +
 ```
 
 
-## Your Turn {.t}
+## Your Turn \#2 {.t}
 Now we will consider the full `diabetes` dataset:
 ```{r, echo=FALSE}
 columns <- names(diabetes)[1:9]
@@ -510,7 +505,7 @@ description <- c("# of times pregnant",
 knitr::kable(cbind(columns, description))
 ```
 
-## Your Turn {.t}
+## Your Turn \#2 {.t}
 Suppose that the primary analysis was the simple logistic regression model with just BMI as a covariate, but now we would like to perform a sensitivity analysis:
 
  - Perform backward selection via p-values, starting from the model with all 8 covariates in it
@@ -540,7 +535,7 @@ Suppose that the primary analysis was the simple logistic regression model with 
 ::: {.t}
 ### Looking Ahead
 \vspace{-2mm}
-Time Series! Also next Tuesday's class is asynchronous.
+Time Series!
 :::
 
 \vspace{6mm}

@@ -10,11 +10,11 @@ days:
         url:
   - date: 2026-11-17
     events:
-      - name: LEC 15
+      - name: LEC 16
         type: lecture
         title: Introduction to Logistic Regression
-        url:
-        html:
+        url: resources/lectures/lec16/Lec16.Rmd
+        html: resources/lectures/lec16/Lec16.pdf
         podcast:
         readings:
           - name: IS 8
@@ -23,7 +23,7 @@ days:
             url: https://peopleanalytics-regression-book.org/binomial_logistic_regression.html
   - date: 2026-11-19
     events:
-      - name: LEC 16
+      - name: LEC 17
         type: lecture
         title: Statistical Inference for Logistic Regression
         url:
