@@ -25,5 +25,5 @@ days:
         url: resources/homework/HW3.pdf
         readings:
           - name: Dataset (TSV)
-            url: resources/homework/Explore.tsv
+            url: /Explore.tsv
 ---
