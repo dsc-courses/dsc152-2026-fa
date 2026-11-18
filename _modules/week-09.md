@@ -22,7 +22,7 @@ days:
       - name: HW 3
         type: hw
         title: Logistic Regression, Interaction Terms, Model Selection
-        url: resources/homework/HW3.pdf
+        url: /homework3.pdf
         readings:
           - name: Dataset (TSV)
             url: /Explore.tsv
