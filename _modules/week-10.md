@@ -19,10 +19,6 @@ days:
         readings:
           - name: TSR 8-9
             url: https://nicolarighetti.github.io/Time-Series-Analysis-With-R/correlations-and-arima.html
-      - name: HW 3
-        type: hw
-        title: Logistic Regression, Interaction Terms, Model Selection
-        url:
   - date: 2026-12-3
     events:
       - name: LEC 19

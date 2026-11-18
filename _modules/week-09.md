@@ -19,4 +19,11 @@ days:
         readings:
           - name: TSR 4-6
             url: https://nicolarighetti.github.io/Time-Series-Analysis-With-R/basic-concepts.html
+      - name: HW 3
+        type: hw
+        title: Logistic Regression, Interaction Terms, Model Selection
+        url: resources/homework/HW3.pdf
+        readings:
+          - name: Dataset (TSV)
+            url: resources/homework/Explore.tsv
 ---
