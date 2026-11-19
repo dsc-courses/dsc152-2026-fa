@@ -25,9 +25,10 @@ days:
     events:
       - name: LEC 17
         type: lecture
-        title: Statistical Inference for Logistic Regression
-        url:
-        html:
+        title: Multiple Logistic Regression
+        url: resources/lectures/lec17/Lec17.Rmd
+        html: resources/lectures/lec17/Lec17.pdf
+        html: resources/lectures/lec17/ROC Curves.pdf
         podcast:
         readings:
           - name: IS 8
