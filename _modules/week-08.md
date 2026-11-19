@@ -28,7 +28,6 @@ days:
         title: Multiple Logistic Regression
         url: resources/lectures/lec17/Lec17.Rmd
         html: resources/lectures/lec17/Lec17.pdf
-        html: resources/lectures/lec17/ROC Curves.pdf
         podcast:
         readings:
           - name: IS 8
