@@ -1,0 +1,484 @@
+---
+title: |
+  | DSC 152: 
+  | Applied Statistical Data Analysis and Inference
+author: | 
+  | Lecture \#17
+  | Multiple Logistic Regression
+date: |
+  | Thursday, November 19
+  | Fall Quarter 2026
+  | Armin Schwartzman
+output: 
+  beamer_presentation:
+    theme: "Warsaw"
+    fonttheme: "serif"
+
+header-includes:
+- \setbeamertemplate{footline}[frame number]{}
+- \setbeamertemplate{navigation symbols}{}
+- \setbeamersize{text margin left=0.5cm,text margin right=0.5cm}
+- \definecolor{codegray}{HTML}{f4f4f4}
+- \let\textttOrig\texttt
+- \renewcommand{\texttt}[1]{\textttOrig{\colorbox{codegray}{#1}}}
+---
+    
+```{r setup, include=FALSE}
+  knitr::opts_chunk$set(echo = TRUE)
+  knitr::opts_chunk$set(dev = 'pdf')
+  def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+  knitr::knit_hooks$set(chunk = function(x, options) {
+    x <- def.chunk.hook(x, options)
+    ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+  })
+```
+
+
+## Multiple Logistic Regression
+
+Just like linear regression, logistic regression also generalizes to multiple predictors:
+
+$$
+\log\bigg(\frac{\hat{y}}{1 - \hat{y}}\bigg) = \hat{\beta}_0 + \hat{\beta}_1 \cdot x_1 + \hat{\beta}_2 \cdot x_2 + \ldots + \hat{\beta}_p \cdot x_p
+$$
+
+## Example: Diabetes and BMI {.t}
+
+```{r, warning=FALSE, message=FALSE, echo=TRUE, size="footnotesize"}
+library(readr)
+library(dplyr)
+library(ggplot2)
+diabetes<-read_csv("https://raw.githubusercontent.com/plotly/datasets/master/diabetes.csv")
+model_logit <- glm(Outcome ~ BMI, data=diabetes, family="binomial")
+summary(model_logit)
+```
+
+
+## Example: Diabetes and BMI {.t}
+Now we consider the full `diabetes` dataset:
+```{r, echo=FALSE}
+columns <- names(diabetes)[1:9]
+
+description <- c("# of times pregnant",
+          "Plasma glucose level",
+          "Diastolic bp",
+          "Triceps skin fold thickness",
+          "2-hour serum insulin",
+          "body mass index",
+          "genetic disposition to diabetes",
+          "age in years",
+          "Has diabetes or not")
+
+knitr::kable(cbind(columns, description))
+```
+
+
+## Example: Diabetes and BMI {.t}
+
+```{r, warning=FALSE, message=FALSE, echo=TRUE, size="footnotesize"}
+model_logit <- glm(Outcome ~ ., data=diabetes, family="binomial")
+summary(model_logit)
+```
+
+
+## Multiple Logistic Regression
+
+Interpretation of coefficients:
+
+- $e^{\beta_j}$ is the multiplicative change in odds of the outcome when $x_j$ increases by one unit and all other predictors remain constant
+
+- Remember that $e^{\beta_j} \approx 1 + \beta_j$, if $\beta_j$ is small
+
+\vspace{5mm}
+Testing of coefficients:
+
+- The reported p-value for $\beta_j$ tests the hypothesis
+$$
+H_0: \beta_j = 0 \qquad \text{vs} \qquad H_A: \beta_j \ne 0
+$$
+given that all the other predictors are included in the model.
+
+
+## The Math Behind Logistic Regression
+
+Error criterion for fitting:
+\vspace{5mm}
+
+::: {.t}
+### Linear regression {.t}
+\vspace{-2mm}
+Recall that linear regression minimizes the \emph{mean squared error}:
+$$
+{\rm MSE} = \frac{1}{n} \sum_{i=1}^n (y_i - \hat{y}_i)^2
+$$
+where
+$$
+\hat{y}_i = \beta_0 + x_{i1}\beta_1 + x_{i2}\beta_2 + \cdots + x_{ip}\beta_p
+$$
+:::
+
+\vspace{5mm}
+What is the objective function being minimized in logistic regression?
+
+
+## The Math Behind Logistic Regression
+
+Error criterion for fitting:
+\vspace{5mm}
+
+::: {.t}
+### Logistic regression {.t}
+\vspace{-2mm}
+Logistic regression minimizes the \emph{log loss}:
+$$
+\text{Log-Loss} = - \frac{1}{n} \sum_{i=1}^n \left[y_i \log(\hat{y}_i) + (1-y_i)\log(1-\hat{y}_i)\right]
+$$
+where
+$$
+\log\left(\frac{\hat{y}_i}{1-\hat{y}_i}\right) = \beta_0 + x_{i1}\beta_1 + x_{i2}\beta_2 + \cdots + x_{ip}\beta_p
+$$
+:::
+
+\vspace{5mm}
+Why?
+
+
+## The Meaning of Log-Loss
+
+Consider the loss for an individual observation $y_i$:
+$$
+-[y_i \log(\hat{y}_i) + (1-y_i)\log(1-\hat{y}_i)]
+$$
+Here are some possible values:
+
+$y_i$ | $\hat{y}_i = 0.01$ | $\hat{y}_i = 0.5$ | $\hat{y}_i = 0.99$ |
+| :---: | :---: | :---: | :---: |
+1 | $-\log(0.01) \approx 4.61$ | $-\log(0.5) \approx 0.69$ | $-\log(0.99) \approx 0.01$ |
+0 | $-\log(0.99) \approx 0.01$ | $-\log(0.5) \approx 0.69$ | $-\log(0.01) \approx 4.61$ |
+
+The log-loss represents the surprise of seeing the outcome given the estimated probability.
+
+
+## Another Motivation: Maximum Likelihood
+
+For those who took MATH 181A or DSC 140A, you may know that good estimators can be obtained by \emph{maximizing the likelihood function} of a statistical model.
+
+- For linear regression, minimizing the MSE is exactly the same as maximizing the \emph{Gaussian} log-likelihood.
+
+- For logistic regression, minimizing the log-loss is exactly the same as maximizing the \emph{binomial} log-likelihood.
+
+
+## Binomial Maximum Likelihood
+
+In logistic regression, the outcomes $y_i\in\{0,1\}$ are binary. Let $\hat{y}_i$ denote their corresponding probability. The probability mass function of $y_i$ can be written as:
+$$
+f(y_i) = \hat{y}_i^{y_i} (1-\hat{y}_i)^{1-y_i}, \qquad i = 1,\ldots,n
+$$
+Check: $f(0) = 1-\hat{y}_i$, $f(1) = \hat{y}_i$
+
+If the observations are iid, then their joint probability mass function is:
+$$
+f(y_1,\ldots,y_n) = \prod_{i=1}^n \hat{y}_i^{y_i} (1-\hat{y}_i)^{1-y_i}
+$$
+Look at the expression as a function of the parameters. This is called the \emph{likelihood function}:
+$$
+L = \prod_{i=1}^n \hat{y}_i^{y_i} (1-\hat{y}_i)^{1-y_i}
+$$
+
+## Binomial Maximum Likelihood
+
+The maximizer of the likelihood is the same as the maximizer of the log-likelihood:
+$$
+\begin{aligned}
+\ell = \log L &= \sum_{i=1}^n \log\left[\hat{y}_i^{y_i} (1-\hat{y}_i)^{1-y_i}\right] \\
+&= \sum_{i=1}^n \left[y_i \log(\hat{y}_i) + (1-y_i) \log(1-\hat{y}_i)\right]
+\end{aligned}
+$$
+But maximizing this quantity is the same as minimizing its negative. Therefore, the maximizer of the log-likelihood is the same as the minimizer of
+$$
+-\sum_{i=1}^n \left[y_i \log(\hat{y}_i) + (1-y_i) \log(1-\hat{y}_i)\right]
+$$
+This is the log-loss! (except for a scaling factor $1/n$ that doesn't affect the minimization)
+
+
+## Gaussian Maximum Likelihood
+
+In linear regression, define the errors:
+$$
+\epsilon_i = y_i - \hat{y}_i, \qquad i = 1,\ldots,n
+$$
+If the errors are iid with common variance $\sigma^2$, then their joint probability density is:
+$$
+f(\epsilon_1,\ldots,\epsilon_n) = \prod_{i=1}^n \frac{1}{\sqrt{2\pi}\sigma} \exp\left(-\frac{1}{2\sigma^2}\epsilon_i^2\right)
+$$
+Plug in the $\epsilon_i$'s and look at the expression as a function of the parameters. This is called the \emph{likelihood function}:
+$$
+L = \prod_{i=1}^n \frac{1}{\sqrt{2\pi}\sigma} \exp\left(-\frac{1}{2\sigma^2}(y_i - \hat{y}_i)^2\right)
+$$
+
+
+## Gaussian Maximum Likelihood
+
+The maximizer of the likelihood is the same as the maximizer of the log-likelihood:
+$$
+\begin{aligned}
+\ell = \log L 
+&= \sum_{i=1}^n \log\left[\frac{1}{\sqrt{2\pi}\sigma} \exp\left(-\frac{1}{2\sigma^2}(y_i - \hat{y}_i)^2\right)\right] \\
+&= \sum_{i=1}^n \left[-\log(\sqrt{2\pi}\sigma) - \frac{1}{2\sigma^2}(y_i - \hat{y}_i)^2\right]
+\end{aligned}
+$$
+But $\sigma$ is a constant, so it does not affect the maximization with respect to $\hat{y}_1,\ldots,\hat{y}_n$. Also, maximizing this quantity is the same as minimizing its negative. Therefore, the maximizer of the log-likelihood is the same as the minimizer of
+$$
+\sum_{i=1}^n (y_i - \hat{y}_i)^2
+$$
+This is the residual sum of squares! (except for a scaling factor $1/n$ that doesn't affect the minimization)
+
+
+## Conditions for Logistic Regression
+
+ - The outcome variable is binary
+
+\vspace{12mm}
+
+ - The observations are independent of each other
+
+\vspace{12mm}
+
+ - The relationship between your covariates and the log-odds of the outcome variable is linear
+ 
+ 
+## Conditions for Logistic Regression
+
+ - The outcome variable is binary
+   - This one is obvious
+
+\vspace{10mm}
+
+ - The observations are independent of each other
+   - We could check residuals against time or something like that, but also can just make arguments based on anything we know about how the data were collected
+
+\vspace{10mm}
+
+ - The relationship between your covariates and the log-odds of the outcome variable is linear
+   - We can check this one (somewhat) similar to how we checked for linearity in linear regression...
+
+
+## Conditions for Logistic Regression {.t}
+\framesubtitle{Linearity Condition}
+
+Can we just check residuals vs. fitted values?
+
+```{r, eval=FALSE}
+diabetes$fitted <- model_logit$fitted.values
+diabetes$residuals <- residuals(model_logit, type="deviance")
+ggplot(data=diabetes, aes(x=fitted, y=residuals)) + 
+  geom_point()
+```
+
+### What's up with the residuals(model_logit, type="deviance")?
+\vspace{-2mm}
+When using `glm` for logistic regression, it is customary to calculate "deviance residuals" instead of grabbing `residuals` from the model output. For our purposes, all you need to know is that they have better properties in a glm, and that you can get them with the above code.
+
+## Conditions for Logistic Regression {.t}
+\framesubtitle{Linearity Condition}
+What exactly is happening here?
+
+```{r, echo=FALSE, out.width="80%"}
+diabetes$fitted <- model_logit$fitted.values
+diabetes$residuals <- residuals(model_logit, type="deviance")
+ggplot(data=diabetes, aes(x=fitted, y=residuals)) + 
+  geom_point()
+```
+
+## Conditions for Logistic Regression {.t}
+\framesubtitle{Let's illuminate this with simpler examples}
+
+```{r, echo=FALSE, message=FALSE, out.width="90%"}
+set.seed(2)
+x <- c(rnorm(30), rnorm(30, mean=2.5))
+y <- c(rep(0, 30), rep(1, 30))
+
+df <- data.frame(x=x, y=y)
+
+ggplot(data=df, aes(x=x, y=y)) + 
+  geom_point() + 
+  geom_smooth(method="glm", method.args=list(family="binomial"), se=FALSE)
+```
+
+
+## Conditions for Logistic Regression {.t}
+\framesubtitle{Let's illuminate this with simpler examples}
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+model_simp <- glm(y ~ x, family="binomial")
+
+df$fitted <- model_simp$fitted.values
+df$residuals <- residuals(model_simp, type="deviance")
+ggplot(data=df, aes(x=fitted, y=residuals)) + 
+  geom_point() 
+```
+
+## Conditions for Logistic Regression {.t}
+\framesubtitle{Let's illuminate this with simpler examples}
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+model_simp <- glm(y ~ x, family="binomial")
+
+df$fitted <- model_simp$fitted.values
+df$residuals <- residuals(model_simp, type="deviance")
+ggplot(data=df, aes(x=fitted, y=residuals)) + 
+  geom_point() + 
+  geom_smooth(method = "loess", se = FALSE) +
+  geom_hline(yintercept = 0, linetype = "dashed")
+```
+
+
+## Conditions for Logistic Regression {.t}
+\framesubtitle{Let's illuminate this with simpler examples}
+So this is good, because the we are looking for the loess smoother to roughly follow the flat horizontal line at 0.
+
+Here is the code that made the plot on the previous slide:
+```{r, eval=FALSE}
+model_simp <- glm(y ~ x, family="binomial")
+
+df$fitted <- model_simp$fitted.values
+df$residuals <- residuals(model_simp, type="deviance")
+ggplot(data=df, aes(x=fitted, y=residuals)) + 
+  geom_point() + 
+  geom_smooth(method = "loess", se = FALSE) +
+  geom_hline(yintercept = 0, linetype = "dashed")
+```
+
+
+
+
+## Conditions for Logistic Regression {.t}
+\framesubtitle{Let's illuminate this with simpler examples}
+
+Now here's an example in which we have a questionable fit:
+
+
+```{r, echo=FALSE, message=FALSE, out.width="90%"}
+set.seed(2)
+x <- sort(c(rnorm(20), rnorm(20, mean=3)))
+y <- c(rep(0, 5), rep(1, 3), rep(0, 12), rep(1, 5), rep(0, 6), rep(1, 9))
+
+df <- data.frame(x=x, y=y)
+
+ggplot(data=df, aes(x=x, y=y)) + 
+  geom_point() + 
+  geom_smooth(method="glm", method.args=list(family="binomial"), se=FALSE)
+```
+
+
+## Conditions for Logistic Regression {.t}
+\framesubtitle{Let's illuminate this with simpler examples}
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, out.width="85%"}
+model_simp <- glm(y ~ x, family="binomial")
+
+df$fitted <- model_simp$fitted.values
+df$residuals <- residuals(model_simp, type="deviance")
+ggplot(data=df, aes(x=fitted, y=residuals)) + 
+  geom_point() + 
+  geom_smooth(method = "loess", se = FALSE) +
+  geom_hline(yintercept = 0, linetype = "dashed")
+```
+
+This loess curve wobbles a lot, so this one is not so good.
+
+
+## Conditions for Logistic Regression {.t}
+\framesubtitle{Linearity Condition}
+Back to the BMI data:
+
+```{r, echo=FALSE, out.width="80%", warning=FALSE, message=FALSE}
+diabetes$fitted <- model_logit$fitted.values
+diabetes$residuals <- residuals(model_logit, type="deviance")
+ggplot(data=diabetes, aes(x=fitted, y=residuals)) + 
+  geom_point() + 
+  geom_smooth(method = "loess", se = FALSE) +
+  geom_hline(yintercept = 0, linetype = "dashed")
+```
+
+
+## Your Turn {.t}
+Consider the full `diabetes` dataset:
+```{r, echo=FALSE}
+columns <- names(diabetes)[1:9]
+
+description <- c("# of times pregnant",
+          "Plasma glucose level",
+          "Diastolic bp",
+          "Triceps skin fold thickness",
+          "2-hour serum insulin",
+          "body mass index",
+          "genetic disposition to diabetes",
+          "age in years",
+          "Has diabetes or not")
+
+knitr::kable(cbind(columns, description))
+```
+
+## Your Turn {.t}
+Suppose that the primary analysis was the simple logistic regression model with just BMI as a covariate, but now we would like to perform a sensitivity analysis:
+
+ - Perform backward selection via p-values, starting from the model with all 8 covariates in it
+ - Display the model summary at each step
+
+\vspace{3mm}
+
+ - For the final model, write a brief description of the following:
+   - The p-value for the primary question and what the conclusion would have been if this model had actually been the one used for inference
+   - The interpretation, on the odds ratio scale, of the estimate of the primary coefficient of interest, along with a 95\% confidence interval
+
+\vspace{3mm}
+
+ - Check the linearity condition via a residual plot with the final model, and briefly comment
+ 
+
+## Spam filter {.t}
+
+```{r, warning=FALSE, message=FALSE, echo=TRUE, size="footnotesize"}
+#install.packages("openintro")
+library(openintro)
+data(email)
+```
+
+The \texttt{email} dataset in the \texttt{openintro} package contains 3,921 emails received by a single email account in the first few months of 2012, labeled for spam (spam: 0 or 1).
+
+
+## Spam filter {.t}
+
+```{r, warning=FALSE, message=FALSE, echo=TRUE, size="scriptsize"}
+model_logit <- glm(spam ~ ., data=email, family="binomial")
+round(summary(model_logit)$coefficients, 4)
+```
+
+
+## Recap and Looking Ahead {.t}
+
+::: {.t}
+### Recap
+\vspace{-2mm}
+ - Logistic regression is used when we have a binary outcome variable, and any number of quantitative/categorical/binary covariates
+ - $e^{\hat{\beta}_i}$ can be interpreted as an odds ratio
+ - Logistic regression minimizes log-loss, not MSE
+ - Conditions for logistic regression can be checked by looking at the residuals
+:::
+
+\vspace{6mm}
+
+::: {.t}
+### Looking Ahead
+\vspace{-2mm}
+Time Series!
+:::
+
+\vspace{6mm}
+
+::: {.t}
+### Today's Daily Check
+\vspace{-2mm}
+Your Turn
+:::
