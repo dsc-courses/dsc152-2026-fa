@@ -4,9 +4,9 @@ weekNumber: 8
 days:
   - date: 2026-11-16
     events:
-      - name: DISC 6
+      - name: DISC 8
         type: disc
-        title: HW2 and Midterm 2 review
+        title: Midterm 2 review
         url:
   - date: 2026-11-17
     events:

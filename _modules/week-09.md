@@ -4,10 +4,10 @@ weekNumber: 9
 days:
   - date: 2026-11-23
     events:
-      - name: DISC 7
+      - name: DISC 9
         type: disc
-        title: Final exam prep
-        url:
+        title: Preparation for Time Series Analysis
+        html: resources/discussions/Week 9/Week 9.pdf
   - date: 2026-11-24
     events:
       - name: LEC 17
