@@ -4,9 +4,9 @@ weekNumber: 10
 days:
   - date: 2026-11-30
     events:
-      - name: LAB 9
-        type: lab
-        title: "Poker and Slot Machines: Model Selection and other considerations"
+      - name: DISC 8
+        type: disc
+        title: Final exam prep
         url:
   - date: 2026-12-1
     events:
@@ -23,7 +23,7 @@ days:
     events:
       - name: LEC 19
         type: lecture
-        title: Time Series Models
+        title: Time Series Regression
         url:
         html:
         podcast:
@@ -34,6 +34,12 @@ days:
       - name: SUR
         type: survey
         title: SETs (due 8AM)
+        url:
+  - date: 2026-12-4
+    events:
+      - name: LAB 9
+        type: lab
+        title: "Poker and Slot Machines: Model Selection and other considerations"
         url:
   - date: 2026-12-10
     events:

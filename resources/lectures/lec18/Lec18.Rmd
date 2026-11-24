@@ -1,0 +1,526 @@
+---
+title: |
+  | DSC 152: 
+  | Applied Statistical Data Analysis and Inference
+author: | 
+  | Lecture \#18
+  | Introduction to 
+  | Time Series Analyses
+date: |
+  | Tuesday, November 24
+  | Fall Quarter 2026
+  | Armin Schwartzman
+output: 
+  beamer_presentation:
+    theme: "Warsaw"
+    fonttheme: "serif"
+
+header-includes:
+- \setbeamertemplate{footline}[frame number]{}
+- \setbeamertemplate{navigation symbols}{}
+- \setbeamersize{text margin left=0.5cm,text margin right=0.5cm}
+- \definecolor{codegray}{HTML}{f4f4f4}
+- \let\textttOrig\texttt
+- \renewcommand{\texttt}[1]{\textttOrig{\colorbox{codegray}{#1}}}
+---
+    
+```{r setup, include=FALSE}
+  knitr::opts_chunk$set(echo = TRUE)
+  knitr::opts_chunk$set(dev = 'pdf')
+  def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+  knitr::knit_hooks$set(chunk = function(x, options) {
+    x <- def.chunk.hook(x, options)
+    ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+  })
+```
+
+
+## Recall...
+\framesubtitle{Conditions for validity of inference in linear regression}
+
+
+ - The relationship between $X$ and $Y$, if there is one, is actually \textbf{L}inear
+   - e.g. not quadratic, exponential, etc.
+
+\vspace{2mm}
+
+ - \underline{\textbf{I}ndependence of observations}
+
+\vspace{2mm}
+
+ - \textbf{N}ormality of $\epsilon_i$
+   - Note that this can also be achieved, due to the central limit theorem, with a large sample size even if $\epsilon_i$ does not follow a normal distribution
+
+\vspace{2mm}
+
+ - \textbf{E}qual variance across all values of $X$
+   - Also known as homoskedasticity
+   
+   
+## Time Series Data {.t}
+
+Simply put, time series data are data that are collected over time.
+
+Time Series data violate the independence condition because measurements at various time points may be dependent.
+
+::: {.t}
+### Examples:
+\vspace{-2mm}
+ - Stock market prices over days, hours, minutes or seconds
+ - Temperature in San Diego over days or years
+ - Quiz scores within individual students over days or weeks
+ - Consumer spending, vehicle traffic over weekdays or weekends
+ - Blood glucose over minutes or months
+:::
+
+**Important**: Time scale matters
+
+
+## Time Series Data {.t}
+\framesubtitle{Example: Luteinizing hormone} 
+
+Luteinizing hormone (LH) is a hormone produced by the pituitary gland at the base of the brain that regulates the reproductive system.
+
+The \texttt{lh} data consists of 48 measurements of LH every 10 minutes.
+
+```{r, eval=TRUE, message=FALSE, size="footnotesize", fig.width=5, fig.height=3}
+data(lh)
+print(lh)
+```
+
+
+## Time Series Data {.t}
+\framesubtitle{Example: Luteinizing hormone} 
+
+```{r, eval=TRUE, message=FALSE, size="footnotesize", fig.width=5, fig.height=3, echo = FALSE}
+plot(lh, main = "Luteinizing Hormone Levels", ylab = "Level", xlab = "Time (10-min intervals)")
+```
+
+There seems to be some temporal dependence.
+
+
+## Time Series Data {.t}
+\framesubtitle{Independent normals}
+
+What would the data look like if time points were independent?
+
+```{r, eval=TRUE, message=FALSE, size="footnotesize", fig.width=5, fig.height=3}
+mu = mean(lh); sigma = sd(lh); n = length(lh)
+y.iid = ts(rnorm(n, mean = mu, sd = sigma))
+plot(y.iid, main = "iid data", ylab = "Level", xlab = "Time (10-min intervals)")
+```
+
+
+
+## Time Series Data {.t}
+\framesubtitle{Example: Luteinizing hormone} 
+
+Check temporal dependence: plot $y_t$ against $y_{t-1}$
+
+```{r, eval=TRUE, message=FALSE, size="footnotesize", fig.width=5, fig.height=3}
+plot(lh[2:n] ~ lh[1:(n-1)], main = "Luteinizing Hormone Levels", ylab = "lh[2:n]", xlab = "lh[1:(n-1)]", pch = 16)
+```
+
+
+## Time Series Data {.t}
+\framesubtitle{Independent normals}
+
+Check temporal dependence: plot $y_t$ against $y_{t-1}$
+
+```{r, eval=TRUE, message=FALSE, size="footnotesize", fig.width=5, fig.height=3}
+plot(y.iid[2:n] ~ y.iid[1:(n-1)], main = "iid data", ylab = "y.iid[2:n]", xlab = "y.iid[1:(n-1)]", pch = 16)
+```
+
+
+## Time Series Data {.t}
+\framesubtitle{Example: Luteinizing hormone} 
+
+Let's center the data and fit a linear model:
+
+\vspace{5mm}
+```{r, eval=TRUE, message=FALSE, size="footnotesize", fig.width=5, fig.height=3}
+lh.c <- lh - mean(lh)
+model1.lh <- lm(lh.c[2:n] ~ lh.c[1:(n-1)] - 1)
+round(summary(model1.lh)$coefficients, 4)
+```
+
+
+## Time Series Data {.t}
+\framesubtitle{Example: Luteinizing hormone} 
+
+```{r, eval=TRUE, message=FALSE, size="footnotesize", fig.width=5, fig.height=3}
+plot(lh.c[2:n] ~ lh.c[1:(n-1)], main = "Luteinizing Hormone Levels", ylab = "lh.c[2:n]", xlab = "lh.c[1:(n-1)]", pch = 16)
+abline(model1.lh, col = "red", lwd = 2)
+```
+
+
+## Time Series Data {.t}
+\framesubtitle{Independent normals} 
+
+Compare to the iid normals:
+
+\vspace{5mm}
+```{r, eval=TRUE, message=FALSE, size="footnotesize", fig.width=5, fig.height=3}
+y.iid.c <- y.iid - mean(y.iid)
+model1.iid <- lm(y.iid.c[2:n] ~ y.iid.c[1:(n-1)] - 1)
+round(summary(model1.iid)$coefficients, 4)
+```
+
+
+## Time Series Data {.t}
+\framesubtitle{Independent normals} 
+
+Compare to the iid normals:
+
+```{r, eval=TRUE, message=FALSE, size="footnotesize", fig.width=5, fig.height=3}
+plot(y.iid.c[2:n] ~ y.iid.c[1:(n-1)], main = "Luteinizing Hormone Levels", ylab = "y.iid.c[2:n]", xlab = "y.iid.c[1:(n-1)]", pch = 16)
+abline(model1.iid, col = "blue", lwd = 2)
+```
+
+
+## AR(1) Model {.t} 
+
+A time series autoregressive model of order 1, denoted AR(1), is:
+$$
+y_t = \phi_1 y_{t-1} + \epsilon_t, \qquad \epsilon_t \sim \text{iid } N(0, \sigma^2)
+$$
+Note that there is **no intercept**.
+
+The data need to be *centered* before fitting the model (that is, subtract the mean).
+
+What would happen if we added an intercept?
+$$
+y_t = \phi_0 + \phi_1 y_{t-1} + \epsilon_t
+$$
+
+
+## AR(1) Model {.t} 
+\framesubtitle{Parameter restrictions}
+
+https://www.abcwebsites.online/wp-content/uploads/2026/05/quickpoll-cloud.html#
+
+Are there any restrictions on the parameter $\phi_1$?
+
+A. No restrictions
+
+B. $\phi_1$ must always be non-negative
+
+C. $\phi_1$ must be less than 1
+
+D. $|\phi_1|$ must be less than 1
+
+
+## AR(1) Model {.t} 
+\framesubtitle{Your Turn \#1}
+
+ - Simulate an AR(1) model with $\phi_1 = -0.8$, $\sigma = 1$, and $n = 10$, starting from $y_0 = 0$.
+
+\vspace{5mm}
+
+ - Simulate an AR(1) model with $\phi_1 = 1.5$, $\sigma = 1$, and $n = 10$, starting from $y_0 = 0$.
+ 
+\vspace{5mm}
+ 
+ - Comment briefly on what you observe.
+
+
+## AR($p$) Model {.t} 
+
+We can add more predictors as time points from the past.
+
+An autoregressive model of order $p$ is denoted AR($p$):
+$$
+y_t = \phi_1 y_{t-1} + \phi_2 y_{t-2} + \cdots + \phi_p y_{t-p} + \epsilon_t
+$$
+
+
+## AR($p$) Model {.t} 
+\framesubtitle{Lynx trappings}
+
+The \texttt{lynx} dataset describes annual Canadian lynx trappings in the years 1821–1934.
+
+```{r, eval=TRUE, message=FALSE, size="footnotesize", fig.width=5, fig.height=3}
+data(lynx)
+plot(lynx)
+```
+
+
+## AR($p$) Model {.t} 
+\framesubtitle{Lynx trappings}
+
+The data looks skewed:
+
+```{r, eval=TRUE, message=FALSE, size="footnotesize", fig.width=5, fig.height=3}
+hist(lynx, breaks = 10)
+```
+
+All values are positive: these are counts.
+
+
+## AR($p$) Model {.t} 
+\framesubtitle{Lynx trappings}
+
+We can improve it with a log transformation
+
+```{r, eval=TRUE, message=FALSE, size="footnotesize", fig.width=5, fig.height=3}
+y <- log10(lynx)
+hist(y, breaks = 10)
+```
+
+
+## AR($p$) Model {.t} 
+\framesubtitle{Lynx trappings}
+
+Now the time series looks like this:
+
+```{r, eval=TRUE, message=FALSE, size="footnotesize", fig.width=5, fig.height=3}
+plot(y)
+```
+
+
+## AR($p$) Model {.t} 
+\framesubtitle{Lynx trappings}
+
+Try an AR(1) model:
+
+```{r, eval=TRUE, message=FALSE, size="footnotesize"}
+y.c <- y - mean(y)
+n <- length(y.c)
+model1.y <- lm(y.c[2:n] ~ y.c[1:(n-1)] - 1)
+round(summary(model1.y)$coefficients, 4)
+```
+\vspace{5mm}
+Try an AR(2) model:
+
+```{r, eval=TRUE, message=FALSE, size="footnotesize"}
+model2.y <- lm(y.c[3:n] ~ y.c[2:(n-1)] + y.c[1:(n-2)] - 1)
+round(summary(model2.y)$coefficients, 4)
+```
+
+
+## AR($p$) Model {.t} 
+\framesubtitle{Lynx trappings}
+
+Try an AR(3) model:
+
+```{r, eval=TRUE, message=FALSE, size="footnotesize"}
+model3.y <- lm(y.c[4:n] ~ y.c[3:(n-1)] + y.c[2:(n-2)] + y.c[1:(n-3)] - 1)
+round(summary(model3.y)$coefficients, 4)
+```
+
+\vspace{5mm}
+And an AR(4) model:
+
+```{r, eval=TRUE, message=FALSE, size="footnotesize"}
+model4.y <- lm(y.c[5:n] ~ y.c[4:(n-1)] + y.c[3:(n-2)] + y.c[2:(n-3)] + y.c[1:(n-4)] - 1)
+round(summary(model4.y)$coefficients, 4)
+```
+
+
+## Two types of time series models {.t}
+
+::: {.t}
+### An AR($p$) model:
+\vspace{-6mm}
+$$
+y_t = \phi_1 y_{t-1} + \phi_2 y_{t-2} + \cdots + \phi_p y_{t-p} + \epsilon_t
+$$
+:::
+
+(see Lab 9 for more details)
+
+
+\vspace{7mm}
+
+::: {.t}
+### An MA($q$) model: 
+\vspace{-6mm}
+$$
+y_t = \epsilon_t + \theta_1 \epsilon_{t-1} + \theta_2 \epsilon_{t-2} + \cdots + \theta_q \epsilon_{t-q}
+$$
+:::
+
+where each $\epsilon_i$ is independently $N(0, \sigma^2)$.
+
+\vspace{3mm}
+
+Let's break this one down a little here...
+
+
+## AR(p) vs. MA(q) models {.t}
+\framesubtitle{But first: what is the difference between these two?}
+For simplicity, let's consider AR(1) vs. MA(1).
+
+::: {.t}
+### AR(1)
+\vspace{-7mm}
+$$
+y_t = \phi_1 y_{t-1} + \epsilon_t
+$$
+:::
+
+::: {.t}
+### MA(1)
+\vspace{-7mm}
+$$
+y_t = \epsilon_t + \theta_1 \epsilon_{t-1}
+$$
+:::
+
+Key difference: 
+
+ - In the AR(1) model, even though $y_t$ only explicitly depends on $y_{t-1}$, it is also true that $y_{t-1}$ depended on $y_{t-2}$, and so on. So, impacts last longer than just the value of $p$.
+ - Conversely, in the MA(1) model, $y_t$ depends on $y_{t-1}$ only through its error term. So, impacts only last the length of $q$.
+
+
+
+## MA(q) models {.t}
+
+Again, suppose $q=1$. Then, an MA(1) model would be:
+
+$$
+y_t = \epsilon_t + \theta_1 \epsilon_{t-1}
+$$
+
+So as a simple example, suppose $\theta_1=1, \sigma=1$. Then $\epsilon_1$ and $\epsilon_0$ are both independently $N(0, 1)$ so,
+
+```{r}
+set.seed(1)
+eps0 <- rnorm(n=1, mean=0, sd=1)
+eps1 <- rnorm(n=1, mean=0, sd=1)
+eps0
+eps1
+```
+
+## MA(q) models {.t}
+Now,
+```{r, echo=FALSE}
+eps <- rnorm(5)
+```
+
+$$
+\begin{aligned}
+y_1 &= \epsilon_1 + \epsilon_0 = `r eps1` + `r eps0` = `r eps1 + eps0` \\
+y_2 &= \epsilon_2 + \epsilon_1 = `r eps[1]` + `r eps1` = `r eps[1] + eps1` \\
+y_3 &= \epsilon_3 + \epsilon_2 = `r eps[2]` + `r eps[1]` = `r eps[2] + eps[1]` \\
+y_4 &= \epsilon_4 + \epsilon_3 = `r eps[3]` + `r eps[2]` = `r eps[3] + eps[2]` \\
+y_5 &= \epsilon_5 + \epsilon_4 = `r eps[4]` + `r eps[3]` = `r eps[4] + eps[3]` \\
+y_6 &= \epsilon_6 + \epsilon_5 = `r eps[5]` + `r eps[4]` = `r eps[5] + eps[4]` \\
+\end{aligned}
+$$
+
+ok but what is actually happening here?
+
+## MA(q) models {.t}
+Comparing the MA(1) model to a simple independent N(0, 1) model:
+
+```{r, echo=FALSE, out.width="90%"}
+library(ggplot2)
+library(gridExtra)
+set.seed(1)
+theme_update(text=element_text(size=20))
+x <- 1:100
+y1 <- rnorm(101) # 1 extra for "burn-in"
+y2 <- NULL
+for(i in 1:100){
+  y2[i] <- y1[i+1] + y1[i]
+}
+
+dat1 <- data.frame(x=x, y1=y1[2:101])
+dat2 <- data.frame(x=x, y2=y2)
+
+p1 <- ggplot(data=dat1, aes(x=x, y=y1)) + geom_line() + labs(title="Independent N(0,1)")
+p2 <- ggplot(data=dat2, aes(x=x, y=y2)) + geom_line() + labs(title="MA(1)")
+
+grid.arrange(p1, p2, ncol=1)
+```
+
+## MA(q) models {.t}
+\label{macode}
+Here's the code that made the plot on the previous slide:
+
+```{r, eval=FALSE, size="footnotesize"}
+library(ggplot2)
+library(gridExtra)
+set.seed(1)
+theme_update(text=element_text(size=20))
+x <- 1:100
+y1 <- rnorm(101) # 1 extra for "burn-in"
+y2 <- NULL
+for(i in 1:100){
+  y2[i] <- y1[i+1] + y1[i]
+}
+
+dat1 <- data.frame(x=x, y1=y1[2:101])
+dat2 <- data.frame(x=x, y2=y2)
+
+p1 <- ggplot(data=dat1, aes(x=x, y=y1)) + geom_line() + 
+  labs(title="Independent N(0,1)")
+p2 <- ggplot(data=dat2, aes(x=x, y=y2)) + geom_line() + 
+  labs(title="MA(1)")
+
+grid.arrange(p1, p2, ncol=1)
+```
+
+
+## MA(1) model vs. AR(1) model {.t}
+Let's quickly go back and compare...
+
+::: {.t}
+### In the MA(1) model we had:
+\vspace{-6mm}
+$$
+\begin{aligned}
+y_1 &= \epsilon_1 + \epsilon_0  \\
+y_2 &= \epsilon_2 + \epsilon_1  \\
+y_3 &= \epsilon_3 + \epsilon_2 \\
+\end{aligned}
+$$
+:::
+
+::: {.t}
+### Conversely, in the AR(1) model,
+\vspace{-2mm}
+with $\phi_1=1$ and suppose $y_0=0$, it would be:
+$$
+\begin{aligned}
+y_1 &= y_0 + \epsilon_1 = \epsilon_1 \\
+y_2 &= y_1 + \epsilon_2 = y_0 + \epsilon_1 + \epsilon_2 \\
+y_3 &= y_2 + \epsilon_3 = y_0 + \epsilon_1 + \epsilon_2 + \epsilon_3 \\
+\end{aligned}
+$$
+:::
+
+
+## MA(q) models {.t}
+Now comparing the MA(2) model to a independent N(0, 1) model:
+
+```{r, echo=FALSE, out.width="90%"}
+y1 <- c(y1, rnorm(1))
+y3 <- NULL
+for(i in 1:100){
+  y3[i] <- y1[i+2] + y1[i+1] + y1[i]
+}
+
+dat1 <- data.frame(x=x, y1=y1[3:102])
+dat2 <- data.frame(x=x, y3=y3)
+
+p1 <- ggplot(data=dat1, aes(x=x, y=y1)) + geom_line() + labs(title="Independent N(0,1)")
+p2 <- ggplot(data=dat2, aes(x=x, y=y3)) + geom_line() + labs(title="MA(2)")
+
+grid.arrange(p1, p2, ncol=1)
+```
+
+
+## MA(q) models {.t}
+\framesubtitle{Your Turn \#2}
+
+ - Follow the code on Slide \ref{macode} to plot data from an MA(10) model below data from an independent N(0,1) model. Use the same specifications as in the code on Slide \ref{macode}.
+ 
+\vspace{5mm}
+
+ - Recall the behavior of vectors and their indices, to make at least one part of this slightly less cumbersome to code.
+
+\vspace{5mm}
+ 
+ - Comment briefly on what you observe.

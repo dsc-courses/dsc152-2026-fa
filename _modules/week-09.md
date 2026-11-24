@@ -6,7 +6,7 @@ days:
     events:
       - name: DISC 7
         type: disc
-        title: Final exam prep
+        title: Time series
         url:
   - date: 2026-11-24
     events:
