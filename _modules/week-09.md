@@ -13,8 +13,8 @@ days:
       - name: LEC 18
         type: lecture
         title: Introduction to Time Series
-        url:
-        html:
+        url: resources/lectures/lec18/Lec18.Rmd
+        html: resources/lectures/lec18/Lec18.pdf
         podcast:
         readings:
           - name: TSR 4-6
