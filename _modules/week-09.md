@@ -4,13 +4,13 @@ weekNumber: 9
 days:
   - date: 2026-11-23
     events:
-      - name: DISC 7
+      - name: DISC 9
         type: disc
         title: Time series
         url:
   - date: 2026-11-24
     events:
-      - name: LEC 17
+      - name: LEC 18
         type: lecture
         title: Introduction to Time Series
         url:
